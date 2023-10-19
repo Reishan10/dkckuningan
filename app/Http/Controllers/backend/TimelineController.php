@@ -12,7 +12,7 @@ class TimelineController extends Controller
 {
     public function index()
     {
-        $timeline = Timeline::orderBy('created_at', 'asc')->paginate(10);;
+        $timeline = Timeline::orderBy('created_at', 'asc')->paginate(10);
         return view('backend.timeline.index', compact('timeline'));
     }
 

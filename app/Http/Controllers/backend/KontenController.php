@@ -5,13 +5,15 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\Models\Konten;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class KontenController extends Controller
 {
     public function index()
     {
-        return view('backend.konten.index');
+        $konten = Konten::orderBy('created_at', 'asc')->get();
+        return view('backend.konten.index', compact('konten'));
     }
 
     public function create()
@@ -64,6 +66,69 @@ class KontenController extends Controller
             } else {
                 return response()->json(['errors' => ['image' => 'File image tidak ditemukan']]);
             }
+        }
+    }
+
+    public function edit($id)
+    {
+        $konten = Konten::where('id', $id)->first();
+        return view('backend.konten.edit', compact('konten'));
+    }
+
+    public function update(Request $request)
+    {
+        $id = $request->id;
+
+        $validated = Validator::make(
+            $request->all(),
+            [
+                'title' => 'required|unique:konten,title,' . $id,
+                'content' => 'required|string',
+                'image' => 'image|mimes:jpg,png,jpeg,webp,svgfile|max:5120',
+            ],
+            [
+                'title.required' => 'Silakan isi judul terlebih dahulu!',
+                'title.unique' => 'Judul sudah tersedia!',
+                'content.required' => 'Silakan isi konten terlebih dahulu!',
+                'image.image' => 'File harus berupa gambar!',
+                'image.mimes' => 'Gambar yang diunggah harus dalam format JPG, PNG, JPEG, WEBP, atau SVG.',
+                'image.max' => 'Maksimal ukuran foto 5 MB',
+            ]
+        );
+
+        if ($validated->fails()) {
+            return response()->json(['errors' => $validated->errors()]);
+        } else {
+            $konten = Konten::find($id);
+
+            if (!$konten) {
+                return response()->json(['errors' => ['message' => 'Konten tidak ditemukan']]);
+            }
+
+            if ($request->hasFile('image')) {
+                $previousImage = $konten->image;
+                if ($previousImage) {
+                    Storage::disk('public')->delete('konten/' . $previousImage);
+                }
+
+                $file = $request->file('image');
+                if ($file->isValid()) {
+                    $randomFileName = uniqid() . '.' . $file->getClientOriginalExtension();
+                    $file->storeAs('konten/', $randomFileName, 'public');
+                    $konten->image = $randomFileName;
+                }
+            }
+
+            $konten->title = $request->title;
+            $konten->content = $request->content;
+            $slug = strtolower($request->title);
+            $slug = preg_replace('/[^a-z0-9]+/', '-', $slug);
+            $konten->slug = $slug;
+            $konten->status = 0;
+            $konten->user_id = auth()->user()->id;
+            $konten->save();
+
+            return response()->json($konten);
         }
     }
 }
