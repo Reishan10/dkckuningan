@@ -1,5 +1,5 @@
 @extends('layouts.backend.main')
-@section('title', 'Edit Konten')
+@section('title', 'Tambah Arsip')
 @section('content')
     <link rel="stylesheet" href="{{ asset('assets/css/dropify.css') }}">
     <script src="{{ asset('assets/js/dropify.js') }}"></script>
@@ -12,7 +12,7 @@
                         <div class="page-sub-header">
                             <h3 class="page-title">@yield('title')</h3>
                             <ul class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="{{ route('konten.index') }}">Konten</a></li>
+                                <li class="breadcrumb-item"><a href="{{ route('berkas-lain.index') }}">Arsip</a></li>
                                 <li class="breadcrumb-item active">@yield('title')</li>
                             </ul>
                         </div>
@@ -28,27 +28,25 @@
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="form-group local-forms mb-3">
-                                            <input type="hidden" name="id" id="id" value="{{ $konten->id }}">
-                                            <label>Judul <span class="login-danger">*</span></label>
-                                            <input class="form-control" type="text" name="title" id="title"
-                                                value="{{ $konten->title }}">
-                                            <small class="text-danger errorTitle"></small>
+                                            <input type="hidden" name="id" id="id">
+                                            <label>Surat <span class="login-danger">*</span></label>
+                                            <input class="form-control" type="text" name="name" id="name">
+                                            <div class="invalid-feedback errorName"></div>
                                         </div>
                                     </div>
                                     <div class="col-12">
                                         <div class="form-group local-forms mb-3">
-                                            <label>Konten <span class="login-danger">*</span></label>
-                                            <textarea name="content" id="content" rows="2" class="form-control">{{ $konten->content }}</textarea>
-                                            <small class="text-danger errorContent"></small>
+                                            <label>Tanggal Terbit <span class="login-danger">*</span></label>
+                                            <input class="form-control" type="date" name="tanggal_terbit"
+                                                id="tanggal_terbit">
+                                            <div class="invalid-feedback errorTanggalTerbit"></div>
                                         </div>
                                     </div>
                                     <div class="col-12">
                                         <div class="form-group">
-                                            <label>Foto</label>
-                                            <input class="dropify" type="file" name="image" id="image"
-                                                value="{{ $konten->image }}"
-                                                data-default-file="{{ asset('storage/konten/' . $konten->image) }}">
-                                            <small class="text-danger errorImage"></small>
+                                            <label>File</label>
+                                            <input class="dropify" type="file" name="file" id="file">
+                                            <small class="text-danger errorFile"></small>
                                         </div>
                                     </div>
                                     <div class="col-12">
@@ -79,7 +77,7 @@
                 e.preventDefault();
                 $.ajax({
                     data: new FormData(this),
-                    url: "{{ url('konten/update/"+id+"') }}",
+                    url: "{{ route('berkas-lain.store') }}",
                     type: "POST",
                     dataType: 'json',
                     processData: false,
@@ -95,22 +93,28 @@
                     },
                     success: function(response) {
                         if (response.errors) {
-                            if (response.errors.title) {
-                                $('.errorTitle').html(response.errors.title);
+                            if (response.errors.name) {
+                                $('#name').addClass('is-invalid');
+                                $('.errorName').html(response.errors.name);
                             } else {
-                                $('.errorTitle').html('');
+                                $('#name').removeClass('is-invalid');
+                                $('.errorName').html('');
                             }
 
-                            if (response.errors.content) {
-                                $('.errorContent').html(response.errors.content);
+                            if (response.errors.tanggal_terbit) {
+                                $('#tanggal_terbit').addClass('is-invalid');
+                                $('.errorTanggalTerbit').html(response.errors.tanggal_terbit);
                             } else {
-                                $('.errorContent').html('');
+                                $('#tanggal_terbit').removeClass('is-invalid');
+                                $('.errorTanggalTerbit').html('');
                             }
 
-                            if (response.errors.image) {
-                                $('.errorImage').html(response.errors.image);
+                            if (response.errors.file) {
+                                $('#file').addClass('is-invalid');
+                                $('.errorFile').html(response.errors.file);
                             } else {
-                                $('.errorImage').html('');
+                                $('#file').removeClass('is-invalid');
+                                $('.errorFile').html('');
                             }
                         } else {
                             Swal.fire({
@@ -119,7 +123,7 @@
                                 text: 'Data berhasil disimpan',
                             }).then(function() {
                                 top.location.href =
-                                    "{{ route('konten.index') }}";
+                                    "{{ route('berkas-lain.index') }}";
                             });
                         }
                     },

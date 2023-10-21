@@ -1,5 +1,5 @@
 @extends('layouts.backend.main')
-@section('title', 'Golongan')
+@section('title', 'Berkas Lain')
 @section('content')
     <div class="page-wrapper">
         <div class="content container-fluid">
@@ -29,9 +29,9 @@
                                         <h3 class="page-title">@yield('title')</h3>
                                     </div>
                                     <div class="col-auto text-end float-end ms-auto download-grp">
-                                        <button type="button" class="btn btn-primary" id="btnTambah">
+                                        <a href="{{ route('berkas-lain.create') }}" class="btn btn-primary">
                                             <i class="fas fa-plus"></i>
-                                        </button>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -42,7 +42,9 @@
                                     <thead class="student-thread">
                                         <tr>
                                             <th>#</th>
-                                            <th>Name</th>
+                                            <th>Tanggal Terbit</th>
+                                            <th>Surat</th>
+                                            <th>File</th>
                                             <th class="text-end">Aksi</th>
                                         </tr>
                                     </thead>
@@ -53,34 +55,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- Golongan modal -->
-        <div id="modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <form id="form">
-                        <div class="modal-header">
-                            <h4 class="modal-title" id="modalLabel"></h4>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-hidden="true"></button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="form-group local-forms mb-3">
-                                <input type="hidden" name="id" id="id">
-                                <label>Golongan <span class="login-danger">*</span></label>
-                                <input class="form-control" type="text" name="name" id="name">
-                                <div class="invalid-feedback errorName"></div>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Tutup</button>
-                            <button type="submit" class="btn btn-primary" id="simpan">Simpan</button>
-                        </div>
-                    </form>
-                </div><!-- /.modal-content -->
-            </div><!-- /.modal-dialog -->
-        </div><!-- /.modal -->
-
 
         <script>
             $(document).ready(function() {
@@ -93,7 +67,7 @@
                 var table = $('#datatable').DataTable({
                     processing: true,
                     serverSide: true,
-                    ajax: "{{ route('golongan.index') }}",
+                    ajax: "{{ route('berkas-lain.index') }}",
                     columns: [{
                             data: 'DT_RowIndex',
                             name: 'DT_RowIndex',
@@ -101,8 +75,16 @@
                             searchable: false
                         },
                         {
+                            data: 'tanggal_terbit',
+                            name: 'tanggal_terbit'
+                        },
+                        {
                             data: 'name',
                             name: 'name'
+                        },
+                        {
+                            data: 'file',
+                            name: 'file'
                         },
                         {
                             data: 'aksi',
@@ -113,78 +95,6 @@
                     ]
                 });
 
-                // Tambah Data
-                $('#btnTambah').click(function() {
-                    $('#id').val('');
-                    $('#modalLabel').html("Tambah Golongan");
-                    $('#modal').modal('show');
-                    $('#form').trigger("reset");
-                    $('#name').removeClass('is-invalid');
-                    $('.errorName').html('');
-                });
-
-                // Edit Data
-                $('body').on('click', '#btnEdit', function() {
-                    var id = $(this).data('id');
-                    $.ajax({
-                        type: "GET",
-                        url: "golongan/" + id + "/edit",
-                        dataType: "json",
-                        success: function(response) {
-                            $('#modalLabel').html("Edit Golongan");
-                            $('#simpan').val("edit-modal");
-                            $('#modal').modal('show');
-
-                            $('#name').removeClass('is-invalid');
-                            $('.errorName').html('');
-
-                            $('#id').val(response.id);
-                            $('#name').val(response.name);
-                        }
-                    });
-                });
-
-                $('#form').submit(function(e) {
-                    e.preventDefault();
-                    $.ajax({
-                        data: $(this).serialize(),
-                        url: "{{ route('golongan.store') }}",
-                        type: "POST",
-                        dataType: 'json',
-                        beforeSend: function() {
-                            $('#simpan').attr('disabled', 'disabled');
-                            $('#simpan').text('Proses...');
-                        },
-                        complete: function() {
-                            $('#simpan').removeAttr('disabled');
-                            $('#simpan').html('Simpan');
-                        },
-                        success: function(response) {
-                            if (response.errors) {
-                                if (response.errors.name) {
-                                    $('#name').addClass('is-invalid');
-                                    $('.errorName').html(response.errors.name);
-                                } else {
-                                    $('#name').removeClass('is-invalid');
-                                    $('.errorName').html('');
-                                }
-                            } else {
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'Sukses',
-                                    text: 'Data berhasil disimpan',
-                                });
-                                $('#modal').modal('hide');
-                                $('#form').trigger("reset");
-                                table.ajax.reload();
-                            }
-                        },
-                        error: function(xhr, ajaxOptions, thrownError) {
-                            console.error(xhr.status + "\n" + xhr.responseText + "\n" +
-                                thrownError);
-                        }
-                    });
-                });
 
                 // Hapus Data
                 $('body').on('click', '#btnHapus', function() {
@@ -202,7 +112,7 @@
                         if (result.isConfirmed) {
                             $.ajax({
                                 type: "DELETE",
-                                url: "{{ url('golongan/delete') }}/" + id,
+                                url: "{{ url('berkas-lain/delete') }}/" + id,
                                 data: {
                                     id: id
                                 },

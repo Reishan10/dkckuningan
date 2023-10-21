@@ -6,13 +6,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Ramsey\Uuid\Uuid;
 
-class Konten extends Model
+class Arsip extends Model
 {
     use HasFactory;
 
     public $incrementing = false;
     protected $keyType = 'string';
-    protected $table = 'konten';
+    protected $table = 'arsip';
 
     protected static function boot()
     {
@@ -33,17 +33,11 @@ class Konten extends Model
         return 'string';
     }
 
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
 
     protected $fillable = [
-        'title',
-        'content',
-        'image',
-        'slug',
-        'status',
-        'user_id',
+        'name',
+        'tanggal_terbit',
+        'file',
+        'type',
     ];
 }

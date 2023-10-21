@@ -41,6 +41,10 @@ class User extends Authenticatable
         return $this->hasOne(Pendaftaran::class);
     }
 
+    public function konten() {
+        return $this->hasMany(Konten::class);
+    }
+
     /**
      * The attributes that are mass assignable.
      *

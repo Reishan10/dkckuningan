@@ -70,12 +70,12 @@
                             <div class="form-group local-forms mb-3">
                                 <input type="hidden" name="id" id="id">
                                 <label>Soal <span class="login-danger">*</span></label>
-                                <input class="form-control" type="text" name="soal" id="soal">
+                                <textarea name="soal" id="soal" rows="2" class="form-control"></textarea>
                                 <div class="invalid-feedback errorSoal"></div>
                             </div>
                             <div class="form-group local-forms mb-3">
                                 <label>Bobot <span class="login-danger">*</span></label>
-                                <input class="form-control" type="text" name="bobot_nilai" id="bobot_nilai">
+                                <input class="form-control" type="number" name="bobot_nilai" id="bobot_nilai">
                                 <div class="invalid-feedback errorBobotNilai"></div>
                             </div>
                             <div class="form-group local-forms mb-3">

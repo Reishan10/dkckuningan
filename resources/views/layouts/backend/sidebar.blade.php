@@ -34,7 +34,8 @@
                     </ul>
                 </li>
                 <li class="{{ request()->routeIs(['timeline.index']) ? 'active' : '' }}">
-                    <a href="{{ route('timeline.index') }}"><i class="fas fa-clipboard-list"></i> <span>Time Line</span></a>
+                    <a href="{{ route('timeline.index') }}"><i class="fas fa-clipboard-list"></i> <span>Time
+                            Line</span></a>
                 </li>
                 <li class="{{ request()->routeIs(['soal.index']) ? 'active' : '' }}">
                     <a href="{{ route('soal.index') }}"><i class="fas fa-clipboard"></i> <span>Soal</span></a>
@@ -46,20 +47,20 @@
                     <a href="#"><i class="fas fa-clipboard"></i> <span> Arsip</span> <span
                             class="menu-arrow"></span></a>
                     <ul>
-                        <li><a href="teachers.html">Teacher List</a></li>
-                        <li><a href="teacher-details.html">Teacher View</a></li>
-                        <li><a href="add-teacher.html">Teacher Add</a></li>
-                        <li><a href="edit-teacher.html">Teacher Edit</a></li>
+                        <li><a href="{{ route('surat-kelulusan.index') }}">Surat Kelulusan</a></li>
+                        <li><a href="{{ route('berkas-pendaftaran.index') }}">Berkas Pendaftaran</a></li>
+                        <li><a href="{{ route('berkas-lain.index') }}">Lain-lain</a></li>
                     </ul>
                 </li>
                 <li class="submenu">
-                    <a href="#"><i class="fas fa-chalkboard-teacher"></i> <span> Hasil Penilaian</span>
+                    <a href="#"><i class="fas fa-chalkboard-teacher"></i> <span> Data Penilaian</span>
                         <span class="menu-arrow"></span></a>
                     <ul>
-                        <li><a href="teachers.html">Teacher List</a></li>
-                        <li><a href="teacher-details.html">Teacher View</a></li>
-                        <li><a href="add-teacher.html">Teacher Add</a></li>
-                        <li><a href="edit-teacher.html">Teacher Edit</a></li>
+                        <li><a href="teachers.html">Semua Data</a></li>
+                        <li><a href="teacher-details.html">Siaga</a></li>
+                        <li><a href="add-teacher.html">Penggalang</a></li>
+                        <li><a href="edit-teacher.html">Penegak</a></li>
+                        <li><a href="edit-teacher.html">Pandega</a></li>
                     </ul>
                 </li>
                 <li

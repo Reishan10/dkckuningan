@@ -12,7 +12,17 @@ class KontenController extends Controller
 {
     public function index()
     {
-        $konten = Konten::orderBy('created_at', 'asc')->get();
+        $konten = Konten::with('user')->orderBy('created_at', 'asc');
+
+        $status = request()->query('status');
+
+        if ($status === '1') {
+            $konten->where('status', '1');
+        } elseif ($status === '0') {
+            $konten->where('status', '0');
+        }
+
+        $konten = $konten->paginate(1);
         return view('backend.konten.index', compact('konten'));
     }
 
@@ -130,5 +140,24 @@ class KontenController extends Controller
 
             return response()->json($konten);
         }
+    }
+
+    public function destroy(Request $request)
+    {
+        $konten = Konten::find($request->id);
+
+        if (!$konten) {
+            return response()->json(['error' => 'Konten not found']);
+        }
+
+        if (!empty($konten->image)) {
+            if (Storage::exists('public/konten/' . $konten->image)) {
+                Storage::delete('public/konten/' . $konten->image);
+            }
+        }
+
+        $konten->delete();
+
+        return response()->json(['success' => 'Data berhasil dihapus']);
     }
 }

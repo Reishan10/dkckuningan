@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Backend\ArsipController;
 use App\Http\Controllers\backend\DashboardController;
 use App\Http\Controllers\Backend\GolonganController;
 use App\Http\Controllers\Backend\KontenController;
@@ -129,11 +130,37 @@ Route::middleware(['auth', 'user-access:Administrator'])->group(function () {
 
   // Konten
   Route::get('/konten', [KontenController::class, 'index'])->name('konten.index');
+  Route::post('konten/publish/{konten}', [KontenController::class, 'publish'])->name('konten.publish');
+  Route::post('konten/pending/{konten}', [KontenController::class, 'pending'])->name('konten.pending');
   Route::get('/konten/tambah', [KontenController::class, 'create'])->name('konten.create');
   Route::post('/konten/store', [KontenController::class, 'store'])->name('konten.store');
   Route::get('/konten/{id}/edit', [KontenController::class, 'edit'])->name('konten.edit');
   Route::post('/konten/update/{id}', [KontenController::class, 'update'])->name('konten.update');
   Route::delete('/konten/delete/{id}', [KontenController::class, 'destroy'])->name('konten.delete');
+
+  // Surat kelulusan
+  Route::get('/surat-kelulusan', [ArsipController::class, 'indexKelulusan'])->name('surat-kelulusan.index');
+  Route::get('/surat-kelulusan/tambah', [ArsipController::class, 'createKelulusan'])->name('surat-kelulusan.create');
+  Route::post('/surat-kelulusan/store', [ArsipController::class, 'storeKelulusan'])->name('surat-kelulusan.store');
+  Route::get('/surat-kelulusan/{id}/edit', [ArsipController::class, 'editKelulusan'])->name('surat-kelulusan.edit');
+  Route::post('/surat-kelulusan/update/{id}', [ArsipController::class, 'updateKelulusan'])->name('surat-kelulusan.update');
+  Route::delete('/surat-kelulusan/delete/{id}', [ArsipController::class, 'destroyKelulusan'])->name('surat-kelulusan.delete');
+
+  // Berkas Pendaftaran
+  Route::get('/berkas-pendaftaran', [ArsipController::class, 'indexPendaftaran'])->name('berkas-pendaftaran.index');
+  Route::get('/berkas-pendaftaran/tambah', [ArsipController::class, 'createPendaftaran'])->name('berkas-pendaftaran.create');
+  Route::post('/berkas-pendaftaran/store', [ArsipController::class, 'storePendaftaran'])->name('berkas-pendaftaran.store');
+  Route::get('/berkas-pendaftaran/{id}/edit', [ArsipController::class, 'editPendaftaran'])->name('berkas-pendaftaran.edit');
+  Route::post('/berkas-pendaftaran/update/{id}', [ArsipController::class, 'updatePendaftaran'])->name('berkas-pendaftaran.update');
+  Route::delete('/berkas-pendaftaran/delete/{id}', [ArsipController::class, 'destroyPendaftaran'])->name('berkas-pendaftaran.delete');
+
+    // Berkas lain-lain
+    Route::get('/berkas-lain', [ArsipController::class, 'indexLain'])->name('berkas-lain.index');
+    Route::get('/berkas-lain/tambah', [ArsipController::class, 'createLain'])->name('berkas-lain.create');
+    Route::post('/berkas-lain/store', [ArsipController::class, 'storeLain'])->name('berkas-lain.store');
+    Route::get('/berkas-lain/{id}/edit', [ArsipController::class, 'editLain'])->name('berkas-lain.edit');
+    Route::post('/berkas-lain/update/{id}', [ArsipController::class, 'updateLain'])->name('berkas-lain.update');
+    Route::delete('/berkas-lain/delete/{id}', [ArsipController::class, 'destroyLain'])->name('berkas-lain.delete');
 
   // Pengaturan
   Route::get('/pengaturan/profile', [PengaturanController::class, 'profile'])->name('pengaturan.profile');
