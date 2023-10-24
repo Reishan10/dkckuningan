@@ -28,6 +28,12 @@
                                     <div class="col">
                                         <h3 class="page-title">@yield('title')</h3>
                                     </div>
+                                    <div class="col-auto text-end float-end ms-auto download-grp">
+                                        <a href="{{ route('pendaftaran.siaga.print') }}" target="_blank"
+                                            class="btn btn-primary">
+                                            <i class="fas fa-print"></i>
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
 

@@ -84,7 +84,7 @@ class LoginController extends Controller
                 } elseif ($user->type == 'Panitia') {
                     return response()->json(['redirect' => route('dashboard.index')]);
                 } else {
-                    return redirect()->intended();
+                    return response()->json(['redirect' => route('beranda.index')]);
                 }
             } else {
                 return response()->json(['WrongPassword' => ['message' => 'Password salah.']]);

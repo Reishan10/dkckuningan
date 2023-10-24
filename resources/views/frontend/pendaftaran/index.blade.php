@@ -2,7 +2,8 @@
 @section('title', 'Pendaftaran')
 @section('content')
     <!-- Hero Start -->
-    <section class="bg-half-170 d-table w-100">
+    <section class="section bg-light"
+        style="background: url('{{ asset('assets_frontend') }}/images/shapes/shape2.png') center center;">
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-12 col-md-5 order-2 order-md-1 mt-4 pt-2 mt-sm-0 pt-sm-0">

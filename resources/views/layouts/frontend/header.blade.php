@@ -74,10 +74,10 @@
              <ul class="navigation-menu">
                  <li><a href="{{ route('beranda.index') }}" class="sub-menu-item">Beranda</a></li>
                  <li><a href="{{ route('pendaftaran.index') }}" class="sub-menu-item">Pendaftaran</a></li>
-                 <li><a href="index.html" class="sub-menu-item">Berkas</a></li>
-                 <li><a href="index.html" class="sub-menu-item">Timeline</a></li>
+                 <li><a href="{{ route('berkas-garudaku.index') }}" class="sub-menu-item">Berkas</a></li>
+                 <li><a href="{{ route('timeline-garudaku.index') }}" class="sub-menu-item">Timeline</a></li>
                  <li><a href="index.html" class="sub-menu-item">Pengumuman</a></li>
-                 <li><a href="index.html" class="sub-menu-item">Blog</a></li>
+                 <li><a href="{{ route('berita-garudaku.index') }}" class="sub-menu-item">Berita</a></li>
              </ul><!--end navigation menu-->
          </div><!--end navigation-->
      </div><!--end container-->

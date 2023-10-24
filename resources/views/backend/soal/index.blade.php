@@ -42,7 +42,8 @@
                                     <thead class="student-thread">
                                         <tr>
                                             <th>#</th>
-                                            <th>Soal</th>
+                                            <th>Persyaratan</th>
+                                            <th>Keterangan</th>
                                             <th>Bobot</th>
                                             <th>Golongan</th>
                                             <th class="text-end">Aksi</th>
@@ -59,7 +60,7 @@
         <!-- Golongan modal -->
         <div id="modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalLabel"
             aria-hidden="true">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <form id="form">
                         <div class="modal-header">
@@ -69,9 +70,14 @@
                         <div class="modal-body">
                             <div class="form-group local-forms mb-3">
                                 <input type="hidden" name="id" id="id">
-                                <label>Soal <span class="login-danger">*</span></label>
-                                <textarea name="soal" id="soal" rows="2" class="form-control"></textarea>
-                                <div class="invalid-feedback errorSoal"></div>
+                                <label>Persyaratan <span class="login-danger">*</span></label>
+                                <textarea name="persyaratan" id="persyaratan" rows="2" class="form-control"></textarea>
+                                <div class="invalid-feedback errorPersyaratan"></div>
+                            </div>
+                            <div class="form-group local-forms mb-3">
+                                <label>Keterangan <span class="login-danger">*</span></label>
+                                <textarea name="keterangan" id="keterangan" rows="2" class="form-control"></textarea>
+                                <div class="invalid-feedback errorKeterangan"></div>
                             </div>
                             <div class="form-group local-forms mb-3">
                                 <label>Bobot <span class="login-danger">*</span></label>
@@ -118,8 +124,18 @@
                             searchable: false
                         },
                         {
-                            data: 'soal',
-                            name: 'soal'
+                            data: 'persyaratan',
+                            name: 'persyaratan',
+                            render: function(data) {
+                                return data.length > 50 ? data.substr(0, 50) + '...' : data;
+                            }
+                        },
+                        {
+                            data: 'keterangan',
+                            name: 'keterangan',
+                            render: function(data) {
+                                return data.length > 50 ? data.substr(0, 50) + '...' : data;
+                            }
                         },
                         {
                             data: 'bobot_nilai',
@@ -138,6 +154,7 @@
                     ]
                 });
 
+
                 // Tambah Data
                 $('#btnTambah').click(function() {
                     $('#id').val('');
@@ -145,8 +162,11 @@
                     $('#modal').modal('show');
                     $('#form').trigger("reset");
 
-                    $('#soal').removeClass('is-invalid');
-                    $('.errorSoal').html('');
+                    $('#persyaratan').removeClass('is-invalid');
+                    $('.errorPersyaratan').html('');
+
+                    $('#keterangan').removeClass('is-invalid');
+                    $('.errorKeterangan').html('');
 
                     $('#bobot_nilai').removeClass('is-invalid');
                     $('.errorBobotNilai').html('');
@@ -167,8 +187,11 @@
                             $('#simpan').val("edit-modal");
                             $('#modal').modal('show');
 
-                            $('#soal').removeClass('is-invalid');
-                            $('.errorSoal').html('');
+                            $('#persyaratan').removeClass('is-invalid');
+                            $('.errorPersyaratan').html('');
+
+                            $('#keterangan').removeClass('is-invalid');
+                            $('.errorKeterangan').html('');
 
                             $('#bobot_nilai').removeClass('is-invalid');
                             $('.errorBobotNilai').html('');
@@ -177,7 +200,8 @@
                             $('.errorGolongan').html('');
 
                             $('#id').val(response.id);
-                            $('#soal').val(response.soal);
+                            $('#persyaratan').val(response.persyaratan);
+                            $('#keterangan').val(response.keterangan);
                             $('#bobot_nilai').val(response.bobot_nilai);
                             $('#golongan').val(response.golongan_id);
                         }
@@ -201,12 +225,20 @@
                         },
                         success: function(response) {
                             if (response.errors) {
-                                if (response.errors.soal) {
-                                    $('#soal').addClass('is-invalid');
-                                    $('.errorSoal').html(response.errors.soal);
+                                if (response.errors.persyaratan) {
+                                    $('#persyaratan').addClass('is-invalid');
+                                    $('.errorPersyaratan').html(response.errors.persyaratan);
                                 } else {
-                                    $('#soal').removeClass('is-invalid');
-                                    $('.errorSoal').html('');
+                                    $('#persyaratan').removeClass('is-invalid');
+                                    $('.errorPersyaratan').html('');
+                                }
+
+                                if (response.errors.keterangan) {
+                                    $('#keterangan').addClass('is-invalid');
+                                    $('.errorKeterangan').html(response.errors.keterangan);
+                                } else {
+                                    $('#keterangan').removeClass('is-invalid');
+                                    $('.errorKeterangan').html('');
                                 }
 
                                 if (response.errors.bobot_nilai) {

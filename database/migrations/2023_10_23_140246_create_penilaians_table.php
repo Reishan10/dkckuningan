@@ -13,13 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('soal', function (Blueprint $table) {
+        Schema::create('penilaian', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->text('persyaratan');
-            $table->text('keterangan');
-            $table->string('bobot_nilai', 50);
-            $table->uuid('golongan_id');
-            $table->foreign('golongan_id')->references('id')->on('golongan')->onDelete('cascade');
+            $table->uuid('pendaftaran_id');
+            $table->foreign('pendaftaran_id')->references('id')->on('pendaftaran')->onDelete('cascade');
+            $table->uuid('soal_id');
+            $table->foreign('soal_id')->references('id')->on('soal')->onDelete('cascade');
+            $table->string('nilai', 100)->default(0);
             $table->timestamps();
         });
     }
@@ -31,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('soal');
+        Schema::dropIfExists('penilaian');
     }
 };

@@ -11,8 +11,7 @@
     <!-- Css -->
     <link href="{{ asset('assets_frontend') }}/libs/tiny-slider/tiny-slider.css" rel="stylesheet">
     <!-- Bootstrap Css -->
-    <link href="{{ asset('assets_frontend') }}/css/bootstrap.css" class="theme-opt" rel="stylesheet"
-        type="text/css" />
+    <link href="{{ asset('assets_frontend') }}/css/bootstrap.css" class="theme-opt" rel="stylesheet" type="text/css" />
     <!-- Icons Css -->
     <link href="{{ asset('assets_frontend') }}/css/icons.min.css" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets_frontend') }}/libs/@iconscout/unicons/css/line.css" type="text/css" rel="stylesheet" />
@@ -20,6 +19,10 @@
     <link href="{{ asset('assets_frontend') }}/css/style.min.css" class="theme-opt" rel="stylesheet" type="text/css" />
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="{{ asset('assets') }}/plugins/datatables/datatables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
 
 </head>
 

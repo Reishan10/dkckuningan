@@ -9,8 +9,7 @@ use Ramsey\Uuid\Uuid;
 class Soal extends Model
 {
     use HasFactory;
-
-
+    
     public $incrementing = false;
     protected $keyType = 'string';
     protected $table = 'soal';
@@ -40,7 +39,8 @@ class Soal extends Model
     }
 
     protected $fillable = [
-        'soal',
+        'persyaratan',
+        'keterangan',
         'bobot_nilai',
         'golongan_id',
     ];

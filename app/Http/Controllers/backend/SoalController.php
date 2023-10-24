@@ -14,7 +14,7 @@ class SoalController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $soal = Soal::with('golongan')->orderBy('soal', 'asc')->get();
+            $soal = Soal::with('golongan')->orderBy('created_at','asc')->get();
 
             return DataTables::of($soal)
                 ->addIndexColumn()
@@ -42,13 +42,15 @@ class SoalController extends Controller
         $validated = Validator::make(
             $request->all(),
             [
-                'soal' => 'required|unique:soal,soal,' . $id,
+                'persyaratan' => 'required|unique:soal,persyaratan,' . $id,
+                'keterangan' => 'required',
                 'bobot_nilai' => 'required|string',
                 'golongan' => 'required|string',
             ],
             [
-                'soal.required' => 'Silakan isi nama terlebih dahulu!',
-                'soal.unique' => 'Soal sudah tersedia!',
+                'persyaratan.required' => 'Silakan isi persyaratan terlebih dahulu!',
+                'persyaratan.unique' => 'Persyaratan sudah tersedia!',
+                'keterangan.required' => 'Silakan isi keterangan terlebih dahulu!',
                 'bobot_nilai.required' => 'Silakan isi bobot nilai terlebih dahulu!',
                 'golongan.required' => 'Silakan pilih golongan terlebih dahulu!',
             ]
@@ -60,7 +62,8 @@ class SoalController extends Controller
             $soal = Soal::updateOrCreate([
                 'id' => $id
             ], [
-                'soal' => $request->soal,
+                'persyaratan' => $request->persyaratan,
+                'keterangan' => $request->keterangan,
                 'bobot_nilai' => $request->bobot_nilai,
                 'golongan_id' => $request->golongan,
             ]);

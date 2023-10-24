@@ -6,13 +6,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Ramsey\Uuid\Uuid;
 
-class Pendaftaran extends Model
+class Penilaian extends Model
 {
     use HasFactory;
 
     public $incrementing = false;
     protected $keyType = 'string';
-    protected $table = 'pendaftaran';
+    protected $table = 'penilaian';
 
     protected static function boot()
     {
@@ -33,25 +33,19 @@ class Pendaftaran extends Model
         return 'string';
     }
 
-    public function user()
+    public function pendaftaran()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(Pendaftaran::class);
     }
 
-    public function golongan()
+    public function soal()
     {
-        return $this->belongsTo(Golongan::class);
+        return $this->belongsTo(Soal::class);
     }
 
     protected $fillable = [
-        'user_id',
-        'nta',
-        'tempat_lahir',
-        'tanggal_lahir',
-        'alamat',
-        'pangkalan',
-        'golongan_id',
-        'berkas',
-        'status'
+        'pendaftaran_id',
+        'soal_id',
+        'nilai'
     ];
 }

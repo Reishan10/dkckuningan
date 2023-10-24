@@ -7,6 +7,7 @@ use App\Models\Pendaftaran;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\DataTables;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class PendaftaranController extends Controller
 {
@@ -18,7 +19,6 @@ class PendaftaranController extends Controller
                 ->orderBy('users.name', 'asc')
                 ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.*', 'pendaftaran.*')
                 ->get();
-
 
             return DataTables::of($pendaftaran)
                 ->addIndexColumn()
@@ -121,6 +121,20 @@ class PendaftaranController extends Controller
 
         return response()->json(['success' => 'Data berhasil dihapus', 'berkas' => $pendaftaran->berkas]);
     }
+
+    public function printAll()
+    {
+        $pendaftaran = Pendaftaran::with('user', 'golongan')
+            ->join('users', 'pendaftaran.user_id', '=', 'users.id')
+            ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
+            ->orderBy('users.name', 'asc')
+            ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.name', 'golongan.name as golongan_name', 'pangkalan')
+            ->get();
+
+        $pdf = Pdf::loadView('backend.pendaftaran.all.print', compact('pendaftaran'));
+        return $pdf->download('pendaftaran-semua-' . time() . '.pdf');
+    }
+
 
     public function indexSiaga()
     {
@@ -232,6 +246,20 @@ class PendaftaranController extends Controller
         $pendaftaran->delete();
 
         return response()->json(['success' => 'Data berhasil dihapus', 'berkas' => $pendaftaran->berkas]);
+    }
+
+    public function printSiaga()
+    {
+        $pendaftaran = Pendaftaran::with('user', 'golongan')
+            ->join('users', 'pendaftaran.user_id', '=', 'users.id')
+            ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
+            ->orderBy('users.name', 'asc')
+            ->where('golongan.name', 'Siaga')
+            ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.name', 'golongan.name as golongan_name', 'pangkalan')
+            ->get();
+
+        $pdf = Pdf::loadView('backend.pendaftaran.siaga.print', compact('pendaftaran'));
+        return $pdf->download('pendaftaran-siaga-' . time() . '.pdf');
     }
 
     public function indexPenggalang()
@@ -346,6 +374,20 @@ class PendaftaranController extends Controller
         return response()->json(['success' => 'Data berhasil dihapus', 'berkas' => $pendaftaran->berkas]);
     }
 
+    public function printPenggalang()
+    {
+        $pendaftaran = Pendaftaran::with('user', 'golongan')
+            ->join('users', 'pendaftaran.user_id', '=', 'users.id')
+            ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
+            ->orderBy('users.name', 'asc')
+            ->where('golongan.name', 'Penggalang')
+            ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.name', 'golongan.name as golongan_name', 'pangkalan')
+            ->get();
+
+        $pdf = Pdf::loadView('backend.pendaftaran.penggalang.print', compact('pendaftaran'));
+        return $pdf->download('pendaftaran-penggalang-' . time() . '.pdf');
+    }
+
     public function indexPenegak()
     {
         if (request()->ajax()) {
@@ -458,6 +500,20 @@ class PendaftaranController extends Controller
         return response()->json(['success' => 'Data berhasil dihapus', 'berkas' => $pendaftaran->berkas]);
     }
 
+    public function printPenegak()
+    {
+        $pendaftaran = Pendaftaran::with('user', 'golongan')
+            ->join('users', 'pendaftaran.user_id', '=', 'users.id')
+            ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
+            ->orderBy('users.name', 'asc')
+            ->where('golongan.name', 'Penegak')
+            ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.name', 'golongan.name as golongan_name', 'pangkalan')
+            ->get();
+
+        $pdf = Pdf::loadView('backend.pendaftaran.penegak.print', compact('pendaftaran'));
+        return $pdf->download('pendaftaran-penegak-' . time() . '.pdf');
+    }
+
     public function indexPandega()
     {
         if (request()->ajax()) {
@@ -568,5 +624,19 @@ class PendaftaranController extends Controller
         $pendaftaran->delete();
 
         return response()->json(['success' => 'Data berhasil dihapus', 'berkas' => $pendaftaran->berkas]);
+    }
+
+    public function printPandega()
+    {
+        $pendaftaran = Pendaftaran::with('user', 'golongan')
+            ->join('users', 'pendaftaran.user_id', '=', 'users.id')
+            ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
+            ->orderBy('users.name', 'asc')
+            ->where('golongan.name', 'Pandega')
+            ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.name', 'golongan.name as golongan_name', 'pangkalan')
+            ->get();
+
+        $pdf = Pdf::loadView('backend.pendaftaran.pandega.print', compact('pendaftaran'));
+        return $pdf->download('pendaftaran-pandega-' . time() . '.pdf');
     }
 }
