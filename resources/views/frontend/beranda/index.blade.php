@@ -22,10 +22,6 @@
                         <p class="text-muted mb-0 para-dark para-desc mx-auto ms-md-auto">Launch your campaign and
                             benefit from our expertise on designing and managing conversion centered bootstrap v5 html
                             page.</p>
-
-                        <div class="mt-4">
-                            <a href="javascript:void(0)" class="btn btn-primary">Tentang</a>
-                        </div>
                     </div>
                 </div><!--end col-->
 

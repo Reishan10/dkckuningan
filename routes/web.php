@@ -14,6 +14,7 @@ use App\Http\Controllers\Frontend\BerandaController;
 use App\Http\Controllers\Frontend\BeritaController;
 use App\Http\Controllers\Frontend\BerkasController;
 use App\Http\Controllers\Frontend\PendaftaranController as FrontendPendaftaranController;
+use App\Http\Controllers\Frontend\PengumumanController;
 use App\Http\Controllers\Frontend\TimelineController as FrontendTimelineController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -32,6 +33,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [BerandaController::class, 'index'])->name('beranda.index');
 Route::get('/timeline-garudaku', [FrontendTimelineController::class, 'index'])->name('timeline-garudaku.index');
 Route::get('/berkas-garudaku', [BerkasController::class, 'index'])->name('berkas-garudaku.index');
+Route::get('/pengumuman-garudaku', [PengumumanController::class, 'index'])->name('pengumuman-garudaku.index');
 Route::get('/berita-garudaku', [BeritaController::class, 'index'])->name('berita-garudaku.index');
 Route::get('/berita-garudaku/detail/{slug}', [BeritaController::class, 'detail'])->name('berita-garudaku.detail');
 

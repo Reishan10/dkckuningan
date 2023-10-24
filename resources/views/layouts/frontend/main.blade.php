@@ -61,14 +61,20 @@
 
                     <div class="col-sm-6 mt-4 mt-sm-0 pt-2 pt-sm-0">
                         <ul class="list-unstyled social-icon foot-social-icon text-sm-end mb-0">
-                            <li class="list-inline-item mb-0"><a href="javascript:void(0)" class="rounded"><i
-                                        data-feather="facebook" class="fea icon-sm fea-social"></i></a></li>
-                            <li class="list-inline-item mb-0"><a href="javascript:void(0)" class="rounded"><i
-                                        data-feather="instagram" class="fea icon-sm fea-social"></i></a></li>
-                            <li class="list-inline-item mb-0"><a href="javascript:void(0)" class="rounded"><i
-                                        data-feather="twitter" class="fea icon-sm fea-social"></i></a></li>
-                            <li class="list-inline-item mb-0"><a href="javascript:void(0)" class="rounded"><i
-                                        data-feather="linkedin" class="fea icon-sm fea-social"></i></a></li>
+                            <li class="list-inline-item mb-0"><a href="https://www.youtube.com/@dkckuningan6739"
+                                    target="_blank" class="rounded"><i data-feather="youtube"
+                                        class="fea icon-sm fea-social"></i></a>
+                            </li>
+                            <li class="list-inline-item mb-0"><a href="https://web.facebook.com/kwarcabkuningan"
+                                    target="_blank" class="rounded"><i data-feather="facebook"
+                                        class="fea icon-sm fea-social"></i></a>
+                            </li>
+                            <li class="list-inline-item mb-0"><a href="https://www.instagram.com/pramukakuningan/"
+                                    target="_blank" class="rounded"><i data-feather="instagram"
+                                        class="fea icon-sm fea-social"></i></a></li>
+                            <li class="list-inline-item mb-0"><a href="https://www.instagram.com/dkckuningan/"
+                                    target="_blank" class="rounded"><i data-feather="instagram"
+                                        class="fea icon-sm fea-social"></i></a></li>
                         </ul><!--end icon-->
                     </div><!--end col-->
                 </div><!--end row-->
