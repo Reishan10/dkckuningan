@@ -28,11 +28,13 @@
                                     <div class="col">
                                         <h3 class="page-title">@yield('title')</h3>
                                     </div>
-                                    <div class="col-auto text-end float-end ms-auto download-grp">
-                                        <button type="button" class="btn btn-primary" id="btnTambah">
-                                            <i class="fas fa-plus"></i>
-                                        </button>
-                                    </div>
+                                    @if (auth()->user()->type != 'Juri')
+                                        <div class="col-auto text-end float-end ms-auto download-grp">
+                                            <button type="button" class="btn btn-primary" id="btnTambah">
+                                                <i class="fas fa-plus"></i>
+                                            </button>
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
 

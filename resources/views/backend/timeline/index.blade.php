@@ -6,13 +6,14 @@
 
             <div class="row">
                 <div class="col-md-12 text-md-end">
-                    <a href="{{ route('timeline.create') }}"class="btn btn-primary btn-blog mb-3"><i
-                            class="feather-plus-circle me-1"></i>
-                        Tambah Data</a>
+                    @if (auth()->user()->type != 'Juri')
+                        <a href="{{ route('timeline.create') }}"class="btn btn-primary btn-blog mb-3"><i
+                                class="feather-plus-circle me-1"></i>
+                            Tambah Data</a>
+                    @endif
                 </div>
             </div>
             <div class="row">
-
                 @forelse ($timeline as $row)
                     <div class="col-md-6 col-xl-4 col-sm-12 d-flex">
                         <div class="blog grid-blog flex-fill">
@@ -36,17 +37,19 @@
                                 <h3 class="blog-title"><a href="blog-details.html">{{ $row->name }}
                                     </a></h3>
                             </div>
-                            <div class="row">
-                                <div class="edit-options">
-                                    <div class="edit-delete-btn">
-                                        <a href="{{ route('timeline.edit', $row->id) }}" class="text-success"><i
-                                                class="feather-edit-3 me-1"></i>
-                                            Edit</a>
-                                        <a href="#" class="text-danger" data-id="{{ $row->id }}"
-                                            id="btnHapus"><i class="feather-trash-2 me-1"></i> Hapus</a>
+                            @if (auth()->user()->type != 'Juri')
+                                <div class="row">
+                                    <div class="edit-options">
+                                        <div class="edit-delete-btn">
+                                            <a href="{{ route('timeline.edit', $row->id) }}" class="text-success"><i
+                                                    class="feather-edit-3 me-1"></i>
+                                                Edit</a>
+                                            <a href="#" class="text-danger" data-id="{{ $row->id }}"
+                                                id="btnHapus"><i class="feather-trash-2 me-1"></i> Hapus</a>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            @endif
                         </div>
                     </div>
                 @empty

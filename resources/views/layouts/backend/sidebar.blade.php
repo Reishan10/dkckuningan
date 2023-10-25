@@ -36,16 +36,14 @@
                         </li>
                     </ul>
                 </li>
-                @if (auth()->user()->type == 'Administrator' || 'Panitia')
-                    <li class="{{ request()->routeIs(['timeline.index']) ? 'active' : '' }}">
-                        <a href="{{ route('timeline.index') }}"><i class="fas fa-clipboard-list"></i> <span>Time
-                                Line</span></a>
-                    </li>
-                @endif
+                <li class="{{ request()->routeIs(['timeline.index']) ? 'active' : '' }}">
+                    <a href="{{ route('timeline.index') }}"><i class="fas fa-clipboard-list"></i> <span>Time
+                            Line</span></a>
+                </li>
                 <li class="{{ request()->routeIs(['soal.index']) ? 'active' : '' }}">
                     <a href="{{ route('soal.index') }}"><i class="fas fa-clipboard"></i> <span>Soal</span></a>
                 </li>
-                @if (auth()->user()->type == 'Administrator' || 'Panitia')
+                @if (auth()->user()->type != 'Juri')
                     <li class="{{ request()->routeIs(['golongan.index']) ? 'active' : '' }}">
                         <a href="{{ route('golongan.index') }}"><i class="fas fa-box"></i> <span>Golongan</span></a>
                     </li>

@@ -49,6 +49,31 @@ Route::middleware(['auth', 'user-access:Peserta'])->group(function () {
 Route::middleware(['auth', 'user-access:Administrator,Juri,Panitia'])->group(function () {
   Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
+  // Konten
+  Route::get('/konten', [KontenController::class, 'index'])->name('konten.index');
+  Route::post('konten/publish/{konten}', [KontenController::class, 'publish'])->name('konten.publish');
+  Route::post('konten/pending/{konten}', [KontenController::class, 'pending'])->name('konten.pending');
+  Route::get('/konten/tambah', [KontenController::class, 'create'])->name('konten.create');
+  Route::post('/konten/store', [KontenController::class, 'store'])->name('konten.store');
+  Route::get('/konten/{id}/edit', [KontenController::class, 'edit'])->name('konten.edit');
+  Route::post('/konten/update/{id}', [KontenController::class, 'update'])->name('konten.update');
+  Route::delete('/konten/delete/{id}', [KontenController::class, 'destroy'])->name('konten.delete');
+
+  // Soal
+  Route::get('/soal', [SoalController::class, 'index'])->name('soal.index');
+  Route::get('/soal/tambah', [SoalController::class, 'create'])->name('soal.create');
+  Route::post('/soal/store', [SoalController::class, 'store'])->name('soal.store');
+  Route::get('/soal/{id}/edit', [SoalController::class, 'edit'])->name('soal.edit');
+  Route::delete('/soal/delete/{id}', [SoalController::class, 'destroy'])->name('soal.delete');
+
+  // Timeline
+  Route::get('/timeline', [TimelineController::class, 'index'])->name('timeline.index');
+  Route::get('/timeline/tambah', [TimelineController::class, 'create'])->name('timeline.create');
+  Route::post('/timeline/store', [TimelineController::class, 'store'])->name('timeline.store');
+  Route::get('/timeline/{id}/edit', [TimelineController::class, 'edit'])->name('timeline.edit');
+  Route::post('/timeline/update/{id}', [TimelineController::class, 'update'])->name('timeline.update');
+  Route::delete('/timeline/delete/{id}', [TimelineController::class, 'destroy'])->name('timeline.delete');
+
   // Pendaftaran all
   Route::get('/pendaftaran/semua', [PendaftaranController::class, 'indexAll'])->name('pendaftaran.semua.index');
   Route::post('/pendaftaran/semua/detail/{id}', [PendaftaranController::class, 'detailAll'])->name('pendaftaran.semua.detail');
@@ -130,41 +155,6 @@ Route::middleware(['auth', 'user-access:Administrator,Juri,Panitia'])->group(fun
   Route::post('/pengaturan/nonaktif-akun', [PengaturanController::class, 'updateStatus'])->name('pengaturan.updateStatus');
 });
 
-// Administrator & Panitia
-Route::middleware(['auth', 'user-access:Administrator,Panitia'])->group(function () {
-  // Golongan
-  Route::get('/golongan', [GolonganController::class, 'index'])->name('golongan.index');
-  Route::get('/golongan/tambah', [GolonganController::class, 'create'])->name('golongan.create');
-  Route::post('/golongan/store', [GolonganController::class, 'store'])->name('golongan.store');
-  Route::get('/golongan/{id}/edit', [GolonganController::class, 'edit'])->name('golongan.edit');
-  Route::delete('/golongan/delete/{id}', [GolonganController::class, 'destroy'])->name('golongan.delete');
-
-  // Soal
-  Route::get('/soal', [SoalController::class, 'index'])->name('soal.index');
-  Route::get('/soal/tambah', [SoalController::class, 'create'])->name('soal.create');
-  Route::post('/soal/store', [SoalController::class, 'store'])->name('soal.store');
-  Route::get('/soal/{id}/edit', [SoalController::class, 'edit'])->name('soal.edit');
-  Route::delete('/soal/delete/{id}', [SoalController::class, 'destroy'])->name('soal.delete');
-
-  // Timeline
-  Route::get('/timeline', [TimelineController::class, 'index'])->name('timeline.index');
-  Route::get('/timeline/tambah', [TimelineController::class, 'create'])->name('timeline.create');
-  Route::post('/timeline/store', [TimelineController::class, 'store'])->name('timeline.store');
-  Route::get('/timeline/{id}/edit', [TimelineController::class, 'edit'])->name('timeline.edit');
-  Route::post('/timeline/update/{id}', [TimelineController::class, 'update'])->name('timeline.update');
-  Route::delete('/timeline/delete/{id}', [TimelineController::class, 'destroy'])->name('timeline.delete');
-
-  // Konten
-  Route::get('/konten', [KontenController::class, 'index'])->name('konten.index');
-  Route::post('konten/publish/{konten}', [KontenController::class, 'publish'])->name('konten.publish');
-  Route::post('konten/pending/{konten}', [KontenController::class, 'pending'])->name('konten.pending');
-  Route::get('/konten/tambah', [KontenController::class, 'create'])->name('konten.create');
-  Route::post('/konten/store', [KontenController::class, 'store'])->name('konten.store');
-  Route::get('/konten/{id}/edit', [KontenController::class, 'edit'])->name('konten.edit');
-  Route::post('/konten/update/{id}', [KontenController::class, 'update'])->name('konten.update');
-  Route::delete('/konten/delete/{id}', [KontenController::class, 'destroy'])->name('konten.delete');
-});
-
 // Administrator & Juri
 Route::middleware(['auth', 'user-access:Administrator,Juri'])->group(function () {
   // Penilaian
@@ -186,6 +176,16 @@ Route::middleware(['auth', 'user-access:Administrator,Juri'])->group(function ()
   Route::get('/penilaian-pandega', [PenilaianController::class, 'indexPandega'])->name('penilaian-pandega.index');
   Route::get('/penilaian-pandega/{id}', [PenilaianController::class, 'nilaiPandega'])->name('penilaian-pandega.nilai');
   Route::post('/penilaian-pandega/simpan-penilaian', [PenilaianController::class, 'simpanPenilaianPandega'])->name('penilaian-pandega.simpan');
+});
+
+// Administrator & Panitia
+Route::middleware(['auth', 'user-access:Administrator,Panitia'])->group(function () {
+  // Golongan
+  Route::get('/golongan', [GolonganController::class, 'index'])->name('golongan.index');
+  Route::get('/golongan/tambah', [GolonganController::class, 'create'])->name('golongan.create');
+  Route::post('/golongan/store', [GolonganController::class, 'store'])->name('golongan.store');
+  Route::get('/golongan/{id}/edit', [GolonganController::class, 'edit'])->name('golongan.edit');
+  Route::delete('/golongan/delete/{id}', [GolonganController::class, 'destroy'])->name('golongan.delete');
 });
 
 // Administrator

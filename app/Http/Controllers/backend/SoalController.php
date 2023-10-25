@@ -14,7 +14,7 @@ class SoalController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $soal = Soal::with('golongan')->orderBy('created_at','asc')->get();
+            $soal = Soal::with('golongan')->orderBy('created_at', 'asc')->get();
 
             return DataTables::of($soal)
                 ->addIndexColumn()
@@ -23,8 +23,11 @@ class SoalController extends Controller
                     return $golongan;
                 })
                 ->addColumn('aksi', function ($soal) {
-                    $btn = '<button type="button" class="btn btn-sm btn-warning me-2 text-light" data-id="' . $soal->id . '"  id="btnEdit"><i class="fas fa-pencil-alt"></i></button>';
-                    $btn .= '<button type="button" class="btn btn-sm btn-danger text-light" data-id="' . $soal->id . '" id="btnHapus" title="Hapus"><i class="fas fa-trash"></i></button>';
+                    $btn = '';
+                    if (auth()->user()->type != "Juri") {
+                        $btn = '<button type="button" class="btn btn-sm btn-warning me-2 text-light" data-id="' . $soal->id . '"  id="btnEdit"><i class="fas fa-pencil-alt"></i></button>';
+                        $btn .= '<button type="button" class="btn btn-sm btn-danger text-light" data-id="' . $soal->id . '" id="btnHapus" title="Hapus"><i class="fas fa-trash"></i></button>';
+                    }
 
                     return $btn;
                 })
