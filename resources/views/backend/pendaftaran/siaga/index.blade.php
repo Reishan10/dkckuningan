@@ -41,7 +41,7 @@
                                 <table class="table border-0 table-hover table-center mb-0 table-striped" id="datatable">
                                     <thead class="student-thread">
                                         <tr>
-                                            <th>#</th>
+                                            <th>No</th>
                                             <th>NTA</th>
                                             <th>Nama</th>
                                             <th>Email</th>

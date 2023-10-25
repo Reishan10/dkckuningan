@@ -65,15 +65,16 @@ class PendaftaranController extends Controller
                 ->addColumn('aksi', function ($pendaftaran) {
                     $btn = '';
 
-                    if ($pendaftaran->status != 2) {
+                    if ($pendaftaran->status == 1) {
                         $btn .= '<button type="button" class="btn btn-sm btn-success text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnTerima"><i class="fas fa-check"></i></button>';
-                    } elseif ($pendaftaran->status != 3) {
                         $btn .= '<button type="button" class="btn btn-sm btn-danger text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnTolak" title="Tolak"><i class="fas fa-times"></i></button>';
+                    } elseif ($pendaftaran->status == 2) {
+                        $btn .= '<button type="button" class="btn btn-sm btn-danger text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnTolak" title="Tolak"><i class="fas fa-times"></i></button>';
+                    } elseif ($pendaftaran->status == 3) {
+                        $btn .= '<button type="button" class="btn btn-sm btn-success text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnTerima"><i class="fas fa-check"></i></button>';
                     }
-
                     $btn .= '<button type="button" class="btn btn-sm btn-info text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnDetail" data-bs-toggle="modal" data-bs-target="#detailModal"><i class="fas fa-eye"></i></button>';
                     $btn .= '<button type="button" class="btn btn-sm btn-warning text-light" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnHapus" title="Hapus"><i class="fas fa-trash"></i></button>';
-
                     return $btn;
                 })
 
@@ -131,7 +132,19 @@ class PendaftaranController extends Controller
             ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.name', 'golongan.name as golongan_name', 'pangkalan')
             ->get();
 
-        $pdf = Pdf::loadView('backend.pendaftaran.all.print', compact('pendaftaran'));
+        return view('backend.pendaftaran.all.print', compact('pendaftaran'));
+    }
+
+    public function printPDFAll()
+    {
+        $pendaftaran = Pendaftaran::with('user', 'golongan')
+            ->join('users', 'pendaftaran.user_id', '=', 'users.id')
+            ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
+            ->orderBy('users.name', 'asc')
+            ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.name', 'golongan.name as golongan_name', 'pangkalan')
+            ->get();
+
+        $pdf = Pdf::loadView('backend.pendaftaran.all.printPDF', compact('pendaftaran'));
         return $pdf->download('pendaftaran-semua-' . time() . '.pdf');
     }
 
@@ -248,7 +261,7 @@ class PendaftaranController extends Controller
         return response()->json(['success' => 'Data berhasil dihapus', 'berkas' => $pendaftaran->berkas]);
     }
 
-    public function printSiaga()
+    public function printPDFSiaga()
     {
         $pendaftaran = Pendaftaran::with('user', 'golongan')
             ->join('users', 'pendaftaran.user_id', '=', 'users.id')
@@ -258,7 +271,7 @@ class PendaftaranController extends Controller
             ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.name', 'golongan.name as golongan_name', 'pangkalan')
             ->get();
 
-        $pdf = Pdf::loadView('backend.pendaftaran.siaga.print', compact('pendaftaran'));
+        $pdf = Pdf::loadView('backend.pendaftaran.siaga.printPDF', compact('pendaftaran'));
         return $pdf->download('pendaftaran-siaga-' . time() . '.pdf');
     }
 
@@ -374,7 +387,7 @@ class PendaftaranController extends Controller
         return response()->json(['success' => 'Data berhasil dihapus', 'berkas' => $pendaftaran->berkas]);
     }
 
-    public function printPenggalang()
+    public function printPDFPenggalang()
     {
         $pendaftaran = Pendaftaran::with('user', 'golongan')
             ->join('users', 'pendaftaran.user_id', '=', 'users.id')
@@ -384,7 +397,7 @@ class PendaftaranController extends Controller
             ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.name', 'golongan.name as golongan_name', 'pangkalan')
             ->get();
 
-        $pdf = Pdf::loadView('backend.pendaftaran.penggalang.print', compact('pendaftaran'));
+        $pdf = Pdf::loadView('backend.pendaftaran.penggalang.printPDF', compact('pendaftaran'));
         return $pdf->download('pendaftaran-penggalang-' . time() . '.pdf');
     }
 
@@ -500,7 +513,7 @@ class PendaftaranController extends Controller
         return response()->json(['success' => 'Data berhasil dihapus', 'berkas' => $pendaftaran->berkas]);
     }
 
-    public function printPenegak()
+    public function printPDFPenegak()
     {
         $pendaftaran = Pendaftaran::with('user', 'golongan')
             ->join('users', 'pendaftaran.user_id', '=', 'users.id')
@@ -510,7 +523,7 @@ class PendaftaranController extends Controller
             ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.name', 'golongan.name as golongan_name', 'pangkalan')
             ->get();
 
-        $pdf = Pdf::loadView('backend.pendaftaran.penegak.print', compact('pendaftaran'));
+        $pdf = Pdf::loadView('backend.pendaftaran.penegak.printPDF', compact('pendaftaran'));
         return $pdf->download('pendaftaran-penegak-' . time() . '.pdf');
     }
 
@@ -626,7 +639,7 @@ class PendaftaranController extends Controller
         return response()->json(['success' => 'Data berhasil dihapus', 'berkas' => $pendaftaran->berkas]);
     }
 
-    public function printPandega()
+    public function printPDFPandega()
     {
         $pendaftaran = Pendaftaran::with('user', 'golongan')
             ->join('users', 'pendaftaran.user_id', '=', 'users.id')
@@ -636,7 +649,7 @@ class PendaftaranController extends Controller
             ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.name', 'golongan.name as golongan_name', 'pangkalan')
             ->get();
 
-        $pdf = Pdf::loadView('backend.pendaftaran.pandega.print', compact('pendaftaran'));
+        $pdf = Pdf::loadView('backend.pendaftaran.pandega.printPDF', compact('pendaftaran'));
         return $pdf->download('pendaftaran-pandega-' . time() . '.pdf');
     }
 }

@@ -56,6 +56,7 @@ Route::middleware(['auth', 'user-access:Administrator,Juri,Panitia'])->group(fun
   Route::post('/pendaftaran/semua/tolak/{id}', [PendaftaranController::class, 'tolakAll'])->name('pendaftaran.semua.tolak');
   Route::delete('/pendaftaran/semua/delete/{id}', [PendaftaranController::class, 'destroyAll'])->name('pendaftaran.semua.delete');
   Route::get('/pendaftaran/semua/print', [PendaftaranController::class, 'printAll'])->name('pendaftaran.semua.print');
+  Route::get('/pendaftaran/semua/printPDF', [PendaftaranController::class, 'printPDFAll'])->name('pendaftaran.semua.printPDF');
 
   // Pendaftaran siaga
   Route::get('/pendaftaran/siaga', [PendaftaranController::class, 'indexSiaga'])->name('pendaftaran.siaga.index');
@@ -63,7 +64,7 @@ Route::middleware(['auth', 'user-access:Administrator,Juri,Panitia'])->group(fun
   Route::post('/pendaftaran/siaga/terima/{id}', [PendaftaranController::class, 'terimaSiaga'])->name('pendaftaran.siaga.terima');
   Route::post('/pendaftaran/siaga/tolak/{id}', [PendaftaranController::class, 'tolakSiaga'])->name('pendaftaran.siaga.tolak');
   Route::delete('/pendaftaran/siaga/delete/{id}', [PendaftaranController::class, 'destroySiaga'])->name('pendaftaran.siaga.delete');
-  Route::get('/pendaftaran/siaga/print', [PendaftaranController::class, 'printSiaga'])->name('pendaftaran.siaga.print');
+  Route::get('/pendaftaran/siaga/printPDF', [PendaftaranController::class, 'printPDFSiaga'])->name('pendaftaran.siaga.printPDF');
 
   // Pendaftaran penggalang
   Route::get('/pendaftaran/penggalang', [PendaftaranController::class, 'indexPenggalang'])->name('pendaftaran.penggalang.index');
@@ -71,7 +72,7 @@ Route::middleware(['auth', 'user-access:Administrator,Juri,Panitia'])->group(fun
   Route::post('/pendaftaran/penggalang/terima/{id}', [PendaftaranController::class, 'terimaPenggalang'])->name('pendaftaran.penggalang.terima');
   Route::post('/pendaftaran/penggalang/tolak/{id}', [PendaftaranController::class, 'tolakPenggalang'])->name('pendaftaran.penggalang.tolak');
   Route::delete('/pendaftaran/penggalang/delete/{id}', [PendaftaranController::class, 'destroyPenggalang'])->name('pendaftaran.penggalang.delete');
-  Route::get('/pendaftaran/penggalang/print', [PendaftaranController::class, 'printPenggalang'])->name('pendaftaran.penggalang.print');
+  Route::get('/pendaftaran/penggalang/printPDF', [PendaftaranController::class, 'printPDFPenggalang'])->name('pendaftaran.penggalang.printPDF');
 
   // Pendaftaran penegak
   Route::get('/pendaftaran/penegak', [PendaftaranController::class, 'indexPenegak'])->name('pendaftaran.penegak.index');
@@ -79,7 +80,7 @@ Route::middleware(['auth', 'user-access:Administrator,Juri,Panitia'])->group(fun
   Route::post('/pendaftaran/penegak/terima/{id}', [PendaftaranController::class, 'terimaPenegak'])->name('pendaftaran.penegak.terima');
   Route::post('/pendaftaran/penegak/tolak/{id}', [PendaftaranController::class, 'tolakPenegak'])->name('pendaftaran.penegak.tolak');
   Route::delete('/pendaftaran/penegak/delete/{id}', [PendaftaranController::class, 'destroyPenegak'])->name('pendaftaran.penegak.delete');
-  Route::get('/pendaftaran/penegak/print', [PendaftaranController::class, 'printPenegak'])->name('pendaftaran.penegak.print');
+  Route::get('/pendaftaran/penegak/printPDF', [PendaftaranController::class, 'printPDFPenegak'])->name('pendaftaran.penegak.printPDF');
 
   // Pendaftaran pandega
   Route::get('/pendaftaran/pandega', [PendaftaranController::class, 'indexPandega'])->name('pendaftaran.pandega.index');
@@ -87,7 +88,7 @@ Route::middleware(['auth', 'user-access:Administrator,Juri,Panitia'])->group(fun
   Route::post('/pendaftaran/pandega/terima/{id}', [PendaftaranController::class, 'terimaPandega'])->name('pendaftaran.pandega.terima');
   Route::post('/pendaftaran/pandega/tolak/{id}', [PendaftaranController::class, 'tolakPandega'])->name('pendaftaran.pandega.tolak');
   Route::delete('/pendaftaran/pandega/delete/{id}', [PendaftaranController::class, 'destroyPandega'])->name('pendaftaran.pandega.delete');
-  Route::get('/pendaftaran/pandega/print', [PendaftaranController::class, 'printPandega'])->name('pendaftaran.pandega.print');
+  Route::get('/pendaftaran/pandega/printPDF', [PendaftaranController::class, 'printPDFPandega'])->name('pendaftaran.pandega.printPDF');
 
   // Surat kelulusan
   Route::get('/surat-kelulusan', [ArsipController::class, 'indexKelulusan'])->name('surat-kelulusan.index');

@@ -22,7 +22,7 @@ class KontenController extends Controller
             $konten->where('status', '0');
         }
 
-        $konten = $konten->paginate(1);
+        $konten = $konten->paginate(9);
         return view('backend.konten.index', compact('konten'));
     }
 
@@ -159,5 +159,21 @@ class KontenController extends Controller
         $konten->delete();
 
         return response()->json(['success' => 'Data berhasil dihapus']);
+    }
+
+    public function publish(Request $request)
+    {
+        $konten = Konten::find($request->id);
+        $konten->status = 0;
+        $konten->save();
+        return response()->json(['success' => 'Data berhasil di publish']);
+    }
+
+    public function pending(Request $request)
+    {
+        $konten = Konten::find($request->id);
+        $konten->status = 1;
+        $konten->save();
+        return response()->json(['success' => 'Data berhasil di pending']);
     }
 }

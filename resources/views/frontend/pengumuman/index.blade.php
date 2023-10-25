@@ -21,11 +21,8 @@
             <div class="row justify-content-center">
                 <div class="col-12">
                     <div class="section-title text-center mb-4 pb-2">
-                        <h6 class="text-primary">Dewan Kerja Cabang Kuningan</h6>
-                        <h4 class="title mb-4">Pengumuman Pendaftaran</h4>
-                        <p class="text-muted para-desc mx-auto mb-0">Start working with <span
-                                class="text-primary fw-bold">Landrick</span> that can provide everything you need to
-                            generate awareness, drive traffic, connect.</p>
+                        <h6 class="text-primary">KWARTIR CABANG KABUPATEN KUNINGAN</h6>
+                        <h4 class="title mb-4">Pengumuman Hasil Pramuka Garuda</h4>
                     </div>
                 </div><!--end col-->
             </div><!--end row-->
@@ -36,7 +33,7 @@
                         <table class="table border-0 table-hover table-center mb-0">
                             <thead class="student-thread">
                                 <tr>
-                                    <th>#</th>
+                                    <th>No</th>
                                     <th>Nama</th>
                                     <th>Pangkalan</th>
                                     <th>Golongan</th>

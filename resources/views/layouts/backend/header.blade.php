@@ -2,11 +2,11 @@
 
     <div class="header-left">
         <a href="index.html" class="logo">
-            <img src="{{ asset('assets') }}/img/logo.png" alt="Logo">
+            <img src="{{ asset('assets_frontend') }}/images/logo_garudaku.png" alt="Logo"> Garudaku
         </a>
-        <a href="index.html" class="logo logo-small">
+        {{-- <a href="index.html" class="logo logo-small">
             <img src="{{ asset('assets') }}/img/logo-small.png" alt="Logo" width="30" height="30">
-        </a>
+        </a> --}}
     </div>
     <div class="menu-toggle">
         <a href="javascript:void(0);" id="toggle_btn">

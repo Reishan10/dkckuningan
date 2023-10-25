@@ -10,7 +10,7 @@ class BeritaController extends Controller
 {
     public function index()
     {
-        $konten = Konten::with('user')->orderBy('created_at', 'asc')->paginate(10);
+        $konten = Konten::with('user')->where('status', 0)->orderBy('created_at', 'asc')->paginate(10);
         return view('frontend.berita.index', compact('konten'));
     }
 

@@ -32,6 +32,9 @@
                                         <a href="{{ route('pendaftaran.semua.print') }}" target="_blank" class="btn btn-primary">
                                             <i class="fas fa-print"></i>
                                         </a>
+                                        <a href="{{ route('pendaftaran.semua.printPDF') }}" target="_blank" class="btn btn-primary">
+                                            <i class="fas fa-file-pdf"></i>
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -40,7 +43,7 @@
                                 <table class="table border-0 table-hover table-center mb-0 table-striped" id="datatable">
                                     <thead class="student-thread">
                                         <tr>
-                                            <th>#</th>
+                                            <th>No</th>
                                             <th>NTA</th>
                                             <th>Nama</th>
                                             <th>Email</th>

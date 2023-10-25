@@ -68,9 +68,16 @@
                                             id="btnHapus"><i class="feather-trash-2 me-1"></i> Hapus</a>
                                     </div>
                                     <div class="text-end inactive-style">
-                                        <a href="javascript:void(0);" class="text-danger" data-bs-toggle="modal"
-                                            data-bs-target="#deleteNotConfirmModal"><i class="feather-eye-off me-1"></i>
-                                            Pending</a>
+                                        @if ($row->status == '0')
+                                            <a href="javascript:void(0);" class="text-danger" data-id="{{ $row->id }}"
+                                                id="btnPending"><i class="feather-eye-off me-1"></i>
+                                                Pending</a>
+                                        @else
+                                            <a href="javascript:void(0);" class="text-success"
+                                                data-id="{{ $row->id }}" id="btnPublish"><i
+                                                    class="feather-eye me-1"></i>
+                                                Publish</a>
+                                        @endif
                                     </div>
                                 </div>
                             </div>
@@ -147,6 +154,102 @@
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
+            });
+
+            // Publish
+            $('body').on('click', '#btnPublish', function() {
+                var id = $(this).data('id');
+                Swal.fire({
+                    title: 'Notifikasi',
+                    text: "Apakah anda yakin?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ya, Publish!',
+                    cancelButtonText: 'Batal',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            type: "POST",
+                            url: "{{ url('konten/publish') }}/" + id,
+                            data: {
+                                id: id
+                            },
+                            dataType: 'json',
+                            success: function(response) {
+                                if (response.success) {
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Sukses',
+                                        text: response.success,
+                                    }).then(function() {
+                                        top.location.href =
+                                            "{{ route('konten.index') }}";
+                                    });
+                                } else {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Oops...',
+                                        text: response.error,
+                                    });
+                                }
+                            },
+                            error: function(xhr, ajaxOptions, thrownError) {
+                                console.error(xhr.status + "\n" + xhr.responseText +
+                                    "\n" + thrownError);
+                            }
+                        });
+                    }
+                });
+            });
+
+            // Pending
+            $('body').on('click', '#btnPending', function() {
+                var id = $(this).data('id');
+                Swal.fire({
+                    title: 'Notifikasi',
+                    text: "Apakah anda yakin?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ya, Pending!',
+                    cancelButtonText: 'Batal',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            type: "POST",
+                            url: "{{ url('konten/pending') }}/" + id,
+                            data: {
+                                id: id
+                            },
+                            dataType: 'json',
+                            success: function(response) {
+                                if (response.success) {
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Sukses',
+                                        text: response.success,
+                                    }).then(function() {
+                                        top.location.href =
+                                            "{{ route('konten.index') }}";
+                                    });
+                                } else {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Oops...',
+                                        text: response.error,
+                                    });
+                                }
+                            },
+                            error: function(xhr, ajaxOptions, thrownError) {
+                                console.error(xhr.status + "\n" + xhr.responseText +
+                                    "\n" + thrownError);
+                            }
+                        });
+                    }
+                });
             });
 
             // Hapus Data

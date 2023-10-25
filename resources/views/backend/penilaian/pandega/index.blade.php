@@ -36,7 +36,7 @@
                                     id="datatable">
                                     <thead class="student-thread">
                                         <tr>
-                                            <th>#</th>
+                                            <th>No</th>
                                             <th>NTA</th>
                                             <th>Nama</th>
                                             <th>Pangkalan</th>

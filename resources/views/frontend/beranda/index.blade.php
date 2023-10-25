@@ -17,18 +17,17 @@
             <div class="row align-items-center mt-5 mt-sm-0">
                 <div class="col-md-6">
                     <div class="title-heading text-center text-md-start">
-                        <span class="badge rounded-pill bg-soft-primary">Sistem Informasi</span>
-                        <h5 class="heading mb-3 mt-2">Dewan Kerja Cabang <span class="fw-bold">Kuningan</span></h5>
-                        <p class="text-muted mb-0 para-dark para-desc mx-auto ms-md-auto">Launch your campaign and
-                            benefit from our expertise on designing and managing conversion centered bootstrap v5 html
-                            page.</p>
+                        <span class="badge rounded-pill bg-soft-primary">GARUDAKU</span>
+                        <h5 class="heading mb-3 mt-2">Pramuka Garuda Kwartir Cabang Kabupaten <span
+                                class="fw-bold">Kuningan</span></h5>
+                        <a href="#tentang" class="btn btn-primary rounded-pill">Tentang</a>
                     </div>
                 </div><!--end col-->
 
                 <div class="col-md-6 mt-4 pt-2 mt-sm-0 pt-sm-0">
                     <div class="freelance-hero position-relative">
                         <div class="bg-shape position-relative">
-                            <img src="{{ asset('assets_frontend') }}/images/freelancer/freelancer.png"
+                            <img src="{{ asset('assets_frontend') }}/images/hero-jokowi.png"
                                 class="mx-auto d-block img-fluid" alt="">
                         </div>
                     </div>
@@ -42,20 +41,27 @@
         <div class="container">
             <div class="row align-items-center" id="counter">
                 <div class="col-md-6">
-                    <img src="{{ asset('assets_frontend') }}/images/company/about2.png" class="img-fluid" alt="">
+                    <img src="{{ asset('assets_frontend') }}/images/about-1.jpeg" class="img-fluid" alt="">
                 </div><!--end col-->
 
-                <div class="col-md-6 mt-4 pt-2 mt-sm-0 pt-sm-0">
+                <div class="col-md-6 mt-4 pt-2 mt-sm-0 pt-sm-0" id="tentang">
                     <div class="ms-lg-4">
                         <div class="section-title">
                             <h4 class="title mb-4">Tentang</h4>
-                            <p class="text-muted">Start working with <span class="text-primary fw-bold">Landrick</span>
-                                that can provide everything you need to generate awareness, drive traffic, connect.
-                                Dummy text is text that is used in the publishing industry or by web designers to occupy
-                                the space which will later be filled with 'real' content. This is required when, for
-                                example, the final text is not yet available. Dummy texts have been in use by
-                                typesetters since the 16th century.</p>
-                            <a href="javascript:void(0)" class="btn btn-primary mt-3">Kontak Kami</a>
+                            <p class="text-muted" style="text-align: justify;">
+                                Berdasarkan Surat Keputusan Kwartir Nasional Gerakan Pramuka Nomor 101 Tahun 1984 tentang
+                                Petunjuk Penyelenggaraan <span class="text-primary fw-bold">Pramuka Garuda</span> : <span
+                                    class="text-primary fw-bold">Pramuka Garuda</span> ialah seorang Pramuka yang dapat
+                                menjadi teladan dan telah memenuhi persyaratan serta memiliki Tanda Parmuka Garuda. Tanda
+                                <span class="text-primary fw-bold">Pramuka Garuda</span> adalah tanda kecakapan tertinggi
+                                yang
+                                diberikan kepada seorang Pramuka yang
+                                memenuhi syarat-syarat <span class="text-primary fw-bold">Pramuka Garuda</span>. Selain itu,
+                                Tanda
+                                <span class="text-primary fw-bold">Pramuka Garuda</span> sebagai alat yang
+                                mempunyai nilai pendidikan dalam rangka menerapkan prinsip dasar metodik pendidikan
+                                kepramukaan.
+                            </p>
                         </div>
                     </div>
                 </div><!--end col-->
@@ -69,12 +75,9 @@
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-12">
-                    <div class="section-title text-center mb-4 pb-2">
-                        <h6 class="text-primary">Dewan Kerja Cabang Kuningan</h6>
-                        <h4 class="title mb-4">Pendaftaran Pramuka Garuda</h4>
-                        <p class="text-muted para-desc mx-auto mb-0">Start working with <span
-                                class="text-primary fw-bold">Landrick</span> that can provide everything you need to
-                            generate awareness, drive traffic, connect.</p>
+                    <div class="section-title text-center mb-3 pb-2">
+                        <h6 class="text-primary">KWARTIR CABANG KABUPATEN KUNINGAN</h6>
+                        <h4 class="title mb-4">Tahapan Pendaftaran Pramuka Garuda</h4>
                     </div>
                 </div><!--end col-->
             </div><!--end row-->
@@ -89,8 +92,8 @@
 
                         <div class="card-body">
                             <h5 class="text-dark">Mengisi Biodata</h5>
-                            <p class="text-muted mb-0">The most well-known dummy text is the 'Lorem Ipsum', which is
-                                said to have originated</p>
+                            {{-- <p class="text-muted mb-0">The most well-known dummy text is the 'Lorem Ipsum', which is
+                                said to have originated</p> --}}
                         </div>
                     </div>
                 </div><!--end col-->
@@ -104,8 +107,8 @@
 
                         <div class="card-body">
                             <h5 class="text-dark">Test & Seleksi</h5>
-                            <p class="text-muted mb-0">Generators convallis odio, vel pharetra quam malesuada vel. Nam
-                                porttitor malesuada.</p>
+                            {{-- <p class="text-muted mb-0">Generators convallis odio, vel pharetra quam malesuada vel. Nam
+                                porttitor malesuada.</p> --}}
                         </div>
                     </div>
                 </div><!--end col-->
@@ -119,8 +122,8 @@
 
                         <div class="card-body">
                             <h5 class="text-dark">Pengumuman</h5>
-                            <p class="text-muted mb-0">Internet Proin tempus odio, vel pharetra quam malesuada vel. Nam
-                                porttitor malesuada.</p>
+                            {{-- <p class="text-muted mb-0">Internet Proin tempus odio, vel pharetra quam malesuada vel. Nam
+                                porttitor malesuada.</p> --}}
                         </div>
                     </div>
                 </div><!--end col-->
@@ -132,14 +135,12 @@
     <!-- Start -->
     <section class="section"
         style="background: url('{{ asset('assets_frontend') }}/images/shapes/shape2.png') center center;">
-        <div class="container mt-100 mt-60">
-            <div class="row align-items-center mb-4 pb-2">
-                <div class="col-md-8">
-                    <div class="section-title text-center text-md-start">
-                        <h4 class="mb-4">Berita Terbaru</h4>
-                        <p class="text-muted mb-0 para-desc">Start working with <span
-                                class="text-primary fw-bold">Landrick</span> that can provide everything you need to
-                            generate awareness, drive traffic, connect.</p>
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-12">
+                    <div class="section-title text-center mb-3 pb-2">
+                        <h6 class="text-primary">KWARTIR CABANG KABUPATEN KUNINGAN</h6>
+                        <h4 class="title mb-4">Berita Terbaru</h4>
                     </div>
                 </div><!--end col-->
             </div><!--end row-->
@@ -177,8 +178,8 @@
                 @endforelse
                 <div class="col-12 mt-4 pt-2">
                     <div class="text-center">
-                        <a href="{{ route('berita-garudaku.index') }}" class="btn btn-primary">Berita Lainnya <i data-feather="arrow-right"
-                                class="fea icon-sm"></i></a>
+                        <a href="{{ route('berita-garudaku.index') }}" class="btn btn-primary">Berita Lainnya <i
+                                data-feather="arrow-right" class="fea icon-sm"></i></a>
                     </div>
                 </div><!--end col-->
             </div><!--end row-->

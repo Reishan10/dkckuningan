@@ -7,7 +7,7 @@
     <meta content="{{ csrf_token() }}" name="csrf-token">
     <title>Login - DKC Kuningan</title>
 
-    <link rel="shortcut icon" href="{{ asset('assets') }}/img/favicon.png">
+    <link rel="shortcut icon" href="{{ asset('assets_frontend') }}/images/logo_garudaku.png" />
 
     <link
         href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;0,900;1,400;1,500;1,700&display=swap"
@@ -27,11 +27,11 @@
             <div class="container">
                 <div class="loginbox">
                     <div class="login-left">
-                        <img class="img-fluid" src="{{ asset('assets') }}/img/login.png" alt="Logo">
+                        <img class="img-fluid" src="{{ asset('assets_frontend') }}/images/logo_garudaku.png" alt="Logo">
                     </div>
                     <div class="login-right">
                         <div class="login-right-wrap">
-                            <h1>Selamat datang di DKC Kuningan</h1>
+                            <h1>Selamat datang di Pramuka Garuda Kuningan</h1>
                             <h2>Sign in</h2>
 
                             <form id="form">
@@ -61,7 +61,7 @@
                                             <span class="checkmark"></span>
                                         </label>
                                     </div>
-                                    <a href="forgot-password.html">Lupa Password?</a>
+                                    {{-- <a href="forgot-password.html">Lupa Password?</a> --}}
                                 </div>
                                 <div class="form-group">
                                     <button class="btn btn-primary btn-block" id="login"

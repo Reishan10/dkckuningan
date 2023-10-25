@@ -41,7 +41,7 @@
                                     id="datatable">
                                     <thead class="student-thread">
                                         <tr>
-                                            <th>#</th>
+                                            <th>No</th>
                                             <th>Persyaratan</th>
                                             <th>Keterangan</th>
                                             <th>Bobot</th>

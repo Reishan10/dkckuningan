@@ -12,7 +12,7 @@ class BerandaController extends Controller
     public function index()
     {
         $timeline = Timeline::orderBy('created_at', 'asc')->get();
-        $konten = Konten::with('user')->orderBy('created_at', 'asc')->take(9)->get();
+        $konten = Konten::with('user')->where('status', 0)->orderBy('created_at', 'asc')->take(6)->get();
         return view('frontend.beranda.index', compact('timeline', 'konten'));
     }
 }

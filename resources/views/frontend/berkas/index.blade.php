@@ -7,7 +7,7 @@
             <div class="row mt-5 justify-content-center">
                 <div class="col-lg-12 text-center">
                     <div class="pages-heading">
-                        <h4 class="title mb-0"> Berkas </h4>
+                        <h4 class="title mb-0"> Berkas Pendaftaran </h4>
                     </div>
                 </div> <!--end col-->
             </div><!--end row-->
@@ -21,11 +21,8 @@
             <div class="row justify-content-center">
                 <div class="col-12">
                     <div class="section-title text-center mb-4 pb-2">
-                        <h6 class="text-primary">Dewan Kerja Cabang Kuningan</h6>
-                        <h4 class="title mb-4">Berkas Pendaftaran</h4>
-                        <p class="text-muted para-desc mx-auto mb-0">Start working with <span
-                                class="text-primary fw-bold">Landrick</span> that can provide everything you need to
-                            generate awareness, drive traffic, connect.</p>
+                        <h6 class="text-primary">KWARTIR CABANG KABUPATEN KUNINGAN</h6>
+                        <h4 class="title mb-4">Berkas Pendaftaran Pramuka Garuda</h4>
                     </div>
                 </div><!--end col-->
             </div><!--end row-->
@@ -36,7 +33,7 @@
                         <table class="table border-0 table-hover table-center mb-0">
                             <thead class="student-thread">
                                 <tr>
-                                    <th>#</th>
+                                    <th>No</th>
                                     <th>Tanggal Terbit</th>
                                     <th>Surat</th>
                                     <th>File</th>
@@ -54,7 +51,7 @@
                                     </tr>
                                 @empty
                                     <tr>
-                                        <td colspan="4">Data Tidak Tersedia</td>
+                                        <td colspan="4" class="text-center">Data Tidak Tersedia</td>
                                     </tr>
                                 @endforelse
                             </tbody>
