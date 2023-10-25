@@ -20,17 +20,32 @@
 
             <div class="row">
                 <div class="col-sm-12">
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <input type="date" class="form-control" id="start_date" name="start_date">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <input type="date" class="form-control" id="end_date" name="end_date">
+                        </div>
+                        <div class="col-md-4">
+                            <button id="filter" class="btn btn-primary">Filter</button>
+                        </div>
+                    </div>
                     <div class="card card-table comman-shadow">
                         <div class="card-body">
-
                             <div class="page-header">
                                 <div class="row align-items-center">
                                     <div class="col">
                                         <h3 class="page-title">@yield('title')</h3>
                                     </div>
                                     <div class="col-auto text-end float-end ms-auto download-grp">
-                                        <a href="{{ route('pendaftaran.penegak.print') }}" target="_blank" class="btn btn-primary">
+                                        <a href="{{ route('pendaftaran.penegak.print') }}" target="_blank"
+                                            class="btn btn-primary">
                                             <i class="fas fa-print"></i>
+                                        </a>
+                                        <a href="{{ route('pendaftaran.penegak.printPDF') }}" target="_blank"
+                                            class="btn btn-primary">
+                                            <i class="fas fa-file-pdf"></i>
                                         </a>
                                     </div>
                                 </div>
@@ -183,6 +198,63 @@
                             searchable: false
                         }
                     ]
+                });
+
+                $('#filter').click(function() {
+                    var start_date = $('#start_date').val();
+                    var end_date = $('#end_date').val();
+
+                    table.destroy();
+                    table = $('#datatable').DataTable({
+                        processing: true,
+                        serverSide: true,
+                        ajax: {
+                            url: "{{ route('pendaftaran.penegak.index') }}",
+                            data: {
+                                start_date: start_date,
+                                end_date: end_date
+                            }
+                        },
+                        columns: [{
+                                data: 'DT_RowIndex',
+                                name: 'DT_RowIndex',
+                                orderable: false,
+                                searchable: false
+                            },
+                            {
+                                data: 'nta',
+                                name: 'nta'
+                            },
+                            {
+                                data: 'name',
+                                name: 'name'
+                            },
+                            {
+                                data: 'email',
+                                name: 'email'
+                            },
+                            {
+                                data: 'no_telepon',
+                                name: 'no_telepon'
+                            },
+                            {
+                                data: 'berkas',
+                                name: 'berkas'
+                            },
+                            {
+                                data: 'status',
+                                name: 'status',
+                                orderable: false,
+                                searchable: false
+                            },
+                            {
+                                data: 'aksi',
+                                name: 'aksi',
+                                orderable: false,
+                                searchable: false
+                            }
+                        ]
+                    });
                 });
 
                 // Detail Data

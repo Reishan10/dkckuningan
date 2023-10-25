@@ -11,14 +11,22 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class PendaftaranController extends Controller
 {
-    public function indexAll()
+    public function indexAll(Request $request)
     {
         if (request()->ajax()) {
-            $pendaftaran = Pendaftaran::with('user')
+            $query = Pendaftaran::with('user')
                 ->join('users', 'pendaftaran.user_id', '=', 'users.id')
                 ->orderBy('users.name', 'asc')
-                ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.*', 'pendaftaran.*')
-                ->get();
+                ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.*', 'pendaftaran.*');
+
+            if ($request->has('start_date') && $request->has('end_date')) {
+                $start_date = $request->input('start_date');
+                $end_date = $request->input('end_date');
+
+                $query->whereBetween('pendaftaran.created_at', [$start_date, $end_date]);
+            }
+
+            $pendaftaran = $query->get();
 
             return DataTables::of($pendaftaran)
                 ->addIndexColumn()
@@ -149,16 +157,25 @@ class PendaftaranController extends Controller
     }
 
 
-    public function indexSiaga()
+    public function indexSiaga(Request $request)
     {
         if (request()->ajax()) {
-            $pendaftaran = Pendaftaran::with('user')
+            $query = Pendaftaran::with('user')
                 ->join('users', 'pendaftaran.user_id', '=', 'users.id')
                 ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
                 ->orderBy('users.name', 'asc')
                 ->where('golongan.name', 'Siaga')
-                ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.*', 'pendaftaran.*')
-                ->get();
+                ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.*', 'pendaftaran.*');
+
+            if ($request->has('start_date') && $request->has('end_date')) {
+                $start_date = $request->input('start_date');
+                $end_date = $request->input('end_date');
+
+                $query->whereBetween('pendaftaran.created_at', [$start_date, $end_date]);
+            }
+
+            $pendaftaran = $query->get();
+
 
             return DataTables::of($pendaftaran)
                 ->addIndexColumn()
@@ -205,15 +222,16 @@ class PendaftaranController extends Controller
                 ->addColumn('aksi', function ($pendaftaran) {
                     $btn = '';
 
-                    if ($pendaftaran->status != 2) {
+                    if ($pendaftaran->status == 1) {
                         $btn .= '<button type="button" class="btn btn-sm btn-success text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnTerima"><i class="fas fa-check"></i></button>';
-                    } elseif ($pendaftaran->status != 3) {
                         $btn .= '<button type="button" class="btn btn-sm btn-danger text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnTolak" title="Tolak"><i class="fas fa-times"></i></button>';
+                    } elseif ($pendaftaran->status == 2) {
+                        $btn .= '<button type="button" class="btn btn-sm btn-danger text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnTolak" title="Tolak"><i class="fas fa-times"></i></button>';
+                    } elseif ($pendaftaran->status == 3) {
+                        $btn .= '<button type="button" class="btn btn-sm btn-success text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnTerima"><i class="fas fa-check"></i></button>';
                     }
-
                     $btn .= '<button type="button" class="btn btn-sm btn-info text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnDetail" data-bs-toggle="modal" data-bs-target="#detailModal"><i class="fas fa-eye"></i></button>';
                     $btn .= '<button type="button" class="btn btn-sm btn-warning text-light" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnHapus" title="Hapus"><i class="fas fa-trash"></i></button>';
-
                     return $btn;
                 })
                 ->rawColumns(['nta', 'aksi', 'active_status', 'comboBox', 'status', 'berkas'])
@@ -261,6 +279,19 @@ class PendaftaranController extends Controller
         return response()->json(['success' => 'Data berhasil dihapus', 'berkas' => $pendaftaran->berkas]);
     }
 
+    public function printSiaga()
+    {
+        $pendaftaran = Pendaftaran::with('user', 'golongan')
+            ->join('users', 'pendaftaran.user_id', '=', 'users.id')
+            ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
+            ->orderBy('users.name', 'asc')
+            ->where('golongan.name', 'Siaga')
+            ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.name', 'golongan.name as golongan_name', 'pangkalan')
+            ->get();
+
+        return view('backend.pendaftaran.siaga.print', compact('pendaftaran'));
+    }
+
     public function printPDFSiaga()
     {
         $pendaftaran = Pendaftaran::with('user', 'golongan')
@@ -275,16 +306,24 @@ class PendaftaranController extends Controller
         return $pdf->download('pendaftaran-siaga-' . time() . '.pdf');
     }
 
-    public function indexPenggalang()
+    public function indexPenggalang(Request $request)
     {
         if (request()->ajax()) {
-            $pendaftaran = Pendaftaran::with('user')
+            $query = Pendaftaran::with('user')
                 ->join('users', 'pendaftaran.user_id', '=', 'users.id')
                 ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
                 ->orderBy('users.name', 'asc')
                 ->where('golongan.name', 'Penggalang')
-                ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.*', 'pendaftaran.*')
-                ->get();
+                ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.*', 'pendaftaran.*');
+
+            if ($request->has('start_date') && $request->has('end_date')) {
+                $start_date = $request->input('start_date');
+                $end_date = $request->input('end_date');
+
+                $query->whereBetween('pendaftaran.created_at', [$start_date, $end_date]);
+            }
+
+            $pendaftaran = $query->get();
 
             return DataTables::of($pendaftaran)
                 ->addIndexColumn()
@@ -331,15 +370,16 @@ class PendaftaranController extends Controller
                 ->addColumn('aksi', function ($pendaftaran) {
                     $btn = '';
 
-                    if ($pendaftaran->status != 2) {
+                    if ($pendaftaran->status == 1) {
                         $btn .= '<button type="button" class="btn btn-sm btn-success text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnTerima"><i class="fas fa-check"></i></button>';
-                    } elseif ($pendaftaran->status != 3) {
                         $btn .= '<button type="button" class="btn btn-sm btn-danger text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnTolak" title="Tolak"><i class="fas fa-times"></i></button>';
+                    } elseif ($pendaftaran->status == 2) {
+                        $btn .= '<button type="button" class="btn btn-sm btn-danger text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnTolak" title="Tolak"><i class="fas fa-times"></i></button>';
+                    } elseif ($pendaftaran->status == 3) {
+                        $btn .= '<button type="button" class="btn btn-sm btn-success text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnTerima"><i class="fas fa-check"></i></button>';
                     }
-
                     $btn .= '<button type="button" class="btn btn-sm btn-info text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnDetail" data-bs-toggle="modal" data-bs-target="#detailModal"><i class="fas fa-eye"></i></button>';
                     $btn .= '<button type="button" class="btn btn-sm btn-warning text-light" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnHapus" title="Hapus"><i class="fas fa-trash"></i></button>';
-
                     return $btn;
                 })
                 ->rawColumns(['nta', 'aksi', 'active_status', 'comboBox', 'status', 'berkas'])
@@ -387,6 +427,19 @@ class PendaftaranController extends Controller
         return response()->json(['success' => 'Data berhasil dihapus', 'berkas' => $pendaftaran->berkas]);
     }
 
+    public function printPenggalang()
+    {
+        $pendaftaran = Pendaftaran::with('user', 'golongan')
+            ->join('users', 'pendaftaran.user_id', '=', 'users.id')
+            ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
+            ->orderBy('users.name', 'asc')
+            ->where('golongan.name', 'Penggalang')
+            ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.name', 'golongan.name as golongan_name', 'pangkalan')
+            ->get();
+
+        return view('backend.pendaftaran.penggalang.print', compact('pendaftaran'));
+    }
+
     public function printPDFPenggalang()
     {
         $pendaftaran = Pendaftaran::with('user', 'golongan')
@@ -401,16 +454,24 @@ class PendaftaranController extends Controller
         return $pdf->download('pendaftaran-penggalang-' . time() . '.pdf');
     }
 
-    public function indexPenegak()
+    public function indexPenegak(Request $request)
     {
         if (request()->ajax()) {
-            $pendaftaran = Pendaftaran::with('user')
+            $query = Pendaftaran::with('user')
                 ->join('users', 'pendaftaran.user_id', '=', 'users.id')
                 ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
                 ->orderBy('users.name', 'asc')
                 ->where('golongan.name', 'Penegak')
-                ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.*', 'pendaftaran.*')
-                ->get();
+                ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.*', 'pendaftaran.*');
+
+            if ($request->has('start_date') && $request->has('end_date')) {
+                $start_date = $request->input('start_date');
+                $end_date = $request->input('end_date');
+
+                $query->whereBetween('pendaftaran.created_at', [$start_date, $end_date]);
+            }
+
+            $pendaftaran = $query->get();
 
             return DataTables::of($pendaftaran)
                 ->addIndexColumn()
@@ -457,15 +518,16 @@ class PendaftaranController extends Controller
                 ->addColumn('aksi', function ($pendaftaran) {
                     $btn = '';
 
-                    if ($pendaftaran->status != 2) {
+                    if ($pendaftaran->status == 1) {
                         $btn .= '<button type="button" class="btn btn-sm btn-success text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnTerima"><i class="fas fa-check"></i></button>';
-                    } elseif ($pendaftaran->status != 3) {
                         $btn .= '<button type="button" class="btn btn-sm btn-danger text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnTolak" title="Tolak"><i class="fas fa-times"></i></button>';
+                    } elseif ($pendaftaran->status == 2) {
+                        $btn .= '<button type="button" class="btn btn-sm btn-danger text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnTolak" title="Tolak"><i class="fas fa-times"></i></button>';
+                    } elseif ($pendaftaran->status == 3) {
+                        $btn .= '<button type="button" class="btn btn-sm btn-success text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnTerima"><i class="fas fa-check"></i></button>';
                     }
-
                     $btn .= '<button type="button" class="btn btn-sm btn-info text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnDetail" data-bs-toggle="modal" data-bs-target="#detailModal"><i class="fas fa-eye"></i></button>';
                     $btn .= '<button type="button" class="btn btn-sm btn-warning text-light" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnHapus" title="Hapus"><i class="fas fa-trash"></i></button>';
-
                     return $btn;
                 })
                 ->rawColumns(['nta', 'aksi', 'active_status', 'comboBox', 'status', 'berkas'])
@@ -513,6 +575,19 @@ class PendaftaranController extends Controller
         return response()->json(['success' => 'Data berhasil dihapus', 'berkas' => $pendaftaran->berkas]);
     }
 
+    public function printPenegak()
+    {
+        $pendaftaran = Pendaftaran::with('user', 'golongan')
+            ->join('users', 'pendaftaran.user_id', '=', 'users.id')
+            ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
+            ->orderBy('users.name', 'asc')
+            ->where('golongan.name', 'Penegak')
+            ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.name', 'golongan.name as golongan_name', 'pangkalan')
+            ->get();
+
+        return view('backend.pendaftaran.penegak.print', compact('pendaftaran'));
+    }
+
     public function printPDFPenegak()
     {
         $pendaftaran = Pendaftaran::with('user', 'golongan')
@@ -527,16 +602,24 @@ class PendaftaranController extends Controller
         return $pdf->download('pendaftaran-penegak-' . time() . '.pdf');
     }
 
-    public function indexPandega()
+    public function indexPandega(Request $request)
     {
         if (request()->ajax()) {
-            $pendaftaran = Pendaftaran::with('user')
+            $query = Pendaftaran::with('user')
                 ->join('users', 'pendaftaran.user_id', '=', 'users.id')
                 ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
                 ->orderBy('users.name', 'asc')
                 ->where('golongan.name', 'Pandega')
-                ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.*', 'pendaftaran.*')
-                ->get();
+                ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.*', 'pendaftaran.*');
+
+            if ($request->has('start_date') && $request->has('end_date')) {
+                $start_date = $request->input('start_date');
+                $end_date = $request->input('end_date');
+
+                $query->whereBetween('pendaftaran.created_at', [$start_date, $end_date]);
+            }
+
+            $pendaftaran = $query->get();
 
             return DataTables::of($pendaftaran)
                 ->addIndexColumn()
@@ -583,15 +666,16 @@ class PendaftaranController extends Controller
                 ->addColumn('aksi', function ($pendaftaran) {
                     $btn = '';
 
-                    if ($pendaftaran->status != 2) {
+                    if ($pendaftaran->status == 1) {
                         $btn .= '<button type="button" class="btn btn-sm btn-success text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnTerima"><i class="fas fa-check"></i></button>';
-                    } elseif ($pendaftaran->status != 3) {
                         $btn .= '<button type="button" class="btn btn-sm btn-danger text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnTolak" title="Tolak"><i class="fas fa-times"></i></button>';
+                    } elseif ($pendaftaran->status == 2) {
+                        $btn .= '<button type="button" class="btn btn-sm btn-danger text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnTolak" title="Tolak"><i class="fas fa-times"></i></button>';
+                    } elseif ($pendaftaran->status == 3) {
+                        $btn .= '<button type="button" class="btn btn-sm btn-success text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnTerima"><i class="fas fa-check"></i></button>';
                     }
-
                     $btn .= '<button type="button" class="btn btn-sm btn-info text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnDetail" data-bs-toggle="modal" data-bs-target="#detailModal"><i class="fas fa-eye"></i></button>';
                     $btn .= '<button type="button" class="btn btn-sm btn-warning text-light" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnHapus" title="Hapus"><i class="fas fa-trash"></i></button>';
-
                     return $btn;
                 })
                 ->rawColumns(['nta', 'aksi', 'active_status', 'comboBox', 'status', 'berkas'])
@@ -637,6 +721,19 @@ class PendaftaranController extends Controller
         $pendaftaran->delete();
 
         return response()->json(['success' => 'Data berhasil dihapus', 'berkas' => $pendaftaran->berkas]);
+    }
+
+    public function printPandega()
+    {
+        $pendaftaran = Pendaftaran::with('user', 'golongan')
+            ->join('users', 'pendaftaran.user_id', '=', 'users.id')
+            ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
+            ->orderBy('users.name', 'asc')
+            ->where('golongan.name', 'Pandega')
+            ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.name', 'golongan.name as golongan_name', 'pangkalan')
+            ->get();
+
+        return view('backend.pendaftaran.pandega.print', compact('pendaftaran'));
     }
 
     public function printPDFPandega()
