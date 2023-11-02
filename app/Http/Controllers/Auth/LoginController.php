@@ -77,7 +77,7 @@ class LoginController extends Controller
 
             if ($user && Hash::check($credentials['password'], $user->password)) {
                 Auth::loginUsingId($user->id);
-                if ($user->type == 'Administrator') {
+                if ($user->type == 'Panitia') {
                     return response()->json(['redirect' => route('dashboard.index')]);
                 } elseif ($user->type == 'Juri') {
                     return response()->json(['redirect' => route('dashboard.index')]);

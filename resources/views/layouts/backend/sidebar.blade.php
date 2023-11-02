@@ -83,7 +83,7 @@
                         </ul>
                     </li>
                 @endif
-                @if (auth()->user()->type == 'Administrator')
+                @if (auth()->user()->type == 'Panitia')
                     <li
                         class="submenu {{ request()->routeIs(['pengguna.semua.index', 'pengguna.semua.create', 'pengguna.semua.edit', 'pengguna.juri.index', 'pengguna.juri.create', 'pengguna.juri.edit', 'pengguna.kwarcab.index', 'pengguna.kwarcab.create', 'pengguna.kwarcab.edit', 'pengguna.peserta.index', 'pengguna.peserta.create', 'pengguna.peserta.edit']) ? 'active' : '' }}">
                         <a href="#"><i class="fas fa-users"></i> <span> Pengguna</span> <span

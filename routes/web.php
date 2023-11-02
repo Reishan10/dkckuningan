@@ -45,7 +45,7 @@ Route::middleware(['auth', 'user-access:Peserta'])->group(function () {
   Route::post('/pendaftaran/store', [FrontendPendaftaranController::class, 'store'])->name('pendaftaran.store');
 });
 
-Route::middleware(['auth', 'user-access:Administrator,Juri,Kwarcab,Peserta'])->group(function () {
+Route::middleware(['auth', 'user-access:Panitia,Juri,Kwarcab,Peserta'])->group(function () {
   // Pengaturan
   Route::get('/pengaturan/profile', [PengaturanController::class, 'profile'])->name('pengaturan.profile');
   Route::post('/pengaturan/profile/{id}', [PengaturanController::class, 'updateProfile'])->name('pengaturan.updateProfile');
@@ -58,8 +58,8 @@ Route::middleware(['auth', 'user-access:Administrator,Juri,Kwarcab,Peserta'])->g
   Route::post('/pengaturan/nonaktif-akun', [PengaturanController::class, 'updateStatus'])->name('pengaturan.updateStatus');
 });
 
-// Administrator, Juri, Kwarcab & Peserta
-Route::middleware(['auth', 'user-access:Administrator,Juri,Kwarcab'])->group(function () {
+// Panitia, Juri, Kwarcab & Peserta
+Route::middleware(['auth', 'user-access:Panitia,Juri,Kwarcab'])->group(function () {
   Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
   // Konten
@@ -157,8 +157,8 @@ Route::middleware(['auth', 'user-access:Administrator,Juri,Kwarcab'])->group(fun
   Route::delete('/berkas-lain/delete/{id}', [ArsipController::class, 'destroyLain'])->name('berkas-lain.delete');
 });
 
-// Administrator & Juri
-Route::middleware(['auth', 'user-access:Administrator,Juri'])->group(function () {
+// Panitia & Juri
+Route::middleware(['auth', 'user-access:Panitia,Juri'])->group(function () {
   // Penilaian
   Route::get('/penilaian-siaga', [PenilaianController::class, 'indexSiaga'])->name('penilaian-siaga.index');
   Route::get('/penilaian-siaga/{id}', [PenilaianController::class, 'nilaiSiaga'])->name('penilaian-siaga.nilai');
@@ -180,8 +180,8 @@ Route::middleware(['auth', 'user-access:Administrator,Juri'])->group(function ()
   Route::post('/penilaian-pandega/simpan-penilaian', [PenilaianController::class, 'simpanPenilaianPandega'])->name('penilaian-pandega.simpan');
 });
 
-// Administrator & Kwarcab
-Route::middleware(['auth', 'user-access:Administrator,Kwarcab'])->group(function () {
+// Panitia & Kwarcab
+Route::middleware(['auth', 'user-access:Panitia,Kwarcab'])->group(function () {
   // Golongan
   Route::get('/golongan', [GolonganController::class, 'index'])->name('golongan.index');
   Route::get('/golongan/tambah', [GolonganController::class, 'create'])->name('golongan.create');
@@ -190,8 +190,8 @@ Route::middleware(['auth', 'user-access:Administrator,Kwarcab'])->group(function
   Route::delete('/golongan/delete/{id}', [GolonganController::class, 'destroy'])->name('golongan.delete');
 });
 
-// Administrator
-Route::middleware(['auth', 'user-access:Administrator'])->group(function () {
+// Panitia
+Route::middleware(['auth', 'user-access:Panitia'])->group(function () {
   // Pengguna all
   Route::get('/pengguna/semua', [UserController::class, 'indexAll'])->name('pengguna.semua.index');
   Route::get('/pengguna/semua/tambah', [UserController::class, 'createAll'])->name('pengguna.semua.create');
