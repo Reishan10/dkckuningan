@@ -87,12 +87,26 @@
                         <div class="card-header">
                             <div class="row align-items-center">
                                 <div class="col-12">
-                                    <h5 class="card-title">Pendaftar Tahun Ini</h5>
+                                    <h5 class="card-title">Pendaftar Tahun {{ date('Y') }}</h5>
                                 </div>
                             </div>
                         </div>
                         <div class="card-body">
                             <div id="golongan"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 col-lg-6">
+                    <div class="card card-chart">
+                        <div class="card-header">
+                            <div class="row align-items-center">
+                                <div class="col-12">
+                                    <h5 class="card-title">Peserta Laki-laki dan Perempuan Tahun {{ date('Y') }}</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div id="gender_in_year"></div>
                         </div>
                     </div>
                 </div>
@@ -186,6 +200,87 @@
 
         var chart = new ApexCharts(document.querySelector("#golongan"), options);
         chart.render();
+
+        var genderData = @json($data_gender);
+        var categories = ['Siaga', 'Penggalang', 'Penegak', 'Pandega'];
+
+        var seriesData = [];
+
+        // Initialize the series data with empty data for Laki-laki and Perempuan
+        ['Laki-laki', 'Perempuan'].forEach(function(gender) {
+            var series = {
+                name: gender,
+                data: []
+            };
+
+            categories.forEach(function(category) {
+                var total = genderData
+                    .filter(function(item) {
+                        return item.golongan_name === category && item.jenis_kelamin === gender;
+                    })
+                    .map(function(item) {
+                        return item.total;
+                    })[0] || 0;
+
+                series.data.push(total);
+            });
+
+            seriesData.push(series);
+        });
+
+        var options = {
+            series: seriesData,
+            chart: {
+                type: 'bar',
+                height: 350,
+            },
+            plotOptions: {
+                bar: {
+                    horizontal: false,
+                    columnWidth: '55%',
+                    endingShape: 'rounded'
+                }
+            },
+            dataLabels: {
+                enabled: false
+            },
+            xaxis: {
+                categories: categories,
+            },
+            yaxis: {
+                title: {
+                    text: 'Total'
+                },
+                labels: {
+                    formatter: function(value) {
+                        return Math.floor(value);
+                    }
+                }
+            },
+            fill: {
+                opacity: 1
+            },
+            tooltip: {
+                y: {
+                    formatter: function(val, {
+                        seriesIndex,
+                        dataPointIndex,
+                        w
+                    }) {
+                        var gender = w.config.series[seriesIndex].name;
+                        return gender + ': ' + Math.floor(val);
+                    }
+                }
+            },
+            legend: {
+                show: true,
+                position: 'top'
+            }
+        };
+
+        var chart = new ApexCharts(document.querySelector("#gender_in_year"), options);
+        chart.render();
+
 
         var donutChart = {
             chart: {
@@ -305,9 +400,6 @@
                 categories: [],
             },
             yaxis: {
-                title: {
-                    text: '(count)'
-                },
                 labels: {
                     formatter: function(value) {
                         return Math.floor(value);
@@ -320,7 +412,7 @@
             tooltip: {
                 y: {
                     formatter: function(val) {
-                        return +val + " count";
+                        return val;
                     }
                 }
             }

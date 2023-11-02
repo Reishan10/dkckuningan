@@ -45,8 +45,21 @@ Route::middleware(['auth', 'user-access:Peserta'])->group(function () {
   Route::post('/pendaftaran/store', [FrontendPendaftaranController::class, 'store'])->name('pendaftaran.store');
 });
 
-// Administrator, Juri & Panitia
-Route::middleware(['auth', 'user-access:Administrator,Juri,Panitia'])->group(function () {
+Route::middleware(['auth', 'user-access:Administrator,Juri,Kwarcab,Peserta'])->group(function () {
+  // Pengaturan
+  Route::get('/pengaturan/profile', [PengaturanController::class, 'profile'])->name('pengaturan.profile');
+  Route::post('/pengaturan/profile/{id}', [PengaturanController::class, 'updateProfile'])->name('pengaturan.updateProfile');
+  Route::post('/pengaturan/hapus-foto', [PengaturanController::class, 'hapusFoto'])->name('pengaturan.hapusFoto');
+
+  Route::get('/pengaturan/ganti-password', [PengaturanController::class, 'gantiPassword'])->name('pengaturan.gantiPassword');
+  Route::post('/pengaturan/ganti-password', [PengaturanController::class, 'updatePassword'])->name('pengaturan.updatePassword');
+
+  Route::get('/pengaturan/nonaktif-akun', [PengaturanController::class, 'nonaktif'])->name('pengaturan.nonaktifAkun');
+  Route::post('/pengaturan/nonaktif-akun', [PengaturanController::class, 'updateStatus'])->name('pengaturan.updateStatus');
+});
+
+// Administrator, Juri, Kwarcab & Peserta
+Route::middleware(['auth', 'user-access:Administrator,Juri,Kwarcab'])->group(function () {
   Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
   // Konten
@@ -142,17 +155,6 @@ Route::middleware(['auth', 'user-access:Administrator,Juri,Panitia'])->group(fun
   Route::get('/berkas-lain/{id}/edit', [ArsipController::class, 'editLain'])->name('berkas-lain.edit');
   Route::post('/berkas-lain/update/{id}', [ArsipController::class, 'updateLain'])->name('berkas-lain.update');
   Route::delete('/berkas-lain/delete/{id}', [ArsipController::class, 'destroyLain'])->name('berkas-lain.delete');
-
-  // Pengaturan
-  Route::get('/pengaturan/profile', [PengaturanController::class, 'profile'])->name('pengaturan.profile');
-  Route::post('/pengaturan/profile/{id}', [PengaturanController::class, 'updateProfile'])->name('pengaturan.updateProfile');
-  Route::post('/pengaturan/hapus-foto', [PengaturanController::class, 'hapusFoto'])->name('pengaturan.hapusFoto');
-
-  Route::get('/pengaturan/ganti-password', [PengaturanController::class, 'gantiPassword'])->name('pengaturan.gantiPassword');
-  Route::post('/pengaturan/ganti-password', [PengaturanController::class, 'updatePassword'])->name('pengaturan.updatePassword');
-
-  Route::get('/pengaturan/nonaktif-akun', [PengaturanController::class, 'nonaktif'])->name('pengaturan.nonaktifAkun');
-  Route::post('/pengaturan/nonaktif-akun', [PengaturanController::class, 'updateStatus'])->name('pengaturan.updateStatus');
 });
 
 // Administrator & Juri
@@ -178,8 +180,8 @@ Route::middleware(['auth', 'user-access:Administrator,Juri'])->group(function ()
   Route::post('/penilaian-pandega/simpan-penilaian', [PenilaianController::class, 'simpanPenilaianPandega'])->name('penilaian-pandega.simpan');
 });
 
-// Administrator & Panitia
-Route::middleware(['auth', 'user-access:Administrator,Panitia'])->group(function () {
+// Administrator & Kwarcab
+Route::middleware(['auth', 'user-access:Administrator,Kwarcab'])->group(function () {
   // Golongan
   Route::get('/golongan', [GolonganController::class, 'index'])->name('golongan.index');
   Route::get('/golongan/tambah', [GolonganController::class, 'create'])->name('golongan.create');
@@ -206,13 +208,13 @@ Route::middleware(['auth', 'user-access:Administrator'])->group(function () {
   Route::post('/pengguna/juri/update/{id}', [UserController::class, 'updateJuri'])->name('pengguna.juri.update');
   Route::delete('/pengguna/juri/delete/{id}', [UserController::class, 'destroyJuri'])->name('pengguna.juri.delete');
 
-  // Pengguna panitia
-  Route::get('/pengguna/panitia', [UserController::class, 'indexPanitia'])->name('pengguna.panitia.index');
-  Route::get('/pengguna/panitia/tambah', [UserController::class, 'createPanitia'])->name('pengguna.panitia.create');
-  Route::post('/pengguna/panitia/store', [UserController::class, 'storePanitia'])->name('pengguna.panitia.store');
-  Route::get('/pengguna/panitia/edit/{id}', [UserController::class, 'editPanitia'])->name('pengguna.panitia.edit');
-  Route::post('/pengguna/panitia/update/{id}', [UserController::class, 'updatePanitia'])->name('pengguna.panitia.update');
-  Route::delete('/pengguna/panitia/delete/{id}', [UserController::class, 'destroyPanitia'])->name('pengguna.panitia.delete');
+  // Pengguna Kwarcab
+  Route::get('/pengguna/kwarcab', [UserController::class, 'indexKwarcab'])->name('pengguna.kwarcab.index');
+  Route::get('/pengguna/kwarcab/tambah', [UserController::class, 'createKwarcab'])->name('pengguna.kwarcab.create');
+  Route::post('/pengguna/kwarcab/store', [UserController::class, 'storeKwarcab'])->name('pengguna.kwarcab.store');
+  Route::get('/pengguna/kwarcab/edit/{id}', [UserController::class, 'editKwarcab'])->name('pengguna.kwarcab.edit');
+  Route::post('/pengguna/kwarcab/update/{id}', [UserController::class, 'updateKwarcab'])->name('pengguna.kwarcab.update');
+  Route::delete('/pengguna/kwarcab/delete/{id}', [UserController::class, 'destroyKwarcab'])->name('pengguna.kwarcab.delete');
 
   // Pengguna peserta
   Route::get('/pengguna/peserta', [UserController::class, 'indexPeserta'])->name('pengguna.peserta.index');

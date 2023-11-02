@@ -14,7 +14,7 @@ class PendaftaranController extends Controller
     public function indexAll(Request $request)
     {
         if (request()->ajax()) {
-            $query = Pendaftaran::with('user')
+            $query = Pendaftaran::with('user', 'golongan')
                 ->join('users', 'pendaftaran.user_id', '=', 'users.id')
                 ->orderBy('users.name', 'asc')
                 ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.*', 'pendaftaran.*');
@@ -44,6 +44,11 @@ class PendaftaranController extends Controller
                             </h2>';
 
                     return $nta;
+                })
+                ->addColumn('golongan', function ($user) {
+                    $golongan = $user->golongan->name;
+
+                    return $golongan;
                 })
                 ->addColumn('berkas', function ($user) {
                     $berkas = $user->berkas ? '<a href="' . Storage::url('public/berkas/' . $user->berkas) . '" target="_blank" class="btn btn-secondary btn-sm">Tautan ke Berkas</a>' : 'Berkas tidak tersedia';
@@ -160,7 +165,7 @@ class PendaftaranController extends Controller
     public function indexSiaga(Request $request)
     {
         if (request()->ajax()) {
-            $query = Pendaftaran::with('user')
+            $query = Pendaftaran::with('user', 'golongan')
                 ->join('users', 'pendaftaran.user_id', '=', 'users.id')
                 ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
                 ->orderBy('users.name', 'asc')
@@ -193,6 +198,11 @@ class PendaftaranController extends Controller
                             </h2>';
 
                     return $nta;
+                })
+                ->addColumn('golongan', function ($user) {
+                    $golongan = $user->golongan->name;
+
+                    return $golongan;
                 })
                 ->addColumn('berkas', function ($user) {
                     $berkas = $user->berkas ? '<a href="' . Storage::url('public/berkas/' . $user->berkas) . '" target="_blank" class="btn btn-secondary btn-sm">Tautan ke Berkas</a>' : 'Berkas tidak tersedia';
@@ -309,7 +319,7 @@ class PendaftaranController extends Controller
     public function indexPenggalang(Request $request)
     {
         if (request()->ajax()) {
-            $query = Pendaftaran::with('user')
+            $query = Pendaftaran::with('user', 'golongan')
                 ->join('users', 'pendaftaran.user_id', '=', 'users.id')
                 ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
                 ->orderBy('users.name', 'asc')
@@ -341,6 +351,11 @@ class PendaftaranController extends Controller
                             </h2>';
 
                     return $nta;
+                })
+                ->addColumn('golongan', function ($user) {
+                    $golongan = $user->golongan->name;
+
+                    return $golongan;
                 })
                 ->addColumn('berkas', function ($user) {
                     $berkas = $user->berkas ? '<a href="' . Storage::url('public/berkas/' . $user->berkas) . '" target="_blank" class="btn btn-secondary btn-sm">Tautan ke Berkas</a>' : 'Berkas tidak tersedia';
@@ -457,7 +472,7 @@ class PendaftaranController extends Controller
     public function indexPenegak(Request $request)
     {
         if (request()->ajax()) {
-            $query = Pendaftaran::with('user')
+            $query = Pendaftaran::with('user', 'golongan')
                 ->join('users', 'pendaftaran.user_id', '=', 'users.id')
                 ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
                 ->orderBy('users.name', 'asc')
@@ -489,6 +504,11 @@ class PendaftaranController extends Controller
                             </h2>';
 
                     return $nta;
+                })
+                ->addColumn('golongan', function ($user) {
+                    $golongan = $user->golongan->name;
+
+                    return $golongan;
                 })
                 ->addColumn('berkas', function ($user) {
                     $berkas = $user->berkas ? '<a href="' . Storage::url('public/berkas/' . $user->berkas) . '" target="_blank" class="btn btn-secondary btn-sm">Tautan ke Berkas</a>' : 'Berkas tidak tersedia';
@@ -605,7 +625,7 @@ class PendaftaranController extends Controller
     public function indexPandega(Request $request)
     {
         if (request()->ajax()) {
-            $query = Pendaftaran::with('user')
+            $query = Pendaftaran::with('user', 'golongan')
                 ->join('users', 'pendaftaran.user_id', '=', 'users.id')
                 ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
                 ->orderBy('users.name', 'asc')
@@ -637,6 +657,16 @@ class PendaftaranController extends Controller
                             </h2>';
 
                     return $nta;
+                })
+                ->addColumn('golongan', function ($user) {
+                    $golongan = $user->golongan->name;
+
+                    return $golongan;
+                })
+                ->addColumn('golongan', function ($user) {
+                    $golongan = $user->golongan->name;
+
+                    return $golongan;
                 })
                 ->addColumn('berkas', function ($user) {
                     $berkas = $user->berkas ? '<a href="' . Storage::url('public/berkas/' . $user->berkas) . '" target="_blank" class="btn btn-secondary btn-sm">Tautan ke Berkas</a>' : 'Berkas tidak tersedia';

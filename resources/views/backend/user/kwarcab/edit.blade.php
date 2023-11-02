@@ -9,7 +9,7 @@
                         <div class="page-sub-header">
                             <h3 class="page-title">@yield('title')</h3>
                             <ul class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="{{ route('pengguna.panitia.index') }}">panitia Data</a></li>
+                                <li class="breadcrumb-item"><a href="{{ route('pengguna.kwarcab.index') }}">kwarcab Data</a></li>
                                 <li class="breadcrumb-item active">@yield('title')</li>
                             </ul>
                         </div>
@@ -103,7 +103,7 @@
 
                 $.ajax({
                     data: $(this).serialize() + "&status=" + statusValue,
-                    url: "{{ url('pengguna/panitia/update/"+id+"') }}",
+                    url: "{{ url('pengguna/kwarcab/update/"+id+"') }}",
                     type: "POST",
                     dataType: 'json',
                     beforeSend: function() {
@@ -145,7 +145,7 @@
                                 text: 'Data berhasil disimpan',
                             }).then(function() {
                                 top.location.href =
-                                    "{{ route('pengguna.panitia.index') }}";
+                                    "{{ route('pengguna.kwarcab.index') }}";
                             });
                         }
                     },

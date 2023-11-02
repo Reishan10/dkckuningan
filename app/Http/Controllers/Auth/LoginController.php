@@ -81,7 +81,7 @@ class LoginController extends Controller
                     return response()->json(['redirect' => route('dashboard.index')]);
                 } elseif ($user->type == 'Juri') {
                     return response()->json(['redirect' => route('dashboard.index')]);
-                } elseif ($user->type == 'Panitia') {
+                } elseif ($user->type == 'Kwarcab') {
                     return response()->json(['redirect' => route('dashboard.index')]);
                 } else {
                     return response()->json(['redirect' => route('beranda.index')]);

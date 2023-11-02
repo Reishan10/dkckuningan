@@ -52,6 +52,13 @@ class DashboardController extends Controller
             ->groupBy('year')
             ->get();
 
-        return view('backend.dashboard.index', compact('laki_laki', 'perempuan', 'siaga', 'penggalang', 'penegak', 'pandega', 'data', 'data_pendaftar'));
+        $data_gender = Pendaftaran::join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
+            ->select(DB::raw('YEAR(pendaftaran.created_at) as year'), 'golongan.name as golongan_name', 'jenis_kelamin', DB::raw('COUNT(*) as total'))
+            ->whereYear('pendaftaran.created_at', $currentYear)
+            ->groupBy('year', 'golongan_name', 'jenis_kelamin')
+            ->get();
+
+
+        return view('backend.dashboard.index', compact('laki_laki', 'perempuan', 'siaga', 'penggalang', 'penegak', 'pandega', 'data', 'data_pendaftar', 'data_gender'));
     }
 }

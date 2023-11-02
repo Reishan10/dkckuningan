@@ -27,7 +27,6 @@
 
          <!--Login button Start-->
 
-
          <ul class="buy-button list-inline mb-0">
              @guest
                  <li class="list-inline-item mb-0">
@@ -35,6 +34,14 @@
                      <a href="{{ route('login') }}" class="login-btn-light btn btn-light">Masuk</a>
                  </li>
              @else
+                 <li class="list-inline-item mb-0">
+                     <button type="button" class="login-btn-primary btn btn-icon btn-pills btn-primary"
+                         data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i data-feather="bell"
+                             class="icons"></i></button>
+                     <button type="button" class="login-btn-light btn btn-icon btn-pills btn-light"
+                         data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i data-feather="bell"
+                             class="icons"></i></button>
+                 </li>
                  <li class="list-inline-item mb-0">
                      <div class="dropdown dropdown-primary">
                          <button type="button" class="login-btn-primary btn btn-icon btn-pills btn-primary dropdown-toggle"
@@ -45,13 +52,8 @@
                                  class="icons"></i></button>
                          <div class="dropdown-menu dd-menu dropdown-menu-end bg-white shadow rounded border-0 mt-3 py-3"
                              style="width: 200px;">
-                             <a class="dropdown-item text-dark" href=""><i
-                                     class="uil uil-estate align-middle me-1"></i> Dashboard</a>
-                             <a class="dropdown-item text-dark" href=""><i
+                             <a class="dropdown-item text-dark" href="{{ route('pengaturan.profile') }}"><i
                                      class="uil uil-user align-middle me-1"></i> Akun Anda</a>
-                             <a class="dropdown-item text-dark" href=""><i
-                                     class="uil uil-key-skeleton align-middle me-1"></i> Ganti Kata Sandi</a>
-                             <div class="dropdown-divider my-3 border-top"></div>
                              <a class="dropdown-item text-dark" href="{{ route('logout') }}"
                                  onclick="event.preventDefault();
                             document.getElementById('logout-form').submit();"><i

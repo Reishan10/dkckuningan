@@ -29,7 +29,7 @@ class PendaftaranController extends Controller
                 'pangkalan' => 'required|string',
                 'kwaran' => 'required|string',
                 'golongan' => 'required|string',
-                'berkas' => 'required|file',
+                'berkas' => 'required|file|mimes:pdf'
             ],
             [
                 'nta.required' => 'Silakan isi Nomor Tanda Anggota terlebih dahulu!',
@@ -42,6 +42,7 @@ class PendaftaranController extends Controller
                 'pangkalan.required' => 'Silakan isi pangkalan terlebih dahulu!',
                 'golongan.required' => 'Silakan isi golongan terlebih dahulu!',
                 'berkas.required' => 'Silakan isi berkas terlebih dahulu!',
+                'berkas.mimes' => 'Berkas harus dalam format PDF.'
             ]
         );
 

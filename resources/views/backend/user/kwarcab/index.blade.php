@@ -29,7 +29,7 @@
                                         <h3 class="page-title">@yield('title')</h3>
                                     </div>
                                     <div class="col-auto text-end float-end ms-auto download-grp">
-                                        <a href="{{ route('pengguna.panitia.create') }}" class="btn btn-primary"><i
+                                        <a href="{{ route('pengguna.kwarcab.create') }}" class="btn btn-primary"><i
                                                 class="fas fa-plus"></i></a>
                                     </div>
                                 </div>
@@ -67,7 +67,7 @@
                 var table = $('#datatable').DataTable({
                     processing: true,
                     serverSide: true,
-                    ajax: "{{ route('pengguna.panitia.index') }}",
+                    ajax: "{{ route('pengguna.kwarcab.index') }}",
                     columns: [{
                             data: 'DT_RowIndex',
                             name: 'DT_RowIndex',
@@ -121,7 +121,7 @@
                         if (result.isConfirmed) {
                             $.ajax({
                                 type: "DELETE",
-                                url: "{{ url('pengguna/panitia/delete') }}/" + id,
+                                url: "{{ url('pengguna/kwarcab/delete') }}/" + id,
                                 data: {
                                     id: id
                                 },

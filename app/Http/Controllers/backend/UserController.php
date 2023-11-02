@@ -316,7 +316,7 @@ class UserController extends Controller
         return response()->json(['success' => 'Data berhasil dihapus', 'name' => $user->name]);
     }
 
-    public function indexPanitia()
+    public function indexKwarcab()
     {
         if (request()->ajax()) {
             $users = User::where('id', '!=', auth()->user()->id)
@@ -356,7 +356,7 @@ class UserController extends Controller
                     return $active_status;
                 })
                 ->addColumn('aksi', function ($user) {
-                    $editLink = route('pengguna.panitia.edit', $user->id);
+                    $editLink = route('pengguna.kwarcab.edit', $user->id);
                     $btn = '<a href="' . $editLink . '" class="btn btn-sm btn-warning me-2 text-light" title="Edit"><i class="fas fa-pencil-alt"></i></a>';
                     $btn .= '<button type="button" class="btn btn-sm btn-danger text-light" data-id="' . $user->id . '" id="btnHapus" title="Hapus"><i class="fas fa-trash"></i></button>';
 
@@ -366,15 +366,15 @@ class UserController extends Controller
                 ->make(true);
         }
 
-        return view('backend.user.panitia.index');
+        return view('backend.user.kwarcab.index');
     }
 
-    public function createPanitia()
+    public function createKwarcab()
     {
-        return view('backend.user.panitia.add');
+        return view('backend.user.kwarcab.add');
     }
 
-    public function storePanitia(Request $request)
+    public function storeKwarcab(Request $request)
     {
         $validated = Validator::make(
             $request->all(),
@@ -410,13 +410,13 @@ class UserController extends Controller
         }
     }
 
-    public function editPanitia($id)
+    public function editKwarcab($id)
     {
         $user = User::find($id);
-        return view('backend.user.panitia.edit', compact('user'));
+        return view('backend.user.kwarcab.edit', compact('user'));
     }
 
-    public function updatePanitia(Request $request)
+    public function updateKwarcab(Request $request)
     {
         $id = $request->id;
         $validated = Validator::make(
@@ -452,7 +452,7 @@ class UserController extends Controller
         }
     }
 
-    public function destroyPanitia(Request $request)
+    public function destroyKwarcab(Request $request)
     {
         $user = User::find($request->id);
 

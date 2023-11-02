@@ -21,10 +21,10 @@
             <div class="row">
                 <div class="col-sm-12">
                     <div class="row">
-                        <div class="col-md-4 mb-3">
+                        <div class="col-md-3 mb-3">
                             <input type="date" class="form-control" id="start_date" name="start_date">
                         </div>
-                        <div class="col-md-4 mb-3">
+                        <div class="col-md-3 mb-3">
                             <input type="date" class="form-control" id="end_date" name="end_date">
                         </div>
                         <div class="col-md-4">
@@ -60,6 +60,8 @@
                                             <th>Nama</th>
                                             <th>Email</th>
                                             <th>No Telepon</th>
+                                            <th>Golongan</th>
+                                            <th>Pangkalan</th>
                                             <th>Berkas</th>
                                             <th>Status</th>
                                             <th class="text-end">Aksi</th>
@@ -180,6 +182,14 @@
                         {
                             data: 'no_telepon',
                             name: 'no_telepon'
+                        },
+                        {
+                            data: 'golongan',
+                            name: 'golongan'
+                        },
+                        {
+                            data: 'pangkalan',
+                            name: 'pangkalan'
                         },
                         {
                             data: 'berkas',
