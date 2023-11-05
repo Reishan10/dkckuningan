@@ -31,7 +31,7 @@
                 <div class="col-lg-12 col-md-5 order-2 order-md-1 mt-4 pt-2 mt-sm-0 pt-sm-0">
                     <div class="bg-white shadow rounded position-relative overflow-hidden">
                         <div class="tab-content" id="pills-tabContent">
-                            @if ($user == '')
+                            @if (!$user->count() > 0)
                                 <div class="card" id="user">
                                     <form id="form">
                                         <div class="card-body">

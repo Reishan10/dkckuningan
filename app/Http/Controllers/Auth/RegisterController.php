@@ -51,7 +51,7 @@ class RegisterController extends Controller
     {
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
-            'no_telepon' => ['required', 'string', 'min:11', 'max:13'],
+            'no_telepon' => ['required', 'string', 'min:11', 'max:13', 'unique:users'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ], [
@@ -59,6 +59,7 @@ class RegisterController extends Controller
             'no_telepon.required' => 'Silakan isi nomor telepon terlebih dahulu.',
             'no_telepon.min' => 'No Telepon harus terdiri dari :min karakter.',
             'no_telepon.max' => 'No Telepon harus terdiri dari :max karakter.',
+            'email.unique' => 'No Telepon ini sudah digunakan oleh pengguna lain.',
             'email.required' => 'Silakan isi alamat email terlebih dahulu.',
             'email.email' => 'Format alamat email tidak valid.',
             'email.max' => 'Alamat email tidak boleh lebih dari :max karakter.',

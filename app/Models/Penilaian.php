@@ -46,6 +46,7 @@ class Penilaian extends Model
     protected $fillable = [
         'pendaftaran_id',
         'soal_id',
-        'nilai'
+        'nilai',
+        'status'
     ];
 }

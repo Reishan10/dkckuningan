@@ -189,6 +189,13 @@ Route::middleware(['auth', 'user-access:Panitia,Juri,Kwarcab'])->group(function 
 // Panitia & Juri
 Route::middleware(['auth', 'user-access:Panitia,Juri'])->group(function () {
   // Penilaian
+  Route::get('/penilaian/semua', [PenilaianController::class, 'indexAll'])->name('penilaian.all.index');
+  Route::get('/penilaian/semua/{id}', [PenilaianController::class, 'nilaiAll'])->name('penilaian.all.nilai');
+  Route::post('/penilaian/semua/simpan-penilaian', [PenilaianController::class, 'simpanPenilaianAll'])->name('penilaian.all.simpan');
+  Route::get('/penilaian/semua/print', [PenilaianController::class, 'printAll'])->name('penilaian.all.print');
+  Route::get('/penilaian/semua/printPDF', [PenilaianController::class, 'printPDFAll'])->name('penilaian.all.printPDF');
+
+  // Penilaian
   Route::get('/penilaian-siaga', [PenilaianController::class, 'indexSiaga'])->name('penilaian-siaga.index');
   Route::get('/penilaian-siaga/{id}', [PenilaianController::class, 'nilaiSiaga'])->name('penilaian-siaga.nilai');
   Route::post('/penilaian-siaga/simpan-penilaian', [PenilaianController::class, 'simpanPenilaianSiaga'])->name('penilaian-siaga.simpan');
