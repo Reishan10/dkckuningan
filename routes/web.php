@@ -16,6 +16,7 @@ use App\Http\Controllers\Frontend\BerkasController;
 use App\Http\Controllers\Frontend\PendaftaranController as FrontendPendaftaranController;
 use App\Http\Controllers\Frontend\PengumumanController;
 use App\Http\Controllers\Frontend\TimelineController as FrontendTimelineController;
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -29,6 +30,8 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+Route::get('/mail', [HomeController::class, 'index'])->name('beranda.index');
 
 Route::get('/', [BerandaController::class, 'index'])->name('beranda.index');
 Route::get('/timeline-garudaku', [FrontendTimelineController::class, 'index'])->name('timeline-garudaku.index');
@@ -77,6 +80,32 @@ Route::middleware(['auth', 'user-access:Panitia,Juri,Kwarcab'])->group(function 
   Route::get('/soal/tambah', [SoalController::class, 'create'])->name('soal.create');
   Route::post('/soal/store', [SoalController::class, 'store'])->name('soal.store');
   Route::get('/soal/{id}/edit', [SoalController::class, 'edit'])->name('soal.edit');
+  Route::post('/soal/update/{id}', [SoalController::class, 'update'])->name('soal.update');
+
+  Route::get('/soal-siaga', [SoalController::class, 'indexSiaga'])->name('soal.indexSiaga');
+  Route::get('/soal-siaga/tambah', [SoalController::class, 'createSiaga'])->name('soal.createSiaga');
+  Route::post('/soal-siaga/store', [SoalController::class, 'storeSiaga'])->name('soal.storeSiaga');
+  Route::get('/soal-siaga/{id}/edit', [SoalController::class, 'editSiaga'])->name('soal.editSiaga');
+  Route::post('/soal-siaga/update/{id}', [SoalController::class, 'updateSiaga'])->name('soal.updateSiaga');
+
+  Route::get('/soal-penggalang', [SoalController::class, 'indexPenggalang'])->name('soal.indexPenggalang');
+  Route::get('/soal-penggalang/tambah', [SoalController::class, 'createPenggalang'])->name('soal.createPenggalang');
+  Route::post('/soal-penggalang/store', [SoalController::class, 'storePenggalang'])->name('soal.storePenggalang');
+  Route::get('/soal-penggalang/{id}/edit', [SoalController::class, 'editPenggalang'])->name('soal.editPenggalang');
+  Route::post('/soal-penggalang/update/{id}', [SoalController::class, 'updatePenggalang'])->name('soal.updatePenggalang');
+
+  Route::get('/soal-penegak', [SoalController::class, 'indexPenegak'])->name('soal.indexPenegak');
+  Route::get('/soal-penegak/tambah', [SoalController::class, 'createPenegak'])->name('soal.createPenegak');
+  Route::post('/soal-penegak/store', [SoalController::class, 'storePenegak'])->name('soal.storePenegak');
+  Route::get('/soal-penegak/{id}/edit', [SoalController::class, 'editPenegak'])->name('soal.editPenegak');
+  Route::post('/soal-penegak/update/{id}', [SoalController::class, 'updatePenegak'])->name('soal.updatePenegak');
+
+  Route::get('/soal-pandega', [SoalController::class, 'indexPandega'])->name('soal.indexPandega');
+  Route::get('/soal-pandega/tambah', [SoalController::class, 'createPandega'])->name('soal.createPandega');
+  Route::post('/soal-pandega/store', [SoalController::class, 'storePandega'])->name('soal.storePandega');
+  Route::get('/soal-pandega/{id}/edit', [SoalController::class, 'editPandega'])->name('soal.editPandega');
+  Route::post('/soal-pandega/update/{id}', [SoalController::class, 'updatePandega'])->name('soal.updatePandega');
+
   Route::delete('/soal/delete/{id}', [SoalController::class, 'destroy'])->name('soal.delete');
 
   // Timeline

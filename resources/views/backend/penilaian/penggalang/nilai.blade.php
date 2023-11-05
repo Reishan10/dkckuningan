@@ -36,8 +36,8 @@
                                     @foreach ($soal as $row)
                                         <li>
                                             <strong>No: {{ $loop->iteration }}</strong><br>
-                                            <strong> Persyaratan:</strong><br> {{ $row->persyaratan }}<br>
-                                            <strong> Keterangan:</strong><br> {{ $row->keterangan }}<br>
+                                                <strong> Persyaratan:</strong><br> {!! $row->persyaratan !!}<br>
+                                            <strong> Keterangan:</strong><br> {!! $row->keterangan !!}<br>
                                             <input type="text" name="nilai[{{ $row->id }}]" class="form-control"
                                                 value="0"><br>
                                         </li>

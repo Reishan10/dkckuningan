@@ -125,6 +125,11 @@
                                 <td id="kwaran"></td>
                             </tr>
                             <tr>
+                                <td>Gugus Depan</td>
+                                <td>:</td>
+                                <td id="gudep"></td>
+                            </tr>
+                            <tr>
                                 <td>Pangkalan</td>
                                 <td>:</td>
                                 <td id="pangkalan"></td>
@@ -306,6 +311,7 @@
                             $('#alamat').text(response.pendaftaran.alamat);
                             $('#jenis_kelamin').text(response.pendaftaran.jenis_kelamin);
                             $('#kwaran').text(response.pendaftaran.kwaran);
+                            $('#gudep').text(response.pendaftaran.gudep);
                             $('#pangkalan').text(response.pendaftaran.pangkalan);
                             $('#golongan').text(response.pendaftaran.golongan.name);
 

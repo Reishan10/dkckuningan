@@ -3,11 +3,14 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use App\Mail\MailLolosAdministrasi;
+use App\Mail\MailTolakAdministrasi;
 use App\Models\Pendaftaran;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\DataTables;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Mail;
 
 class PendaftaranController extends Controller
 {
@@ -77,15 +80,10 @@ class PendaftaranController extends Controller
 
                 ->addColumn('aksi', function ($pendaftaran) {
                     $btn = '';
-
                     if ($pendaftaran->status == 1) {
                         $btn .= '<button type="button" class="btn btn-sm btn-success text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnTerima"><i class="fas fa-check"></i></button>';
                         $btn .= '<button type="button" class="btn btn-sm btn-danger text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnTolak" title="Tolak"><i class="fas fa-times"></i></button>';
-                    } elseif ($pendaftaran->status == 2) {
-                        $btn .= '<button type="button" class="btn btn-sm btn-danger text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnTolak" title="Tolak"><i class="fas fa-times"></i></button>';
-                    } elseif ($pendaftaran->status == 3) {
-                        $btn .= '<button type="button" class="btn btn-sm btn-success text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnTerima"><i class="fas fa-check"></i></button>';
-                    }
+                    } 
                     $btn .= '<button type="button" class="btn btn-sm btn-info text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnDetail" data-bs-toggle="modal" data-bs-target="#detailModal"><i class="fas fa-eye"></i></button>';
                     $btn .= '<button type="button" class="btn btn-sm btn-warning text-light" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnHapus" title="Hapus"><i class="fas fa-trash"></i></button>';
                     return $btn;
@@ -105,19 +103,23 @@ class PendaftaranController extends Controller
 
     public function terimaAll(Request $request)
     {
-        $pendaftaran = Pendaftaran::find($request->id);
+        $pendaftaran = Pendaftaran::with('user', 'golongan')->findOrFail($request->id);
+        $pendaftaran->tahap_1 = "Terima";
         $pendaftaran->status = 2;
         $pendaftaran->save();
 
+        Mail::to($pendaftaran->user->email)->send(new MailLolosAdministrasi($pendaftaran));
         return response()->json(['success' => 'Status berhasil diubah menjadi "Terima"']);
     }
 
     public function tolakAll(Request $request)
     {
-        $pendaftaran = Pendaftaran::find($request->id);
+        $pendaftaran = Pendaftaran::with('user', 'golongan')->findOrFail($request->id);
+        $pendaftaran->tahap_1 = "Tolak";
         $pendaftaran->status = 3;
         $pendaftaran->save();
 
+        Mail::to($pendaftaran->user->email)->send(new MailTolakAdministrasi($pendaftaran));
         return response()->json(['success' => 'Status berhasil diubah menjadi "Tolak"']);
     }
 

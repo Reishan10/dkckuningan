@@ -23,7 +23,8 @@
     <!-- Hero End -->
 
     <!--Blog Lists Start-->
-    <section class="section">
+    <section class="section overflow-hidden"
+        style="background: url('{{ asset('assets_frontend') }}/images/shapes/shape2.png') center center;">
         <div class="container">
             <div class="row">
                 @forelse ($konten as $row)

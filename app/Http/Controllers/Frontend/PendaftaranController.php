@@ -13,7 +13,8 @@ class PendaftaranController extends Controller
     public function index()
     {
         $golongan = Golongan::orderBy('name', 'asc')->get();
-        return view('frontend.pendaftaran.index', compact('golongan'));
+        $user = Pendaftaran::where('user_id', auth()->user()->id)->whereYear('created_at', now()->year)->get();
+        return view('frontend.pendaftaran.index', compact('golongan', 'user'));
     }
 
     public function store(Request $request)
@@ -29,6 +30,7 @@ class PendaftaranController extends Controller
                 'pangkalan' => 'required|string',
                 'kwaran' => 'required|string',
                 'golongan' => 'required|string',
+                'gudep' => 'required|string',
                 'berkas' => 'required|file|mimes:pdf'
             ],
             [
@@ -41,6 +43,7 @@ class PendaftaranController extends Controller
                 'kwaran.required' => 'Silakan isi kwartir ranting terlebih dahulu!',
                 'pangkalan.required' => 'Silakan isi pangkalan terlebih dahulu!',
                 'golongan.required' => 'Silakan isi golongan terlebih dahulu!',
+                'gudep.required' => 'Silakan isi gugus depan terlebih dahulu!',
                 'berkas.required' => 'Silakan isi berkas terlebih dahulu!',
                 'berkas.mimes' => 'Berkas harus dalam format PDF.'
             ]
@@ -65,6 +68,7 @@ class PendaftaranController extends Controller
                     $pendaftaran->kwaran = $request->kwaran;
                     $pendaftaran->pangkalan = $request->pangkalan;
                     $pendaftaran->golongan_id = $request->golongan;
+                    $pendaftaran->gudep = $request->gudep;
                     $pendaftaran->berkas = $randomFileName;
                     $pendaftaran->save();
 
