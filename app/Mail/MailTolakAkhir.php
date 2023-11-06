@@ -44,7 +44,7 @@ class MailTolakAkhir extends Mailable
     public function content()
     {
         return new Content(
-            view: 'mail.administrasi.terima',
+            view: 'mail.akhir.tolak',
         );
     }
 

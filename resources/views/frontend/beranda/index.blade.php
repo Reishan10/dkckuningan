@@ -185,23 +185,6 @@
             </div><!--end row-->
         </div><!--end container-->
     </section><!--end section-->
-
-    <!-- Start Contact -->
-    <section class="section pb-0">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-12 p-0">
-                    <div class="card map border-0">
-                        <div class="card-body p-0">
-                            <iframe
-                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d63375.95562114534!2d108.45164959695168!3d-6.890933854335921!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e6f19dc111ad4df%3A0xf7fdf51259797a5d!2sKwartir%20Cabang%20Gerakan%20Pramuka%20Kab.%20Kuningan!5e0!3m2!1sid!2sid!4v1698940708511!5m2!1sid!2sid"
-                                style="border:0" allowfullscreen></iframe>
-                        </div>
-                    </div>
-                </div><!--end col-->
-            </div><!--end row-->
-        </div><!--end container-->
-    </section><!--end section-->
     <!-- End contact -->
     <!-- End -->
 @endsection

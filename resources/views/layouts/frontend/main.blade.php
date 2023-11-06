@@ -63,6 +63,9 @@
 
                     <div class="col-sm-6 mt-4 mt-sm-0 pt-2 pt-sm-0">
                         <ul class="list-unstyled social-icon foot-social-icon text-sm-end mb-0">
+                            <li class="list-inline-item mb-0"><a href="https://maps.app.goo.gl/o7Uvpd3GtpGTxEFk8" target="_blank"
+                                    class="rounded"><i class="fas fa-map-marker-alt"></i></a>
+                            </li>
                             <li class="list-inline-item mb-0"><a href="https://wa.me/6285722958809" target="_blank"
                                     class="rounded"><i class="fab fa-whatsapp"></i></a>
                             </li>

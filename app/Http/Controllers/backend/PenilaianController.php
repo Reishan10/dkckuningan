@@ -19,12 +19,20 @@ class PenilaianController extends Controller
     public function indexAll(Request $request)
     {
         if (request()->ajax()) {
-            $query = Pendaftaran::with('user', 'golongan')
-                ->join('users', 'pendaftaran.user_id', '=', 'users.id')
-                ->orderBy('users.name', 'asc')
-                ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.*', 'pendaftaran.*')
-                ->where('tahap_1', 'Selesai')
-                ->where('status', 2);
+            $query = '';
+            if (auth()->user()->type == "Juri") {
+                $query = Pendaftaran::with('user', 'golongan')
+                    ->join('users', 'pendaftaran.user_id', '=', 'users.id')
+                    ->orderBy('users.name', 'asc')
+                    ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.*', 'pendaftaran.*')
+                    ->where('tahap_1', 'Selesai')
+                    ->where('status', 2);
+            } else {
+                $query = Pendaftaran::with('user', 'golongan')
+                    ->join('users', 'pendaftaran.user_id', '=', 'users.id')
+                    ->orderBy('users.name', 'asc')
+                    ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.*', 'pendaftaran.*');
+            }
 
             if ($request->has('start_date') && $request->has('end_date')) {
                 $start_date = $request->input('start_date');
@@ -189,8 +197,6 @@ class PenilaianController extends Controller
             ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
             ->orderBy('users.name', 'asc')
             ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.name', 'golongan.name as golongan_name', 'pangkalan')
-            ->where('tahap_1', 'Selesai')
-            ->where('status', 2)
             ->get();
 
         $pdf = Pdf::loadView('backend.penilaian.all.printPDF', compact('pendaftaran'));
@@ -200,14 +206,24 @@ class PenilaianController extends Controller
     public function indexSiaga(Request $request)
     {
         if (request()->ajax()) {
-            $query = Pendaftaran::with('user', 'golongan')
-                ->join('users', 'pendaftaran.user_id', '=', 'users.id')
-                ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
-                ->orderBy('users.name', 'asc')
-                ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.*', 'pendaftaran.*')
-                ->where('tahap_1', 'Selesai')
-                 ->where('golongan.name', 'Siaga')
-                ->where('status', 2);
+            $query = '';
+            if (auth()->user()->type == 'Juri') {
+                $query = Pendaftaran::with('user', 'golongan')
+                    ->join('users', 'pendaftaran.user_id', '=', 'users.id')
+                    ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
+                    ->orderBy('users.name', 'asc')
+                    ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.*', 'pendaftaran.*')
+                    ->where('tahap_1', 'Selesai')
+                    ->where('golongan.name', 'Siaga')
+                    ->where('status', 2);
+            } else {
+                $query = Pendaftaran::with('user', 'golongan')
+                    ->join('users', 'pendaftaran.user_id', '=', 'users.id')
+                    ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
+                    ->orderBy('users.name', 'asc')
+                    ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.*', 'pendaftaran.*')
+                    ->where('golongan.name', 'Siaga');
+            }
 
             if ($request->has('start_date') && $request->has('end_date')) {
                 $start_date = $request->input('start_date');
@@ -361,6 +377,7 @@ class PenilaianController extends Controller
             ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
             ->orderBy('users.name', 'asc')
             ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.name', 'golongan.name as golongan_name', 'pangkalan')
+            ->where('golongan.name', 'Siaga')
             ->get();
         return view('backend.penilaian.all.print', compact('pendaftaran'));
     }
@@ -372,8 +389,7 @@ class PenilaianController extends Controller
             ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
             ->orderBy('users.name', 'asc')
             ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.name', 'golongan.name as golongan_name', 'pangkalan')
-            ->where('tahap_1', 'Selesai')
-            ->where('status', 2)
+            ->where('golongan.name', 'Siaga')
             ->get();
 
         $pdf = Pdf::loadView('backend.penilaian.all.printPDF', compact('pendaftaran'));
@@ -383,14 +399,25 @@ class PenilaianController extends Controller
     public function indexPenggalang(Request $request)
     {
         if (request()->ajax()) {
-            $query = Pendaftaran::with('user', 'golongan')
-                ->join('users', 'pendaftaran.user_id', '=', 'users.id')
-                ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
-                ->orderBy('users.name', 'asc')
-                ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.*', 'pendaftaran.*')
-                ->where('tahap_1', 'Selesai')
-                 ->where('golongan.name', 'Penggalang')
-                ->where('status', 2);
+            $query = '';
+
+            if (auth()->user()->type == 'Juri') {
+                $query = Pendaftaran::with('user', 'golongan')
+                    ->join('users', 'pendaftaran.user_id', '=', 'users.id')
+                    ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
+                    ->orderBy('users.name', 'asc')
+                    ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.*', 'pendaftaran.*')
+                    ->where('tahap_1', 'Selesai')
+                    ->where('golongan.name', 'Penggalang')
+                    ->where('status', 2);
+            } else {
+                $query = Pendaftaran::with('user', 'golongan')
+                    ->join('users', 'pendaftaran.user_id', '=', 'users.id')
+                    ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
+                    ->orderBy('users.name', 'asc')
+                    ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.*', 'pendaftaran.*')
+                    ->where('golongan.name', 'Penggalang');
+            }
 
             if ($request->has('start_date') && $request->has('end_date')) {
                 $start_date = $request->input('start_date');
@@ -544,6 +571,7 @@ class PenilaianController extends Controller
             ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
             ->orderBy('users.name', 'asc')
             ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.name', 'golongan.name as golongan_name', 'pangkalan')
+            ->where('golongan.name', 'Penggalang')
             ->get();
         return view('backend.penilaian.all.print', compact('pendaftaran'));
     }
@@ -555,8 +583,7 @@ class PenilaianController extends Controller
             ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
             ->orderBy('users.name', 'asc')
             ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.name', 'golongan.name as golongan_name', 'pangkalan')
-            ->where('tahap_1', 'Selesai')
-            ->where('status', 2)
+            ->where('golongan.name', 'Penggalang')
             ->get();
 
         $pdf = Pdf::loadView('backend.penilaian.all.printPDF', compact('pendaftaran'));
@@ -566,14 +593,25 @@ class PenilaianController extends Controller
     public function indexPenegak(Request $request)
     {
         if (request()->ajax()) {
-            $query = Pendaftaran::with('user', 'golongan')
-                ->join('users', 'pendaftaran.user_id', '=', 'users.id')
-                ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
-                ->orderBy('users.name', 'asc')
-                ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.*', 'pendaftaran.*')
-                ->where('tahap_1', 'Selesai')
-                 ->where('golongan.name', 'Penegak')
-                ->where('status', 2);
+            $query = '';
+
+            if (auth()->user()->type == 'Juri') {
+                $query = Pendaftaran::with('user', 'golongan')
+                    ->join('users', 'pendaftaran.user_id', '=', 'users.id')
+                    ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
+                    ->orderBy('users.name', 'asc')
+                    ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.*', 'pendaftaran.*')
+                    ->where('tahap_1', 'Selesai')
+                    ->where('golongan.name', 'Penegak')
+                    ->where('status', 2);
+            } else {
+                $query = Pendaftaran::with('user', 'golongan')
+                    ->join('users', 'pendaftaran.user_id', '=', 'users.id')
+                    ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
+                    ->orderBy('users.name', 'asc')
+                    ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.*', 'pendaftaran.*')
+                    ->where('golongan.name', 'Penegak');
+            }
 
             if ($request->has('start_date') && $request->has('end_date')) {
                 $start_date = $request->input('start_date');
@@ -727,6 +765,7 @@ class PenilaianController extends Controller
             ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
             ->orderBy('users.name', 'asc')
             ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.name', 'golongan.name as golongan_name', 'pangkalan')
+            ->where('golongan.name', 'Penegak')
             ->get();
         return view('backend.penilaian.all.print', compact('pendaftaran'));
     }
@@ -738,8 +777,7 @@ class PenilaianController extends Controller
             ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
             ->orderBy('users.name', 'asc')
             ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.name', 'golongan.name as golongan_name', 'pangkalan')
-            ->where('tahap_1', 'Selesai')
-            ->where('status', 2)
+            ->where('golongan.name', 'Penegak')
             ->get();
 
         $pdf = Pdf::loadView('backend.penilaian.all.printPDF', compact('pendaftaran'));
@@ -749,14 +787,25 @@ class PenilaianController extends Controller
     public function indexPandega(Request $request)
     {
         if (request()->ajax()) {
-            $query = Pendaftaran::with('user', 'golongan')
-                ->join('users', 'pendaftaran.user_id', '=', 'users.id')
-                ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
-                ->orderBy('users.name', 'asc')
-                ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.*', 'pendaftaran.*')
-                ->where('tahap_1', 'Selesai')
-                 ->where('golongan.name', 'Pandega')
-                ->where('status', 2);
+            $query = '';
+
+            if (auth()->user()->type == 'Juri') {
+                $query = Pendaftaran::with('user', 'golongan')
+                    ->join('users', 'pendaftaran.user_id', '=', 'users.id')
+                    ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
+                    ->orderBy('users.name', 'asc')
+                    ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.*', 'pendaftaran.*')
+                    ->where('tahap_1', 'Selesai')
+                    ->where('golongan.name', 'Pandega')
+                    ->where('status', 2);
+            } else {
+                $query = Pendaftaran::with('user', 'golongan')
+                    ->join('users', 'pendaftaran.user_id', '=', 'users.id')
+                    ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
+                    ->orderBy('users.name', 'asc')
+                    ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.*', 'pendaftaran.*')
+                    ->where('golongan.name', 'Pandega');
+            }
 
             if ($request->has('start_date') && $request->has('end_date')) {
                 $start_date = $request->input('start_date');
@@ -910,6 +959,7 @@ class PenilaianController extends Controller
             ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
             ->orderBy('users.name', 'asc')
             ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.name', 'golongan.name as golongan_name', 'pangkalan')
+            ->where('golongan.name', 'Pandega')
             ->get();
         return view('backend.penilaian.all.print', compact('pendaftaran'));
     }
@@ -921,8 +971,7 @@ class PenilaianController extends Controller
             ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
             ->orderBy('users.name', 'asc')
             ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.name', 'golongan.name as golongan_name', 'pangkalan')
-            ->where('tahap_1', 'Selesai')
-            ->where('status', 2)
+            ->where('golongan.name', 'Pandega')
             ->get();
 
         $pdf = Pdf::loadView('backend.penilaian.all.printPDF', compact('pendaftaran'));

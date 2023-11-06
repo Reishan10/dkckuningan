@@ -44,7 +44,7 @@
                                                             <input type="hidden" name="id_user" id="id_user"
                                                                 value="{{ auth()->user()->id }}">
                                                             <i data-feather="credit-card" class="fea icon-sm icons"></i>
-                                                            <input type="number" class="form-control ps-5" name="nta"
+                                                            <input type="text" class="form-control ps-5" name="nta"
                                                                 id="nta" placeholder="Nomor Tanda Anggota">
                                                             <small class="text-danger errorNta"></small>
                                                         </div>

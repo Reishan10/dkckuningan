@@ -14,7 +14,6 @@ class PengumumanController extends Controller
             ->where('user_id', auth()->user()->id)
             ->first();
 
-
         return view('frontend.pengumuman.index', compact('pendaftaran'));
     }
 }

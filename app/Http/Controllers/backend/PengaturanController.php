@@ -59,7 +59,7 @@ class PengaturanController extends Controller
                     $user->avatar = $randomFileName;
                     $user->save();
 
-                    return response()->json(['success' => 'Data barhasil diperbarui']);
+                    return response()->json(['success' => 'Data berhasil diperbarui']);
                 }
             } else {
                 $user = User::findOrFail($id);
@@ -69,7 +69,7 @@ class PengaturanController extends Controller
                 $user->no_telepon = $request->no_telepon;
                 $user->save();
 
-                return response()->json(['success' => 'Data barhasil diperbarui']);
+                return response()->json(['success' => 'Data berhasil diperbarui']);
             }
         }
     }
