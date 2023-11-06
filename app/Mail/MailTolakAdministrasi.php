@@ -32,7 +32,7 @@ class MailTolakAdministrasi extends Mailable
     public function envelope()
     {
         return new Envelope(
-            subject: 'Mohon Maaf Anda Tidak Lolos',
+            subject: 'Mohon Maaf Anda Belum Lolos',
         );
     }
 
@@ -44,7 +44,7 @@ class MailTolakAdministrasi extends Mailable
     public function content()
     {
         return new Content(
-            view: 'mail.tolak',
+            view: 'mail.administrasi.tolak',
         );
     }
 

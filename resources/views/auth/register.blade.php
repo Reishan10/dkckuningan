@@ -26,7 +26,8 @@
             <div class="container">
                 <div class="loginbox">
                     <div class="login-left">
-                        <img class="img-fluid" src="{{ asset('assets_frontend') }}/images/logo_garudaku.png" alt="Logo">
+                        <img class="img-fluid" src="{{ asset('assets_frontend') }}/images/logo_garudaku.png"
+                            alt="Logo">
                     </div>
                     <div class="login-right">
                         <div class="login-right-wrap">
@@ -81,9 +82,10 @@
                                 <div class="form-group">
                                     <label>Konfirmasi password <span class="login-danger">*</span></label>
                                     <div class="password-input">
-                                        <input class="form-control" type="password" name="password_confirmation"
+                                        <input class="form-control pass-confirm" type="password" name="password_confirmation"
                                             id="password_confirmation" value="{{ old('password_confirmation') }}">
-                                        <span class="profile-views toggle-password feather-eye-off"></span>
+                                        <span class="profile-views reg-toggle-password feather-eye-off"
+                                            id="toggleConfirmPassword"></span>
                                     </div>
                                     @error('password_confirmation')
                                         <span class="text-danger text-sm">
@@ -107,6 +109,40 @@
     <script src="{{ asset('assets') }}/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="{{ asset('assets') }}/js/feather.min.js"></script>
     <script src="{{ asset('assets') }}/js/script.js"></script>
+    <script>
+        // Element toggle password
+        const togglePassword = document.getElementById('togglePassword');
+        const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
+
+        // Element input password
+        const password = document.getElementById('password');
+        const confirmPassword = document.getElementById('confirmPassword');
+
+        // Fungsi toggle masing-masing input password
+        function togglePasswordInput() {
+            if (password.type === 'password') {
+                password.type = 'text';
+                togglePassword.classList.add('show');
+            } else {
+                password.type = 'password';
+                togglePassword.classList.remove('show');
+            }
+        }
+
+        function toggleConfirmPasswordInput() {
+            if (confirmPassword.type === 'password') {
+                confirmPassword.type = 'text';
+                toggleConfirmPassword.classList.add('show');
+            } else {
+                confirmPassword.type = 'password';
+                toggleConfirmPassword.classList.remove('show');
+            }
+        }
+
+        // Event listener untuk masing-masing tombol toggle
+        togglePassword.addEventListener('click', togglePasswordInput);
+        toggleConfirmPassword.addEventListener('click', toggleConfirmPasswordInput);
+    </script>
 </body>
 
 </html>

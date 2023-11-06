@@ -33,7 +33,6 @@
                     </div>
                     <div class="card card-table comman-shadow">
                         <div class="card-body">
-
                             <div class="page-header">
                                 <div class="row align-items-center">
                                     <div class="col">
@@ -124,6 +123,11 @@
                                 <td>Kwartir Ranting</td>
                                 <td>:</td>
                                 <td id="kwaran"></td>
+                            </tr>
+                            <tr>
+                                <td>Gugus Depan</td>
+                                <td>:</td>
+                                <td id="gudep"></td>
                             </tr>
                             <tr>
                                 <td>Pangkalan</td>
@@ -220,7 +224,7 @@
                         processing: true,
                         serverSide: true,
                         ajax: {
-                            url: "{{ route('pendaftaran.penegak.index') }}",
+                            url: "{{ route('pendaftaran.pandega.index') }}",
                             data: {
                                 start_date: start_date,
                                 end_date: end_date
@@ -307,6 +311,7 @@
                             $('#alamat').text(response.pendaftaran.alamat);
                             $('#jenis_kelamin').text(response.pendaftaran.jenis_kelamin);
                             $('#kwaran').text(response.pendaftaran.kwaran);
+                            $('#gudep').text(response.pendaftaran.gudep);
                             $('#pangkalan').text(response.pendaftaran.pangkalan);
                             $('#golongan').text(response.pendaftaran.golongan.name);
 

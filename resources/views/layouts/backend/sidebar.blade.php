@@ -17,56 +17,36 @@
                     </li>
                 @endif
                 @if (auth()->user()->type != 'Peserta')
-                    {{-- <li
-                        class="submenu {{ request()->routeIs(['pendaftaran.semua.index', 'pendaftaran.siaga.index', 'pendaftaran.penggalang.index', 'pendaftaran.penegak.index', 'pendaftaran.pandega.index']) ? 'active' : '' }}">
-                        <a href="#"><i class="fas fa-graduation-cap"></i> <span> Pendaftar</span> <span
-                                class="menu-arrow"></span></a>
-                        <ul>
-                            <li class="{{ request()->routeIs(['pendaftaran.semua.index']) ? 'active' : '' }}">
-                                <a href="{{ route('pendaftaran.semua.index') }}">Semua Data</a>
-                            </li>
-                            <li class="{{ request()->routeIs(['pendaftaran.siaga.index']) ? 'active' : '' }}">
-                                <a href="{{ route('pendaftaran.siaga.index') }}">Siaga</a>
-                            </li>
-                            <li class="{{ request()->routeIs(['pendaftaran.penggalang.index']) ? 'active' : '' }}">
-                                <a href="{{ route('pendaftaran.penggalang.index') }}">Penggalang</a>
-                            </li>
-                            <li class="{{ request()->routeIs(['pendaftaran.penegak.index']) ? 'active' : '' }}">
-                                <a href="{{ route('pendaftaran.penegak.index') }}">Penegak</a>
-                            </li>
-                            <li class="{{ request()->routeIs(['pendaftaran.pandega.index']) ? 'active' : '' }}">
-                                <a href="{{ route('pendaftaran.pandega.index') }}">Pandega</a>
-                            </li>
-                        </ul>
-                    </li> --}}
-
-
                     <li
-                        class="submenu {{ request()->routeIs(['pendaftaran.semua.index', 'pendaftaran.siaga.index', 'pendaftaran.penggalang.index', 'pendaftaran.penegak.index', 'pendaftaran.pandega.index']) ? 'active' : '' }}">
-                        <a href="javascript:void(0);"><i class="fas fa-graduation-cap"></i> <span>Pendaftar</span> <span
-                                class="menu-arrow"></span></a>
+                        class="submenu {{ request()->routeIs(['pendaftaran.semua.index', 'pendaftaran.siaga.index', 'pendaftaran.penggalang.index', 'pendaftaran.penegak.index', 'pendaftaran.pandega.index', 'penilaian.all.index', 'penilaian.all.nilai', 'penilaian.siaga.index', 'penilaian.siaga.nilai', 'penilaian.penggalang.index', 'penilaian.penggalang.nilai', 'penilaian.penegak.index', 'penilaian.penegak.nilai', 'penilaian.pandega.index', 'penilaian.pandega.nilai']) ? 'active' : '' }}">
+                        <a href="javascript:void(0);"><i class="fas fa-graduation-cap"></i> <span>Pendaftaran</span>
+                            <span class="menu-arrow"></span></a>
                         <ul>
-                            <li class="submenu {{ request()->routeIs(['pendaftaran.semua.index']) ? 'active' : '' }}">
+                            <li
+                                class="submenu {{ request()->routeIs(['pendaftaran.semua.index', 'penilaian.all.index', 'penilaian.all.nilai']) ? 'active' : '' }}">
                                 <a href="javascript:void(0);"> <span> Semua Data</span> <span
                                         class="menu-arrow"></span></a>
                                 <ul>
                                     <li class="{{ request()->routeIs(['pendaftaran.semua.index']) ? 'active' : '' }}"><a
                                             href="{{ route('pendaftaran.semua.index') }}">Administrasi</a>
                                     </li>
-                                    <li><a href="javascript:void(0);">Tahap Akhir</a></li>
-                                </ul>
-                            </li>
-                            <li class="submenu {{ request()->routeIs(['pendaftaran.siaga.index']) ? 'active' : '' }}">
-                                <a href="javascript:void(0);"> <span> Siaga</span> <span class="menu-arrow"></span></a>
-                                <ul>
-                                    <li class="{{ request()->routeIs(['pendaftaran.siaga.index']) ? 'active' : '' }}"><a
-                                            href="{{ route('pendaftaran.siaga.index') }}">Administrasi</a>
-                                    </li>
-                                    <li><a href="{{ route('penilaian-siaga.index') }}">Penilaian</a></li>
+                                    <li class="{{ request()->routeIs(['penilaian.all.index']) ? 'active' : '' }}"><a
+                                            href="{{ route('penilaian.all.index') }}">Tahap Akhir</a></li>
                                 </ul>
                             </li>
                             <li
-                                class="submenu {{ request()->routeIs(['pendaftaran.penggalang.index']) ? 'active' : '' }}">
+                                class="submenu {{ request()->routeIs(['pendaftaran.siaga.index', 'penilaian.siaga.index', 'penilaian.siaga.nilai']) ? 'active' : '' }}">
+                                <a href="javascript:void(0);"> <span> Siaga</span> <span class="menu-arrow"></span></a>
+                                <ul>
+                                    <li class="{{ request()->routeIs(['pendaftaran.siaga.index']) ? 'active' : '' }}">
+                                        <a href="{{ route('pendaftaran.siaga.index') }}">Administrasi</a>
+                                    </li>
+                                    <li class="{{ request()->routeIs(['penilaian.siaga.index']) ? 'active' : '' }}"><a
+                                            href="{{ route('penilaian.siaga.index') }}">Penilaian</a></li>
+                                </ul>
+                            </li>
+                            <li
+                                class="submenu {{ request()->routeIs(['pendaftaran.penggalang.index', 'penilaian.penggalang.index', 'penilaian.penggalang.nilai']) ? 'active' : '' }}">
                                 <a href="javascript:void(0);"> <span> Penggalang</span> <span
                                         class="menu-arrow"></span></a>
                                 <ul>
@@ -74,11 +54,14 @@
                                         class="{{ request()->routeIs(['pendaftaran.penggalang.index']) ? 'active' : '' }}">
                                         <a href="{{ route('pendaftaran.penggalang.index') }}">Administrasi</a>
                                     </li>
-                                    <li><a href="{{ route('penilaian-penggalang.index') }}">Penilaian</a></li>
+                                    <li
+                                        class="{{ request()->routeIs(['penilaian.penggalang.index']) ? 'active' : '' }}">
+                                        <a href="{{ route('penilaian.penggalang.index') }}">Penilaian</a>
+                                    </li>
                                 </ul>
                             </li>
                             <li
-                                class="submenu {{ request()->routeIs(['pendaftaran.penegak.index']) ? 'active' : '' }}">
+                                class="submenu {{ request()->routeIs(['pendaftaran.penegak.index', 'penilaian.penegak.index', 'penilaian.penegak.nilai']) ? 'active' : '' }}">
                                 <a href="javascript:void(0);"> <span> Penegak</span> <span
                                         class="menu-arrow"></span></a>
                                 <ul>
@@ -86,11 +69,12 @@
                                         class="{{ request()->routeIs(['pendaftaran.penegak.index']) ? 'active' : '' }}">
                                         <a href="{{ route('pendaftaran.penegak.index') }}">Administrasi</a>
                                     </li>
-                                    <li><a href="{{ route('penilaian-penegak.index') }}">Penilaian</a></li>
+                                    <li class="{{ request()->routeIs(['penilaian.penegak.index']) ? 'active' : '' }}">
+                                        <a href="{{ route('penilaian.penegak.index') }}">Penilaian</a></li>
                                 </ul>
                             </li>
                             <li
-                                class="submenu {{ request()->routeIs(['pendaftaran.pandega.index']) ? 'active' : '' }}">
+                                class="submenu {{ request()->routeIs(['pendaftaran.pandega.index', 'penilaian.pandega.index', 'penilaian.pandega.nilai']) ? 'active' : '' }}">
                                 <a href="javascript:void(0);"> <span> Pandega</span> <span
                                         class="menu-arrow"></span></a>
                                 <ul>
@@ -98,7 +82,9 @@
                                         class="{{ request()->routeIs(['pendaftaran.pandega.index']) ? 'active' : '' }}">
                                         <a href="{{ route('pendaftaran.pandega.index') }}">Administrasi</a>
                                     </li>
-                                    <li><a href="{{ route('penilaian-pandega.index') }}">Penilaian</a></li>
+                                    <li class="{{ request()->routeIs(['penilaian.pandega.index']) ? 'active' : '' }}">
+                                        <a href="{{ route('penilaian.pandega.index') }}">Penilaian</a>
+                                    </li>
                                 </ul>
                             </li>
                         </ul>
@@ -109,25 +95,31 @@
                         <a href="{{ route('timeline.index') }}"><i class="fas fa-clipboard-list"></i> <span>Time
                                 Line</span></a>
                     </li>
-                    {{-- <li class="{{ request()->routeIs(['soal.index']) ? 'active' : '' }}">
-                        <a href="{{ route('soal.index') }}"><i class="fas fa-clipboard"></i> <span>Soal</span></a>
-                    </li> --}}
-
                     <li
                         class="submenu {{ request()->routeIs(['soal.index', 'soal.create', 'soal.edit', 'soal.indexSiaga', 'soal.createSiaga', 'soal.editSiaga', 'soal.indexPenggalang', 'soal.createPenggalang', 'soal.editPenggalang', 'soal.indexPenegak', 'soal.createPenegak', 'soal.editPenegak', 'soal.indexPandega', 'soal.createPandega', 'soal.editPandega']) ? 'active' : '' }}">
-                        <a href="#"><i class="fas fa-clipboard"></i> <span> Soal</span> <span
+                        <a href="#"><i class="fas fa-clipboard"></i> <span> Kriteria Penilaian</span> <span
                                 class="menu-arrow"></span></a>
                         <ul>
-                            <li class="{{ request()->routeIs(['soal.index', 'soal.create', 'soal.edit']) ? 'active' : '' }}"><a
-                                    href="{{ route('soal.index') }}">Semua Data</a></li>
-                            <li class="{{ request()->routeIs(['soal.indexSiaga', 'soal.createSiaga', 'soal.editSiaga']) ? 'active' : '' }}"><a
-                                    href="{{ route('soal.indexSiaga') }}">Siaga</a></li>
-                            <li class="{{ request()->routeIs(['soal.indexPenggalang', 'soal.createPenggalang', 'soal.editPenggalang']) ? 'active' : '' }}"><a
-                                    href="{{ route('soal.indexPenggalang') }}">Penggalang</a></li>
-                            <li class="{{ request()->routeIs([ 'soal.indexPenegak', 'soal.createPenegak', 'soal.editPenegak']) ? 'active' : '' }}"><a
-                                    href="{{ route('soal.indexPenegak') }}">Penegak</a></li>
-                            <li class="{{ request()->routeIs(['soal.indexPandega', 'soal.createPandega', 'soal.editPandega']) ? 'active' : '' }}"><a
-                                    href="{{ route('soal.indexPandega') }}">Pandega</a></li>
+                            <li
+                                class="{{ request()->routeIs(['soal.index', 'soal.create', 'soal.edit']) ? 'active' : '' }}">
+                                <a href="{{ route('soal.index') }}">Semua Data</a>
+                            </li>
+                            <li
+                                class="{{ request()->routeIs(['soal.indexSiaga', 'soal.createSiaga', 'soal.editSiaga']) ? 'active' : '' }}">
+                                <a href="{{ route('soal.indexSiaga') }}">Siaga</a>
+                            </li>
+                            <li
+                                class="{{ request()->routeIs(['soal.indexPenggalang', 'soal.createPenggalang', 'soal.editPenggalang']) ? 'active' : '' }}">
+                                <a href="{{ route('soal.indexPenggalang') }}">Penggalang</a>
+                            </li>
+                            <li
+                                class="{{ request()->routeIs(['soal.indexPenegak', 'soal.createPenegak', 'soal.editPenegak']) ? 'active' : '' }}">
+                                <a href="{{ route('soal.indexPenegak') }}">Penegak</a>
+                            </li>
+                            <li
+                                class="{{ request()->routeIs(['soal.indexPandega', 'soal.createPandega', 'soal.editPandega']) ? 'active' : '' }}">
+                                <a href="{{ route('soal.indexPandega') }}">Pandega</a>
+                            </li>
                         </ul>
                     </li>
                 @endif

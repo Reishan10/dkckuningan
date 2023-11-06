@@ -43,6 +43,11 @@ class Pendaftaran extends Model
         return $this->belongsTo(Golongan::class);
     }
 
+    public function penilaian()
+    {
+      return $this->hasMany(Penilaian::class); 
+    }
+
     protected $fillable = [
         'user_id',
         'nta',

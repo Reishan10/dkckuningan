@@ -20,7 +20,9 @@ class PendaftaranController extends Controller
             $query = Pendaftaran::with('user', 'golongan')
                 ->join('users', 'pendaftaran.user_id', '=', 'users.id')
                 ->orderBy('users.name', 'asc')
-                ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.*', 'pendaftaran.*');
+                ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.*', 'pendaftaran.*')
+                ->where('tahap_1', null)
+                ->where('status', 1);
 
             if ($request->has('start_date') && $request->has('end_date')) {
                 $start_date = $request->input('start_date');
@@ -83,7 +85,7 @@ class PendaftaranController extends Controller
                     if ($pendaftaran->status == 1) {
                         $btn .= '<button type="button" class="btn btn-sm btn-success text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnTerima"><i class="fas fa-check"></i></button>';
                         $btn .= '<button type="button" class="btn btn-sm btn-danger text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnTolak" title="Tolak"><i class="fas fa-times"></i></button>';
-                    } 
+                    }
                     $btn .= '<button type="button" class="btn btn-sm btn-info text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnDetail" data-bs-toggle="modal" data-bs-target="#detailModal"><i class="fas fa-eye"></i></button>';
                     $btn .= '<button type="button" class="btn btn-sm btn-warning text-light" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnHapus" title="Hapus"><i class="fas fa-trash"></i></button>';
                     return $btn;
@@ -104,7 +106,7 @@ class PendaftaranController extends Controller
     public function terimaAll(Request $request)
     {
         $pendaftaran = Pendaftaran::with('user', 'golongan')->findOrFail($request->id);
-        $pendaftaran->tahap_1 = "Terima";
+        $pendaftaran->tahap_1 = "Selesai";
         $pendaftaran->status = 2;
         $pendaftaran->save();
 
@@ -115,7 +117,7 @@ class PendaftaranController extends Controller
     public function tolakAll(Request $request)
     {
         $pendaftaran = Pendaftaran::with('user', 'golongan')->findOrFail($request->id);
-        $pendaftaran->tahap_1 = "Tolak";
+        $pendaftaran->tahap_1 = "Selesai";
         $pendaftaran->status = 3;
         $pendaftaran->save();
 
@@ -145,6 +147,8 @@ class PendaftaranController extends Controller
             ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
             ->orderBy('users.name', 'asc')
             ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.name', 'golongan.name as golongan_name', 'pangkalan')
+            ->where('tahap_1', null)
+            ->where('status', 1)
             ->get();
 
         return view('backend.pendaftaran.all.print', compact('pendaftaran'));
@@ -157,22 +161,25 @@ class PendaftaranController extends Controller
             ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
             ->orderBy('users.name', 'asc')
             ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.name', 'golongan.name as golongan_name', 'pangkalan')
+            ->where('tahap_1', null)
+            ->where('status', 1)
             ->get();
 
         $pdf = Pdf::loadView('backend.pendaftaran.all.printPDF', compact('pendaftaran'));
         return $pdf->download('pendaftaran-semua-' . time() . '.pdf');
     }
 
-
     public function indexSiaga(Request $request)
     {
         if (request()->ajax()) {
             $query = Pendaftaran::with('user', 'golongan')
-                ->join('users', 'pendaftaran.user_id', '=', 'users.id')
                 ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
+                ->join('users', 'pendaftaran.user_id', '=', 'users.id')
                 ->orderBy('users.name', 'asc')
-                ->where('golongan.name', 'Siaga')
-                ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.*', 'pendaftaran.*');
+                ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.*', 'pendaftaran.*')
+                ->where('tahap_1', null)
+                ->where('status', 1)
+                ->where('golongan.name', 'Siaga');
 
             if ($request->has('start_date') && $request->has('end_date')) {
                 $start_date = $request->input('start_date');
@@ -182,7 +189,6 @@ class PendaftaranController extends Controller
             }
 
             $pendaftaran = $query->get();
-
 
             return DataTables::of($pendaftaran)
                 ->addIndexColumn()
@@ -233,19 +239,15 @@ class PendaftaranController extends Controller
 
                 ->addColumn('aksi', function ($pendaftaran) {
                     $btn = '';
-
                     if ($pendaftaran->status == 1) {
                         $btn .= '<button type="button" class="btn btn-sm btn-success text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnTerima"><i class="fas fa-check"></i></button>';
                         $btn .= '<button type="button" class="btn btn-sm btn-danger text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnTolak" title="Tolak"><i class="fas fa-times"></i></button>';
-                    } elseif ($pendaftaran->status == 2) {
-                        $btn .= '<button type="button" class="btn btn-sm btn-danger text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnTolak" title="Tolak"><i class="fas fa-times"></i></button>';
-                    } elseif ($pendaftaran->status == 3) {
-                        $btn .= '<button type="button" class="btn btn-sm btn-success text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnTerima"><i class="fas fa-check"></i></button>';
                     }
                     $btn .= '<button type="button" class="btn btn-sm btn-info text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnDetail" data-bs-toggle="modal" data-bs-target="#detailModal"><i class="fas fa-eye"></i></button>';
                     $btn .= '<button type="button" class="btn btn-sm btn-warning text-light" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnHapus" title="Hapus"><i class="fas fa-trash"></i></button>';
                     return $btn;
                 })
+
                 ->rawColumns(['nta', 'aksi', 'active_status', 'comboBox', 'status', 'berkas'])
                 ->make(true);
         }
@@ -260,19 +262,23 @@ class PendaftaranController extends Controller
 
     public function terimaSiaga(Request $request)
     {
-        $pendaftaran = Pendaftaran::find($request->id);
+        $pendaftaran = Pendaftaran::with('user', 'golongan')->findOrFail($request->id);
+        $pendaftaran->tahap_1 = "Selesai";
         $pendaftaran->status = 2;
         $pendaftaran->save();
 
+        Mail::to($pendaftaran->user->email)->send(new MailLolosAdministrasi($pendaftaran));
         return response()->json(['success' => 'Status berhasil diubah menjadi "Terima"']);
     }
 
     public function tolakSiaga(Request $request)
     {
-        $pendaftaran = Pendaftaran::find($request->id);
+        $pendaftaran = Pendaftaran::with('user', 'golongan')->findOrFail($request->id);
+        $pendaftaran->tahap_1 = "Selesai";
         $pendaftaran->status = 3;
         $pendaftaran->save();
 
+        Mail::to($pendaftaran->user->email)->send(new MailTolakAdministrasi($pendaftaran));
         return response()->json(['success' => 'Status berhasil diubah menjadi "Tolak"']);
     }
 
@@ -297,8 +303,10 @@ class PendaftaranController extends Controller
             ->join('users', 'pendaftaran.user_id', '=', 'users.id')
             ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
             ->orderBy('users.name', 'asc')
-            ->where('golongan.name', 'Siaga')
             ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.name', 'golongan.name as golongan_name', 'pangkalan')
+            ->where('tahap_1', null)
+            ->where('status', 1)
+            ->where('golongan.name', 'Siaga')
             ->get();
 
         return view('backend.pendaftaran.siaga.print', compact('pendaftaran'));
@@ -310,8 +318,10 @@ class PendaftaranController extends Controller
             ->join('users', 'pendaftaran.user_id', '=', 'users.id')
             ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
             ->orderBy('users.name', 'asc')
-            ->where('golongan.name', 'Siaga')
             ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.name', 'golongan.name as golongan_name', 'pangkalan')
+            ->where('tahap_1', null)
+            ->where('status', 1)
+            ->where('golongan.name', 'Siaga')
             ->get();
 
         $pdf = Pdf::loadView('backend.pendaftaran.siaga.printPDF', compact('pendaftaran'));
@@ -322,11 +332,13 @@ class PendaftaranController extends Controller
     {
         if (request()->ajax()) {
             $query = Pendaftaran::with('user', 'golongan')
-                ->join('users', 'pendaftaran.user_id', '=', 'users.id')
                 ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
+                ->join('users', 'pendaftaran.user_id', '=', 'users.id')
                 ->orderBy('users.name', 'asc')
-                ->where('golongan.name', 'Penggalang')
-                ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.*', 'pendaftaran.*');
+                ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.*', 'pendaftaran.*')
+                ->where('tahap_1', null)
+                ->where('status', 1)
+                ->where('golongan.name', 'Penggalang');
 
             if ($request->has('start_date') && $request->has('end_date')) {
                 $start_date = $request->input('start_date');
@@ -386,19 +398,15 @@ class PendaftaranController extends Controller
 
                 ->addColumn('aksi', function ($pendaftaran) {
                     $btn = '';
-
                     if ($pendaftaran->status == 1) {
                         $btn .= '<button type="button" class="btn btn-sm btn-success text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnTerima"><i class="fas fa-check"></i></button>';
                         $btn .= '<button type="button" class="btn btn-sm btn-danger text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnTolak" title="Tolak"><i class="fas fa-times"></i></button>';
-                    } elseif ($pendaftaran->status == 2) {
-                        $btn .= '<button type="button" class="btn btn-sm btn-danger text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnTolak" title="Tolak"><i class="fas fa-times"></i></button>';
-                    } elseif ($pendaftaran->status == 3) {
-                        $btn .= '<button type="button" class="btn btn-sm btn-success text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnTerima"><i class="fas fa-check"></i></button>';
                     }
                     $btn .= '<button type="button" class="btn btn-sm btn-info text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnDetail" data-bs-toggle="modal" data-bs-target="#detailModal"><i class="fas fa-eye"></i></button>';
                     $btn .= '<button type="button" class="btn btn-sm btn-warning text-light" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnHapus" title="Hapus"><i class="fas fa-trash"></i></button>';
                     return $btn;
                 })
+
                 ->rawColumns(['nta', 'aksi', 'active_status', 'comboBox', 'status', 'berkas'])
                 ->make(true);
         }
@@ -413,19 +421,23 @@ class PendaftaranController extends Controller
 
     public function terimaPenggalang(Request $request)
     {
-        $pendaftaran = Pendaftaran::find($request->id);
+        $pendaftaran = Pendaftaran::with('user', 'golongan')->findOrFail($request->id);
+        $pendaftaran->tahap_1 = "Selesai";
         $pendaftaran->status = 2;
         $pendaftaran->save();
 
+        Mail::to($pendaftaran->user->email)->send(new MailLolosAdministrasi($pendaftaran));
         return response()->json(['success' => 'Status berhasil diubah menjadi "Terima"']);
     }
 
     public function tolakPenggalang(Request $request)
     {
-        $pendaftaran = Pendaftaran::find($request->id);
+        $pendaftaran = Pendaftaran::with('user', 'golongan')->findOrFail($request->id);
+        $pendaftaran->tahap_1 = "Selesai";
         $pendaftaran->status = 3;
         $pendaftaran->save();
 
+        Mail::to($pendaftaran->user->email)->send(new MailTolakAdministrasi($pendaftaran));
         return response()->json(['success' => 'Status berhasil diubah menjadi "Tolak"']);
     }
 
@@ -450,8 +462,10 @@ class PendaftaranController extends Controller
             ->join('users', 'pendaftaran.user_id', '=', 'users.id')
             ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
             ->orderBy('users.name', 'asc')
-            ->where('golongan.name', 'Penggalang')
             ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.name', 'golongan.name as golongan_name', 'pangkalan')
+            ->where('tahap_1', null)
+            ->where('status', 1)
+            ->where('golongan.name', 'Penggalang')
             ->get();
 
         return view('backend.pendaftaran.penggalang.print', compact('pendaftaran'));
@@ -463,8 +477,10 @@ class PendaftaranController extends Controller
             ->join('users', 'pendaftaran.user_id', '=', 'users.id')
             ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
             ->orderBy('users.name', 'asc')
-            ->where('golongan.name', 'Penggalang')
             ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.name', 'golongan.name as golongan_name', 'pangkalan')
+            ->where('tahap_1', null)
+            ->where('status', 1)
+            ->where('golongan.name', 'Penggalang')
             ->get();
 
         $pdf = Pdf::loadView('backend.pendaftaran.penggalang.printPDF', compact('pendaftaran'));
@@ -475,11 +491,13 @@ class PendaftaranController extends Controller
     {
         if (request()->ajax()) {
             $query = Pendaftaran::with('user', 'golongan')
-                ->join('users', 'pendaftaran.user_id', '=', 'users.id')
                 ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
+                ->join('users', 'pendaftaran.user_id', '=', 'users.id')
                 ->orderBy('users.name', 'asc')
-                ->where('golongan.name', 'Penegak')
-                ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.*', 'pendaftaran.*');
+                ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.*', 'pendaftaran.*')
+                ->where('tahap_1', null)
+                ->where('status', 1)
+                ->where('golongan.name', 'Penegak');
 
             if ($request->has('start_date') && $request->has('end_date')) {
                 $start_date = $request->input('start_date');
@@ -539,19 +557,15 @@ class PendaftaranController extends Controller
 
                 ->addColumn('aksi', function ($pendaftaran) {
                     $btn = '';
-
                     if ($pendaftaran->status == 1) {
                         $btn .= '<button type="button" class="btn btn-sm btn-success text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnTerima"><i class="fas fa-check"></i></button>';
                         $btn .= '<button type="button" class="btn btn-sm btn-danger text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnTolak" title="Tolak"><i class="fas fa-times"></i></button>';
-                    } elseif ($pendaftaran->status == 2) {
-                        $btn .= '<button type="button" class="btn btn-sm btn-danger text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnTolak" title="Tolak"><i class="fas fa-times"></i></button>';
-                    } elseif ($pendaftaran->status == 3) {
-                        $btn .= '<button type="button" class="btn btn-sm btn-success text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnTerima"><i class="fas fa-check"></i></button>';
                     }
                     $btn .= '<button type="button" class="btn btn-sm btn-info text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnDetail" data-bs-toggle="modal" data-bs-target="#detailModal"><i class="fas fa-eye"></i></button>';
                     $btn .= '<button type="button" class="btn btn-sm btn-warning text-light" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnHapus" title="Hapus"><i class="fas fa-trash"></i></button>';
                     return $btn;
                 })
+
                 ->rawColumns(['nta', 'aksi', 'active_status', 'comboBox', 'status', 'berkas'])
                 ->make(true);
         }
@@ -566,19 +580,23 @@ class PendaftaranController extends Controller
 
     public function terimaPenegak(Request $request)
     {
-        $pendaftaran = Pendaftaran::find($request->id);
+        $pendaftaran = Pendaftaran::with('user', 'golongan')->findOrFail($request->id);
+        $pendaftaran->tahap_1 = "Selesai";
         $pendaftaran->status = 2;
         $pendaftaran->save();
 
+        Mail::to($pendaftaran->user->email)->send(new MailLolosAdministrasi($pendaftaran));
         return response()->json(['success' => 'Status berhasil diubah menjadi "Terima"']);
     }
 
     public function tolakPenegak(Request $request)
     {
-        $pendaftaran = Pendaftaran::find($request->id);
+        $pendaftaran = Pendaftaran::with('user', 'golongan')->findOrFail($request->id);
+        $pendaftaran->tahap_1 = "Selesai";
         $pendaftaran->status = 3;
         $pendaftaran->save();
 
+        Mail::to($pendaftaran->user->email)->send(new MailTolakAdministrasi($pendaftaran));
         return response()->json(['success' => 'Status berhasil diubah menjadi "Tolak"']);
     }
 
@@ -603,8 +621,10 @@ class PendaftaranController extends Controller
             ->join('users', 'pendaftaran.user_id', '=', 'users.id')
             ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
             ->orderBy('users.name', 'asc')
-            ->where('golongan.name', 'Penegak')
             ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.name', 'golongan.name as golongan_name', 'pangkalan')
+            ->where('tahap_1', null)
+            ->where('status', 1)
+            ->where('golongan.name', 'Penegak')
             ->get();
 
         return view('backend.pendaftaran.penegak.print', compact('pendaftaran'));
@@ -616,8 +636,10 @@ class PendaftaranController extends Controller
             ->join('users', 'pendaftaran.user_id', '=', 'users.id')
             ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
             ->orderBy('users.name', 'asc')
-            ->where('golongan.name', 'Penegak')
             ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.name', 'golongan.name as golongan_name', 'pangkalan')
+            ->where('tahap_1', null)
+            ->where('status', 1)
+            ->where('golongan.name', 'Penegak')
             ->get();
 
         $pdf = Pdf::loadView('backend.pendaftaran.penegak.printPDF', compact('pendaftaran'));
@@ -628,11 +650,13 @@ class PendaftaranController extends Controller
     {
         if (request()->ajax()) {
             $query = Pendaftaran::with('user', 'golongan')
-                ->join('users', 'pendaftaran.user_id', '=', 'users.id')
                 ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
+                ->join('users', 'pendaftaran.user_id', '=', 'users.id')
                 ->orderBy('users.name', 'asc')
-                ->where('golongan.name', 'Pandega')
-                ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.*', 'pendaftaran.*');
+                ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.*', 'pendaftaran.*')
+                ->where('tahap_1', null)
+                ->where('status', 1)
+                ->where('golongan.name', 'Pandega');
 
             if ($request->has('start_date') && $request->has('end_date')) {
                 $start_date = $request->input('start_date');
@@ -659,11 +683,6 @@ class PendaftaranController extends Controller
                             </h2>';
 
                     return $nta;
-                })
-                ->addColumn('golongan', function ($user) {
-                    $golongan = $user->golongan->name;
-
-                    return $golongan;
                 })
                 ->addColumn('golongan', function ($user) {
                     $golongan = $user->golongan->name;
@@ -697,19 +716,15 @@ class PendaftaranController extends Controller
 
                 ->addColumn('aksi', function ($pendaftaran) {
                     $btn = '';
-
                     if ($pendaftaran->status == 1) {
                         $btn .= '<button type="button" class="btn btn-sm btn-success text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnTerima"><i class="fas fa-check"></i></button>';
                         $btn .= '<button type="button" class="btn btn-sm btn-danger text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnTolak" title="Tolak"><i class="fas fa-times"></i></button>';
-                    } elseif ($pendaftaran->status == 2) {
-                        $btn .= '<button type="button" class="btn btn-sm btn-danger text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnTolak" title="Tolak"><i class="fas fa-times"></i></button>';
-                    } elseif ($pendaftaran->status == 3) {
-                        $btn .= '<button type="button" class="btn btn-sm btn-success text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnTerima"><i class="fas fa-check"></i></button>';
                     }
                     $btn .= '<button type="button" class="btn btn-sm btn-info text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnDetail" data-bs-toggle="modal" data-bs-target="#detailModal"><i class="fas fa-eye"></i></button>';
                     $btn .= '<button type="button" class="btn btn-sm btn-warning text-light" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnHapus" title="Hapus"><i class="fas fa-trash"></i></button>';
                     return $btn;
                 })
+
                 ->rawColumns(['nta', 'aksi', 'active_status', 'comboBox', 'status', 'berkas'])
                 ->make(true);
         }
@@ -724,19 +739,23 @@ class PendaftaranController extends Controller
 
     public function terimaPandega(Request $request)
     {
-        $pendaftaran = Pendaftaran::find($request->id);
+        $pendaftaran = Pendaftaran::with('user', 'golongan')->findOrFail($request->id);
+        $pendaftaran->tahap_1 = "Selesai";
         $pendaftaran->status = 2;
         $pendaftaran->save();
 
+        Mail::to($pendaftaran->user->email)->send(new MailLolosAdministrasi($pendaftaran));
         return response()->json(['success' => 'Status berhasil diubah menjadi "Terima"']);
     }
 
     public function tolakPandega(Request $request)
     {
-        $pendaftaran = Pendaftaran::find($request->id);
+        $pendaftaran = Pendaftaran::with('user', 'golongan')->findOrFail($request->id);
+        $pendaftaran->tahap_1 = "Selesai";
         $pendaftaran->status = 3;
         $pendaftaran->save();
 
+        Mail::to($pendaftaran->user->email)->send(new MailTolakAdministrasi($pendaftaran));
         return response()->json(['success' => 'Status berhasil diubah menjadi "Tolak"']);
     }
 
@@ -761,8 +780,10 @@ class PendaftaranController extends Controller
             ->join('users', 'pendaftaran.user_id', '=', 'users.id')
             ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
             ->orderBy('users.name', 'asc')
-            ->where('golongan.name', 'Pandega')
             ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.name', 'golongan.name as golongan_name', 'pangkalan')
+            ->where('tahap_1', null)
+            ->where('status', 1)
+            ->where('golongan.name', 'Pandega')
             ->get();
 
         return view('backend.pendaftaran.pandega.print', compact('pendaftaran'));
@@ -774,8 +795,10 @@ class PendaftaranController extends Controller
             ->join('users', 'pendaftaran.user_id', '=', 'users.id')
             ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
             ->orderBy('users.name', 'asc')
-            ->where('golongan.name', 'Pandega')
             ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.name', 'golongan.name as golongan_name', 'pangkalan')
+            ->where('tahap_1', null)
+            ->where('status', 1)
+            ->where('golongan.name', 'Pandega')
             ->get();
 
         $pdf = Pdf::loadView('backend.pendaftaran.pandega.printPDF', compact('pendaftaran'));

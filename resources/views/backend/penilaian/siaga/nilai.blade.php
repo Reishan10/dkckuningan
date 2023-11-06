@@ -72,8 +72,10 @@
                                                 <td>{{ $loop->iteration }}</td>
                                                 <td>{!! $row->persyaratan !!}</td>
                                                 <td>{!! $row->keterangan !!}</td>
-                                                <td><input type="text" name="nilai[{{ $row->id }}]"
-                                                        class="form-control" value="0"></td>
+                                                <td>
+                                                    <input type="number" name="nilai[{{ $row->id }}]"
+                                                        class="form-control" value="0" max="100">
+                                                </td>
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -102,7 +104,7 @@
                 e.preventDefault();
                 $.ajax({
                     data: $(this).serialize(),
-                    url: "{{ route('penilaian-siaga.simpan') }}",
+                    url: "{{ route('penilaian.siaga.simpan') }}",
                     type: "POST",
                     dataType: 'json',
                     beforeSend: function() {
@@ -120,7 +122,7 @@
                             text: 'Data berhasil disimpan',
                         }).then(function() {
                             top.location.href =
-                                "{{ route('penilaian-siaga.index') }}";
+                                "{{ route('penilaian.siaga.index') }}";
                         });
                     },
                     error: function(xhr, ajaxOptions, thrownError) {

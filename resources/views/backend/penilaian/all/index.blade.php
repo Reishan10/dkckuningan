@@ -63,6 +63,8 @@
                                             <th>Golongan</th>
                                             <th>Pangkalan</th>
                                             <th>Berkas</th>
+                                            <th>Nilai</th>
+                                            <th>Status</th>
                                             <th class="text-end">Aksi</th>
                                         </tr>
                                     </thead>
@@ -194,6 +196,14 @@
                             name: 'berkas'
                         },
                         {
+                            data: 'nilai',
+                            name: 'nilai'
+                        },
+                        {
+                            data: 'status_2',
+                            name: 'status_2'
+                        },
+                        {
                             data: 'aksi',
                             name: 'aksi',
                             orderable: false,
@@ -240,14 +250,24 @@
                                 name: 'no_telepon'
                             },
                             {
+                                data: 'golongan',
+                                name: 'golongan'
+                            },
+                            {
+                                data: 'pangkalan',
+                                name: 'pangkalan'
+                            },
+                            {
                                 data: 'berkas',
                                 name: 'berkas'
                             },
                             {
-                                data: 'status',
-                                name: 'status',
-                                orderable: false,
-                                searchable: false
+                                data: 'nilai',
+                                name: 'nilai'
+                            },
+                            {
+                                data: 'status_2',
+                                name: 'status_2'
                             },
                             {
                                 data: 'aksi',
@@ -259,81 +279,99 @@
                     });
                 });
 
-                // Detail Data
-                $('body').on('click', '#btnDetail', function() {
-                    let id = $(this).data('id');
-
-                    $.ajax({
-                        type: "POST",
-                        url: "{{ url('/pendaftaran/semua/detail/"+id+"') }}",
-                        data: {
-                            id: id
-                        },
-                        dataType: 'json',
-                        success: function(response) {
-                            $('#nta').text(response.pendaftaran.nta);
-                            $('#name').text(response.pendaftaran.user.name);
-                            $('#email').text(response.pendaftaran.user.email);
-                            $('#no_telepon').text(response.pendaftaran.user.no_telepon);
-
-                            var tanggalLahir = response.pendaftaran.tanggal_lahir;
-
-                            var tanggalLahirArray = tanggalLahir.split("-");
-                            var tanggal = tanggalLahirArray[2];
-                            var bulan = tanggalLahirArray[1];
-                            var tahun = tanggalLahirArray[0];
-
-                            var namaBulan = [
-                                "Januari", "Februari", "Maret", "April", "Mei", "Juni",
-                                "Juli", "Agustus", "September", "Oktober", "November",
-                                "Desember"
-                            ];
-
-                            var namaBulanLahir = namaBulan[parseInt(bulan) - 1];
-
-                            var tanggalLahirString = tanggal + " " + namaBulanLahir + " " + tahun;
-                            $('#ttl').text(response.pendaftaran.tempat_lahir + ", " +
-                                tanggalLahirString);
-
-                            $('#alamat').text(response.pendaftaran.alamat);
-                            $('#jenis_kelamin').text(response.pendaftaran.jenis_kelamin);
-                            $('#kwaran').text(response.pendaftaran.kwaran);
-                            $('#gudep').text(response.pendaftaran.gudep);
-                            $('#pangkalan').text(response.pendaftaran.pangkalan);
-                            $('#golongan').text(response.pendaftaran.golongan.name);
-
-                            var statusText = '';
-                            var badgeClass = '';
-
-                            switch (response.pendaftaran.status) {
-                                case 1:
-                                    badgeClass = 'badge-soft-info';
-                                    statusText = 'Dalam Proses';
-                                    break;
-                                case 2:
-                                    badgeClass = 'badge-soft-success';
-                                    statusText = 'Terima';
-                                    break;
-                                case 3:
-                                    badgeClass = 'badge-soft-danger';
-                                    statusText = 'Tolak';
-                                    break;
-                                default:
-                                    badgeClass = 'badge-soft-secondary';
-                                    statusText = 'Unknown';
-                            }
-
-                            $('#status').html('<span class="badge ' + badgeClass + '">' +
-                                statusText + '</span>');
-                        },
-                        error: function(xhr, ajaxOptions, thrownError) {
-                            alert(xhr.status + "\n" + xhr.responseText + "\n" +
-                                thrownError);
+                // Terima Data
+                $('body').on('click', '#btnTerima', function() {
+                    var id = $(this).data('id');
+                    Swal.fire({
+                        title: 'Ubah Status',
+                        text: "Apakah anda yakin?",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Ya, Terima!',
+                        cancelButtonText: 'Batal',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $.ajax({
+                                type: "POST",
+                                url: "{{ url('penilaian/semua/terima') }}/" + id,
+                                data: {
+                                    id: id
+                                },
+                                dataType: 'json',
+                                success: function(response) {
+                                    if (response.success) {
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Sukses',
+                                            text: response.success,
+                                        });
+                                        table.ajax.reload();
+                                    } else {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Oops...',
+                                            text: response.error,
+                                        });
+                                    }
+                                },
+                                error: function(xhr, ajaxOptions, thrownError) {
+                                    console.error(xhr.status + "\n" + xhr.responseText +
+                                        "\n" + thrownError);
+                                }
+                            });
                         }
-                    })
+                    });
                 });
 
-            
+                // Tolak Data
+                $('body').on('click', '#btnTolak', function() {
+                    var id = $(this).data('id');
+                    Swal.fire({
+                        title: 'Ubah Status',
+                        text: "Apakah anda yakin?",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Ya, Tolak!',
+                        cancelButtonText: 'Batal',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $.ajax({
+                                type: "POST",
+                                url: "{{ url('penilaian/semua/tolak') }}/" + id,
+                                data: {
+                                    id: id
+                                },
+                                dataType: 'json',
+                                success: function(response) {
+                                    if (response.success) {
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Sukses',
+                                            text: response.success,
+                                        });
+                                        table.ajax.reload();
+                                    } else {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Oops...',
+                                            text: response.error,
+                                        });
+                                    }
+                                },
+                                error: function(xhr, ajaxOptions, thrownError) {
+                                    console.error(xhr.status + "\n" + xhr.responseText +
+                                        "\n" + thrownError);
+                                }
+                            });
+                        }
+                    });
+                });
+
+
                 // Hapus Data
                 $('body').on('click', '#btnHapus', function() {
                     var id = $(this).data('id');
@@ -350,7 +388,7 @@
                         if (result.isConfirmed) {
                             $.ajax({
                                 type: "DELETE",
-                                url: "{{ url('pendaftaran/semua/delete') }}/" + id,
+                                url: "{{ url('penilaian/semua/delete') }}/" + id,
                                 data: {
                                     id: id
                                 },

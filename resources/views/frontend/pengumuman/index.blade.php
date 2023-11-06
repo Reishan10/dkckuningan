@@ -31,41 +31,80 @@
                 <div class="col-md-12 mt-4 pt-2">
                     <div class="table-responsive">
                         <table class="table border-0 table-hover table-center mb-0">
-                            <thead class="student-thread">
-                                <tr>
-                                    <th>No</th>
-                                    <th>Nama</th>
-                                    <th>Pangkalan</th>
-                                    <th>Golongan</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse ($pendaftaran as $row)
-                                    <tr>
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $row->user->name }}</td>
-                                        <td>{{ $row->pangkalan }}</td>
-                                        <td>{{ $row->golongan_name }}</td>
-                                        <td>
-                                            @if ($row->status == 1)
-                                                <span>Dalam Proses</span>
-                                            @elseif ($row->status == 2)
-                                                <span>Terima</span>
-                                            @elseif ($row->status == 3)
-                                                <span>Tolak</span>
-                                            @else
-                                                <span>Status Tidak Valid</span>
-                                            @endif
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="5">Data Tidak Tersedia</td>
-                                    </tr>
-                                @endforelse
+                            <tr>
+                                <th>Pengumuman</th>
+                                <td>:</td>
+                                <td>
+                                    @if ($pendaftaran->status == 1)
+                                        @if ($pendaftaran->status_2 == 1)
+                                            <strong>Seleksi tahap administrasi dalam proses</strong>
+                                        @elseif ($pendaftaran->status_2 == 2)
+                                            <strong>Selemat anda lolos seleksi tahap administrasi</strong>
+                                        @elseif ($pendaftaran->status_2 == 3)
+                                            <strong>Mohon maaf anda belum lolos seleksi tahap administrasi</strong>
+                                        @endif
+                                    @elseif ($pendaftaran->status == 2)
+                                        @if ($pendaftaran->status_2 == 1)
+                                            <strong>Seleksi tahap akhir dalam proses</strong>
+                                        @elseif ($pendaftaran->status_2 == 2)
+                                            <strong>Selemat anda lolos seleksi tahap akhir</strong>
+                                        @elseif ($pendaftaran->status_2 == 3)
+                                            <strong>Mohon maaf anda belum lolos seleksi tahap akhir</strong>
+                                        @endif
+                                    @elseif ($pendaftaran->status == 3)
+                                        <strong>Mohon maaf anda belum lolos seleksi tahap administrasi</strong>
+                                    @endif
 
-                            </tbody>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <th>Nomor Tanda Anggota</td>
+                                <td>:</td>
+                                <td>{{ $pendaftaran->nta }}</td>
+                            </tr>
+                            <tr>
+                                <th>Nama</td>
+                                <td>:</td>
+                                <td>{{ $pendaftaran->user->name }}</td>
+                            </tr>
+                            <tr>
+                                <th>Email</td>
+                                <td>:</td>
+                                <td>{{ $pendaftaran->user->email }}</td>
+                            </tr>
+                            <tr>
+                                <th>Nomor Telepon</td>
+                                <td>:</td>
+                                <td>{{ $pendaftaran->user->no_telepon }}</td>
+                            </tr>
+                            <tr>
+                                <th>Tempat, Tanggal Lahir</td>
+                                <td>:</td>
+                                <td>{{ $pendaftaran->tempat_lahir }},
+                                    {{ $formattedDate = \Carbon\Carbon::parse($pendaftaran->tanggal_lahir)->locale('id')->isoFormat('D MMMM Y') }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Jenis Kelamin</td>
+                                <td>:</td>
+                                <td>{{ $pendaftaran->jenis_kelamin }}</td>
+                            </tr>
+                            <tr>
+                                <th>kwartir Ranting</td>
+                                <td>:</td>
+                                <td>{{ $pendaftaran->kwaran }}</td>
+                            </tr>
+                            <tr>
+                                <th>Gugus Depan</td>
+                                <td>:</td>
+                                <td>{{ $pendaftaran->gudep }}</td>
+                            </tr>
+                            <tr>
+                                <th>Golongan</td>
+                                <td>:</td>
+                                <td>{{ $pendaftaran->golongan->name }}</td>
+                            </tr>
                         </table>
                     </div>
                 </div>

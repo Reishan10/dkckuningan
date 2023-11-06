@@ -9,7 +9,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class MailLolosAdministrasi extends Mailable
+class MailTolakAkhir extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -18,13 +18,12 @@ class MailLolosAdministrasi extends Mailable
      *
      * @return void
      */
-
     public $pendaftaran;
     public function __construct($pendaftaran)
     {
         $this->pendaftaran = $pendaftaran;
     }
-
+    
     /**
      * Get the message envelope.
      *
@@ -33,7 +32,7 @@ class MailLolosAdministrasi extends Mailable
     public function envelope()
     {
         return new Envelope(
-            subject: 'Selamat Lolos Seleksi Administrasi',
+            subject: 'Mohon Maaf Anda Belum Lolos Seleksi Tahap Akhir',
         );
     }
 
@@ -45,7 +44,7 @@ class MailLolosAdministrasi extends Mailable
     public function content()
     {
         return new Content(
-            view: 'mail.administrasi.lolos',
+            view: 'mail.administrasi.terima',
         );
     }
 

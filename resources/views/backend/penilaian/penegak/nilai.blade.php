@@ -1,6 +1,31 @@
 @extends('layouts.backend.main')
 @section('title', 'Penilaian')
 @section('content')
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #ddd;
+        }
+    </style>
     <div class="page-wrapper">
         <div class="content container-fluid">
 
@@ -32,20 +57,35 @@
                             </div>
 
                             <form id="form">
-                                <ul>
-                                    @foreach ($soal as $row)
-                                        <li>
-                                            <strong>No: {{ $loop->iteration }}</strong><br>
-                                            <strong> Persyaratan:</strong><br> {!! $row->persyaratan !!}<br>
-                                            <strong> Keterangan:</strong><br> {!! $row->keterangan !!}<br>
-                                            <input type="text" name="nilai[{{ $row->id }}]" class="form-control"
-                                                value="0"><br>
-                                        </li>
-                                    @endforeach
-                                </ul>
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Persyaratan</th>
+                                            <th>Keterangan</th>
+                                            <th>Nilai</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($soal as $row)
+                                            <tr>
+                                                <td>{{ $loop->iteration }}</td>
+                                                <td>{!! $row->persyaratan !!}</td>
+                                                <td>{!! $row->keterangan !!}</td>
+                                                <td>
+                                                    <input type="number" name="nilai[{{ $row->id }}]"
+                                                        class="form-control" value="0" max="100">
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+
+
                                 <input type="hidden" name="pendaftaran_id" value="{{ $pendaftaran->id }}">
-                                <button type="submit" class="btn btn-primary float-end" id="simpan">Simpan</button>
+                                <button type="submit" class="btn btn-primary float-end mt-4" id="simpan">Simpan</button>
                             </form>
+
                         </div>
                     </div>
                 </div>
@@ -64,7 +104,7 @@
                 e.preventDefault();
                 $.ajax({
                     data: $(this).serialize(),
-                    url: "{{ route('penilaian-penegak.simpan') }}",
+                    url: "{{ route('penilaian.penegak.simpan') }}",
                     type: "POST",
                     dataType: 'json',
                     beforeSend: function() {
@@ -82,7 +122,7 @@
                             text: 'Data berhasil disimpan',
                         }).then(function() {
                             top.location.href =
-                                "{{ route('penilaian-penegak.index') }}";
+                                "{{ route('penilaian.penegak.index') }}";
                         });
                     },
                     error: function(xhr, ajaxOptions, thrownError) {

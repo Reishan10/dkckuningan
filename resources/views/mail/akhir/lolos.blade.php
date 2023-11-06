@@ -71,10 +71,10 @@
 <body>
     <div class="container">
         <div class="header">
-            <h2 style="color: #ffffff;">Selamat Telah Lolos Tahap 1 <br>Pramuka Garuda</h2>
+            <h2 style="color: #ffffff;">Selamat Telah Lolos Seleksi Tahap Akhir <br>Pramuka Garuda</h2>
         </div>
 
-        <p>Anda telah berhasil lolos dalam pendaftaran Pramuka Garuda tahap 1. Berikut adalah detail pendaftaran Anda :
+        <p>Anda telah berhasil lolos dalam tahap akhir Pramuka Garuda. Berikut adalah detail pendaftaran Anda :
         </p>
         <table>
             <tr>
@@ -128,7 +128,7 @@
             <tr>
                 <td>Status</td>
                 <td>:</td>
-                <td><strong>{{ $pendaftaran->tahap_1 }}</strong></td>
+                <td><strong>Diterima</strong></td>
             </tr>
         </table>
 
