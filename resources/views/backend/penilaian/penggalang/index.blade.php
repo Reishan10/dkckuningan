@@ -62,88 +62,16 @@
                                             <th>No Telepon</th>
                                             <th>Golongan</th>
                                             <th>Pangkalan</th>
-                                            <th>Berkas</th>
                                             <th>Nilai</th>
-                                            <th>Status</th>
+                                            <th>Tahap 1</th>
+                                            <th>Tahap 2</th>
+                                            <th>Berkas</th>
                                             <th class="text-end">Aksi</th>
                                         </tr>
                                     </thead>
                                 </table>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
-            <div class="modal-dialog  modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="detailModalLabel">Detail Data</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <table class="table table-sm">
-                            <tr>
-                                <td>Nomor Tanda Anggota</td>
-                                <td>:</td>
-                                <td id="nta"></td>
-                            </tr>
-                            <tr>
-                                <td>Nama</td>
-                                <td>:</td>
-                                <td id="name"></td>
-                            </tr>
-                            <tr>
-                                <td>Email</td>
-                                <td>:</td>
-                                <td id="email"></td>
-                            </tr>
-                            <tr>
-                                <td>No Telepon</td>
-                                <td>:</td>
-                                <td id="no_telepon"></td>
-                            </tr>
-                            <tr>
-                                <td>Tempat, Tanggal Lahir</td>
-                                <td>:</td>
-                                <td id="ttl"></td>
-                            </tr>
-                            <tr>
-                                <td>Alamat</td>
-                                <td>:</td>
-                                <td id="alamat"></td>
-                            </tr>
-                            <tr>
-                                <td>Jenis Kelamin</td>
-                                <td>:</td>
-                                <td id="jenis_kelamin"></td>
-                            </tr>
-                            <tr>
-                                <td>Kwartir Ranting</td>
-                                <td>:</td>
-                                <td id="kwaran"></td>
-                            </tr>
-                            <tr>
-                                <td>Gugus Depan</td>
-                                <td>:</td>
-                                <td id="gudep"></td>
-                            </tr>
-                            <tr>
-                                <td>Pangkalan</td>
-                                <td>:</td>
-                                <td id="pangkalan"></td>
-                            </tr>
-                            <tr>
-                                <td>Golongan</td>
-                                <td>:</td>
-                                <td id="golongan"></td>
-                            </tr>
-                        </table>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                     </div>
                 </div>
             </div>
@@ -192,16 +120,20 @@
                             name: 'pangkalan'
                         },
                         {
-                            data: 'berkas',
-                            name: 'berkas'
-                        },
-                        {
                             data: 'nilai',
                             name: 'nilai'
                         },
                         {
+                            data: 'status_1',
+                            name: 'status_1'
+                        },
+                        {
                             data: 'status_2',
                             name: 'status_2'
+                        },
+                        {
+                            data: 'berkas',
+                            name: 'berkas'
                         },
                         {
                             data: 'aksi',
@@ -258,16 +190,20 @@
                                 name: 'pangkalan'
                             },
                             {
-                                data: 'berkas',
-                                name: 'berkas'
-                            },
-                            {
                                 data: 'nilai',
                                 name: 'nilai'
                             },
                             {
+                                data: 'status_1',
+                                name: 'status_1'
+                            },
+                            {
                                 data: 'status_2',
                                 name: 'status_2'
+                            },
+                            {
+                                data: 'berkas',
+                                name: 'berkas'
                             },
                             {
                                 data: 'aksi',
@@ -342,6 +278,52 @@
                             $.ajax({
                                 type: "POST",
                                 url: "{{ url('penilaian/penggalang/tolak') }}/" + id,
+                                data: {
+                                    id: id
+                                },
+                                dataType: 'json',
+                                success: function(response) {
+                                    if (response.success) {
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Sukses',
+                                            text: response.success,
+                                        });
+                                        table.ajax.reload();
+                                    } else {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Oops...',
+                                            text: response.error,
+                                        });
+                                    }
+                                },
+                                error: function(xhr, ajaxOptions, thrownError) {
+                                    console.error(xhr.status + "\n" + xhr.responseText +
+                                        "\n" + thrownError);
+                                }
+                            });
+                        }
+                    });
+                });
+
+                 // Pertimbangkan Data
+                 $('body').on('click', '#btnPertimbangkan', function() {
+                    var id = $(this).data('id');
+                    Swal.fire({
+                        title: 'Ubah Status',
+                        text: "Apakah anda yakin?",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'Ya, Pertimbangkan!',
+                        cancelButtonText: 'Batal',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            $.ajax({
+                                type: "POST",
+                                url: "{{ url('penilaian/penggalang/pertimbangkan') }}/" + id,
                                 data: {
                                     id: id
                                 },

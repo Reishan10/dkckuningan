@@ -14,6 +14,11 @@ class PengumumanController extends Controller
             ->where('user_id', auth()->user()->id)
             ->first();
 
-        return view('frontend.pengumuman.index', compact('pendaftaran'));
+        $riwayat_pendaftaran = Pendaftaran::with('user', 'golongan')
+            ->where('user_id', auth()->user()->id)
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('frontend.pengumuman.index', compact('pendaftaran', 'riwayat_pendaftaran'));
     }
 }

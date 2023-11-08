@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('pendaftaran', function (Blueprint $table) {
-            $table->integer('status_2')->default(1)->after('status')->comment('1 = Proses, 2 = Terima, 3 = Tolak');
+            $table->integer('status_2')->default(1)->after('status')->comment('1 = Proses, 2 = Terima, 3 = Tolak, 4 = Pertimbangkan');
         });
     }
 

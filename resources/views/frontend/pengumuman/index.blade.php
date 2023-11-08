@@ -120,12 +120,21 @@
                                     <td>:</td>
                                     <td>{{ $pendaftaran->golongan->name }}</td>
                                 </tr>
+                                <tr>
+                                    <th>Riwayat Pendaftaran</th>
+                                    <td>:</td>
+                                    <td>
+                                        @foreach ($riwayat_pendaftaran as $row)
+                                            {{ $row->golongan->name }} - {{ $row->created_at->year }} <br>
+                                        @endforeach
+                                    </td>
+                                </tr>
                             </table>
                         </div>
                     @else
-                    <div class="card">
-                        <h6 class="text-center">Data belum tersedia</h6>
-                    </div>
+                        <div class="card">
+                            <h6 class="text-center">Data belum tersedia</h6>
+                        </div>
                     @endif
                 </div>
             </div><!--end row-->

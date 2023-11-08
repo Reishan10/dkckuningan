@@ -19,20 +19,12 @@ class PenilaianController extends Controller
     public function indexAll(Request $request)
     {
         if (request()->ajax()) {
-            $query = '';
-            if (auth()->user()->type == "Juri") {
-                $query = Pendaftaran::with('user', 'golongan')
-                    ->join('users', 'pendaftaran.user_id', '=', 'users.id')
-                    ->orderBy('users.name', 'asc')
-                    ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.*', 'pendaftaran.*')
-                    ->where('tahap_1', 'Selesai')
-                    ->where('status', 2);
-            } else {
-                $query = Pendaftaran::with('user', 'golongan')
-                    ->join('users', 'pendaftaran.user_id', '=', 'users.id')
-                    ->orderBy('users.name', 'asc')
-                    ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.*', 'pendaftaran.*');
-            }
+            $query = Pendaftaran::with('user', 'golongan')
+                ->join('users', 'pendaftaran.user_id', '=', 'users.id')
+                ->orderBy('users.name', 'asc')
+                ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.*', 'pendaftaran.*')
+                ->where('tahap_1', 'Selesai')
+                ->where('status', 2);
 
             if ($request->has('start_date') && $request->has('end_date')) {
                 $start_date = $request->input('start_date');
@@ -69,6 +61,24 @@ class PenilaianController extends Controller
 
                     return $berkas;
                 })
+                ->addColumn('status_1', function ($pendaftaran) {
+                    $statusText = '';
+                    $badgeClass = '';
+
+                    if ($pendaftaran->status == 1) {
+                        $badgeClass = 'badge-soft-info';
+                        $statusText = 'Dalam Proses';
+                    } elseif ($pendaftaran->status == 2) {
+                        $badgeClass = 'badge-soft-success';
+                        $statusText = 'Terima';
+                    } else {
+                        $badgeClass = 'badge-soft-danger';
+                        $statusText = 'Tolak';
+                    }
+                    $status = '<span class="badge ' . $badgeClass . '">' . $statusText . '</span>';
+
+                    return $status;
+                })
                 ->addColumn('status_2', function ($pendaftaran) {
                     $statusText = '';
                     $badgeClass = '';
@@ -79,6 +89,9 @@ class PenilaianController extends Controller
                     } elseif ($pendaftaran->status_2 == 2) {
                         $badgeClass = 'badge-soft-success';
                         $statusText = 'Terima';
+                    } elseif ($pendaftaran->status_2 == 4) {
+                        $badgeClass = 'badge-soft-warning';
+                        $statusText = 'Pertimbangkan';
                     } else {
                         $badgeClass = 'badge-soft-danger';
                         $statusText = 'Tolak';
@@ -90,19 +103,26 @@ class PenilaianController extends Controller
                 ->addColumn('aksi', function ($pendaftaran) {
                     $btn = '';
                     if ($pendaftaran->tahap_2 == null) {
-                        $btn = '<a href="' . route('penilaian.all.nilai', $pendaftaran->pendaftaran_id) . '" class="btn btn-sm btn-warning text-light me-2"><i class="fas fa-pencil-alt"></i></a>';
+                        $btn .= '<a href="' . route('penilaian.all.nilai', $pendaftaran->pendaftaran_id) . '" class="btn btn-sm btn-warning text-light me-2"><i class="fas fa-pencil-alt"></i></a>';
                         $btn .= '<button type="button" class="btn btn-sm btn-danger text-light" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnHapus" title="Hapus"><i class="fas fa-trash"></i></button>';
                     } elseif ($pendaftaran->status_2 == 1) {
+                        $btn .= '<a href="' . route('penilaian.all.nilai.edit', $pendaftaran->pendaftaran_id) . '" class="btn btn-sm btn-warning text-light me-2"><i class="fas fa-pencil-alt"></i></a>';
+                        $btn .= '<button type="button" class="btn btn-sm btn-secondary text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnPertimbangkan"><i class="fas fa-users"></i></button>';
+                        $btn .= '<button type="button" class="btn btn-sm btn-success text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnTerima"><i class="fas fa-check"></i></button>';
+                        $btn .= '<button type="button" class="btn btn-sm btn-danger text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnTolak" title="Tolak"><i class="fas fa-times"></i></button>';
+                    } elseif ($pendaftaran->status_2 == 4) {
+                        $btn .= '<a href="' . route('penilaian.all.nilai.edit', $pendaftaran->pendaftaran_id) . '" class="btn btn-sm btn-warning text-light me-2"><i class="fas fa-pencil-alt"></i></a>';
                         $btn .= '<button type="button" class="btn btn-sm btn-success text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnTerima"><i class="fas fa-check"></i></button>';
                         $btn .= '<button type="button" class="btn btn-sm btn-danger text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnTolak" title="Tolak"><i class="fas fa-times"></i></button>';
                     } else {
+                        $btn = '<a href="' . route('penilaian.all.detail', $pendaftaran->pendaftaran_id) . '" class="btn btn-sm btn-info text-light me-2"><i class="fas fa-eye"></i></a>';
                         $btn .= '<button type="button" class="btn btn-sm btn-danger text-light" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnHapus" title="Hapus"><i class="fas fa-trash"></i></button>';
                     }
 
                     return $btn;
                 })
 
-                ->rawColumns(['nta', 'aksi', 'berkas', 'status_2'])
+                ->rawColumns(['nta', 'aksi', 'berkas', 'status_1', 'status_2'])
                 ->make(true);
         }
         return view('backend.penilaian.all.index');
@@ -157,6 +177,42 @@ class PenilaianController extends Controller
         }
     }
 
+    public function nilaiEditAll($id)
+    {
+        $pendaftar = Pendaftaran::with('user', 'golongan')->findOrFail($id);
+        $penilaian = Penilaian::with('soal')->where('pendaftaran_id', $pendaftar->id)->get();
+        return view('backend.penilaian.all.nilai_edit', compact('pendaftar', 'penilaian'));
+    }
+
+    public function updatePenilaianAll(Request $request)
+    {
+        $pendaftaranId = $request->input('pendaftaran_id');
+        $nilai = $request->input('nilai');
+
+        // Update nilai di tabel Penilaian
+        foreach ($nilai as $soalId => $nilaiSoal) {
+            $penilaian = Penilaian::updateOrCreate(
+                ['pendaftaran_id' => $pendaftaranId, 'soal_id' => $soalId],
+                ['nilai' => $nilaiSoal]
+            );
+        }
+
+        // Menghitung rata-rata nilai
+        $totalNilai = array_sum($nilai);
+        $jumlahNilai = count($nilai);
+        $rataRata = $jumlahNilai > 0 ? $totalNilai / $jumlahNilai : 0;
+
+        // Update nilai rata-rata di tabel Pendaftaran
+        $pendaftaran = Pendaftaran::find($pendaftaranId);
+        if ($pendaftaran) {
+            $pendaftaran->nilai = $rataRata;
+            $pendaftaran->save();
+            return response()->json(['message' => 'Data dan rata-rata berhasil disimpan'], 200);
+        } else {
+            return response()->json(['message' => 'Pendaftaran tidak ditemukan'], 404);
+        }
+    }
+
     public function terimaAll(Request $request)
     {
         $pendaftaran = Pendaftaran::with('user', 'golongan')->findOrFail($request->id);
@@ -179,6 +235,15 @@ class PenilaianController extends Controller
         return response()->json(['success' => 'Status berhasil diubah menjadi "Tolak"']);
     }
 
+    public function pertimbangkanAll(Request $request)
+    {
+        $pendaftaran = Pendaftaran::with('user', 'golongan')->findOrFail($request->id);
+        $pendaftaran->tahap_2 = "Selesai";
+        $pendaftaran->status_2 = 4;
+        $pendaftaran->save();
+        return response()->json(['success' => 'Status berhasil diubah menjadi "Pertimbangkan"']);
+    }
+
     public function printAll()
     {
         $pendaftaran = Pendaftaran::with('user', 'golongan')
@@ -186,6 +251,8 @@ class PenilaianController extends Controller
             ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
             ->orderBy('users.name', 'asc')
             ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.name', 'golongan.name as golongan_name', 'pangkalan')
+            ->where('tahap_1', 'Selesai')
+            ->where('status', 2)
             ->get();
         return view('backend.penilaian.all.print', compact('pendaftaran'));
     }
@@ -197,33 +264,32 @@ class PenilaianController extends Controller
             ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
             ->orderBy('users.name', 'asc')
             ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.name', 'golongan.name as golongan_name', 'pangkalan')
+            ->where('tahap_1', 'Selesai')
+            ->where('status', 2)
             ->get();
 
         $pdf = Pdf::loadView('backend.penilaian.all.printPDF', compact('pendaftaran'));
         return $pdf->download('pendaftaran-semua-' . time() . '.pdf');
     }
 
+    public function detailAll($id)
+    {
+        $detail_user = Pendaftaran::with('user', 'golongan')->findOrFail($id);
+        $penilaian = Penilaian::with('soal')->where('pendaftaran_id', $detail_user->id)->get();
+        return view('backend.penilaian.all.detail', compact('detail_user', 'penilaian'));
+    }
+
     public function indexSiaga(Request $request)
     {
         if (request()->ajax()) {
-            $query = '';
-            if (auth()->user()->type == 'Juri') {
-                $query = Pendaftaran::with('user', 'golongan')
-                    ->join('users', 'pendaftaran.user_id', '=', 'users.id')
-                    ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
-                    ->orderBy('users.name', 'asc')
-                    ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.*', 'pendaftaran.*')
-                    ->where('tahap_1', 'Selesai')
-                    ->where('golongan.name', 'Siaga')
-                    ->where('status', 2);
-            } else {
-                $query = Pendaftaran::with('user', 'golongan')
-                    ->join('users', 'pendaftaran.user_id', '=', 'users.id')
-                    ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
-                    ->orderBy('users.name', 'asc')
-                    ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.*', 'pendaftaran.*')
-                    ->where('golongan.name', 'Siaga');
-            }
+            $query = Pendaftaran::with('user', 'golongan')
+                ->join('users', 'pendaftaran.user_id', '=', 'users.id')
+                ->orderBy('users.name', 'asc')
+                ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
+                ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.*', 'pendaftaran.*')
+                ->where('tahap_1', 'Selesai')
+                ->where('status', 2)
+                ->where('golongan.name', 'Siaga');
 
             if ($request->has('start_date') && $request->has('end_date')) {
                 $start_date = $request->input('start_date');
@@ -260,6 +326,24 @@ class PenilaianController extends Controller
 
                     return $berkas;
                 })
+                ->addColumn('status_1', function ($pendaftaran) {
+                    $statusText = '';
+                    $badgeClass = '';
+
+                    if ($pendaftaran->status == 1) {
+                        $badgeClass = 'badge-soft-info';
+                        $statusText = 'Dalam Proses';
+                    } elseif ($pendaftaran->status == 2) {
+                        $badgeClass = 'badge-soft-success';
+                        $statusText = 'Terima';
+                    } else {
+                        $badgeClass = 'badge-soft-danger';
+                        $statusText = 'Tolak';
+                    }
+                    $status = '<span class="badge ' . $badgeClass . '">' . $statusText . '</span>';
+
+                    return $status;
+                })
                 ->addColumn('status_2', function ($pendaftaran) {
                     $statusText = '';
                     $badgeClass = '';
@@ -270,6 +354,9 @@ class PenilaianController extends Controller
                     } elseif ($pendaftaran->status_2 == 2) {
                         $badgeClass = 'badge-soft-success';
                         $statusText = 'Terima';
+                    } elseif ($pendaftaran->status_2 == 4) {
+                        $badgeClass = 'badge-soft-warning';
+                        $statusText = 'Pertimbangkan';
                     } else {
                         $badgeClass = 'badge-soft-danger';
                         $statusText = 'Tolak';
@@ -281,19 +368,26 @@ class PenilaianController extends Controller
                 ->addColumn('aksi', function ($pendaftaran) {
                     $btn = '';
                     if ($pendaftaran->tahap_2 == null) {
-                        $btn = '<a href="' . route('penilaian.siaga.nilai', $pendaftaran->pendaftaran_id) . '" class="btn btn-sm btn-warning text-light me-2"><i class="fas fa-pencil-alt"></i></a>';
+                        $btn .= '<a href="' . route('penilaian.siaga.nilai', $pendaftaran->pendaftaran_id) . '" class="btn btn-sm btn-warning text-light me-2"><i class="fas fa-pencil-alt"></i></a>';
                         $btn .= '<button type="button" class="btn btn-sm btn-danger text-light" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnHapus" title="Hapus"><i class="fas fa-trash"></i></button>';
                     } elseif ($pendaftaran->status_2 == 1) {
+                        $btn .= '<a href="' . route('penilaian.siaga.nilai.edit', $pendaftaran->pendaftaran_id) . '" class="btn btn-sm btn-warning text-light me-2"><i class="fas fa-pencil-alt"></i></a>';
+                        $btn .= '<button type="button" class="btn btn-sm btn-secondary text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnPertimbangkan"><i class="fas fa-users"></i></button>';
+                        $btn .= '<button type="button" class="btn btn-sm btn-success text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnTerima"><i class="fas fa-check"></i></button>';
+                        $btn .= '<button type="button" class="btn btn-sm btn-danger text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnTolak" title="Tolak"><i class="fas fa-times"></i></button>';
+                    } elseif ($pendaftaran->status_2 == 4) {
+                        $btn .= '<a href="' . route('penilaian.siaga.nilai.edit', $pendaftaran->pendaftaran_id) . '" class="btn btn-sm btn-warning text-light me-2"><i class="fas fa-pencil-alt"></i></a>';
                         $btn .= '<button type="button" class="btn btn-sm btn-success text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnTerima"><i class="fas fa-check"></i></button>';
                         $btn .= '<button type="button" class="btn btn-sm btn-danger text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnTolak" title="Tolak"><i class="fas fa-times"></i></button>';
                     } else {
+                        $btn = '<a href="' . route('penilaian.siaga.detail', $pendaftaran->pendaftaran_id) . '" class="btn btn-sm btn-info text-light me-2"><i class="fas fa-eye"></i></a>';
                         $btn .= '<button type="button" class="btn btn-sm btn-danger text-light" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnHapus" title="Hapus"><i class="fas fa-trash"></i></button>';
                     }
 
                     return $btn;
                 })
 
-                ->rawColumns(['nta', 'aksi', 'berkas', 'status_2'])
+                ->rawColumns(['nta', 'aksi', 'berkas', 'status_1', 'status_2'])
                 ->make(true);
         }
         return view('backend.penilaian.siaga.index');
@@ -348,6 +442,42 @@ class PenilaianController extends Controller
         }
     }
 
+    public function nilaiEditSiaga($id)
+    {
+        $pendaftar = Pendaftaran::with('user', 'golongan')->findOrFail($id);
+        $penilaian = Penilaian::with('soal')->where('pendaftaran_id', $pendaftar->id)->get();
+        return view('backend.penilaian.siaga.nilai_edit', compact('pendaftar', 'penilaian'));
+    }
+
+    public function updatePenilaianSiaga(Request $request)
+    {
+        $pendaftaranId = $request->input('pendaftaran_id');
+        $nilai = $request->input('nilai');
+
+        // Update nilai di tabel Penilaian
+        foreach ($nilai as $soalId => $nilaiSoal) {
+            $penilaian = Penilaian::updateOrCreate(
+                ['pendaftaran_id' => $pendaftaranId, 'soal_id' => $soalId],
+                ['nilai' => $nilaiSoal]
+            );
+        }
+
+        // Menghitung rata-rata nilai
+        $totalNilai = array_sum($nilai);
+        $jumlahNilai = count($nilai);
+        $rataRata = $jumlahNilai > 0 ? $totalNilai / $jumlahNilai : 0;
+
+        // Update nilai rata-rata di tabel Pendaftaran
+        $pendaftaran = Pendaftaran::find($pendaftaranId);
+        if ($pendaftaran) {
+            $pendaftaran->nilai = $rataRata;
+            $pendaftaran->save();
+            return response()->json(['message' => 'Data dan rata-rata berhasil disimpan'], 200);
+        } else {
+            return response()->json(['message' => 'Pendaftaran tidak ditemukan'], 404);
+        }
+    }
+
     public function terimaSiaga(Request $request)
     {
         $pendaftaran = Pendaftaran::with('user', 'golongan')->findOrFail($request->id);
@@ -370,6 +500,15 @@ class PenilaianController extends Controller
         return response()->json(['success' => 'Status berhasil diubah menjadi "Tolak"']);
     }
 
+    public function pertimbangkanSiaga(Request $request)
+    {
+        $pendaftaran = Pendaftaran::with('user', 'golongan')->findOrFail($request->id);
+        $pendaftaran->tahap_2 = "Selesai";
+        $pendaftaran->status_2 = 4;
+        $pendaftaran->save();
+        return response()->json(['success' => 'Status berhasil diubah menjadi "Pertimbangkan"']);
+    }
+
     public function printSiaga()
     {
         $pendaftaran = Pendaftaran::with('user', 'golongan')
@@ -377,9 +516,10 @@ class PenilaianController extends Controller
             ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
             ->orderBy('users.name', 'asc')
             ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.name', 'golongan.name as golongan_name', 'pangkalan')
-            ->where('golongan.name', 'Siaga')
+            ->where('tahap_1', 'Selesai')
+            ->where('status', 2)
             ->get();
-        return view('backend.penilaian.all.print', compact('pendaftaran'));
+        return view('backend.penilaian.siaga.print', compact('pendaftaran'));
     }
 
     public function printPDFSiaga()
@@ -389,35 +529,32 @@ class PenilaianController extends Controller
             ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
             ->orderBy('users.name', 'asc')
             ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.name', 'golongan.name as golongan_name', 'pangkalan')
-            ->where('golongan.name', 'Siaga')
+            ->where('tahap_1', 'Selesai')
+            ->where('status', 2)
             ->get();
 
-        $pdf = Pdf::loadView('backend.penilaian.all.printPDF', compact('pendaftaran'));
-        return $pdf->download('pendaftaran-siaga-' . time() . '.pdf');
+        $pdf = Pdf::loadView('backend.penilaian.siaga.printPDF', compact('pendaftaran'));
+        return $pdf->download('pendaftaran-semua-' . time() . '.pdf');
+    }
+
+    public function detailSiaga($id)
+    {
+        $detail_user = Pendaftaran::with('user', 'golongan')->findOrFail($id);
+        $penilaian = Penilaian::with('soal')->where('pendaftaran_id', $detail_user->id)->get();
+        return view('backend.penilaian.siaga.detail', compact('detail_user', 'penilaian'));
     }
 
     public function indexPenggalang(Request $request)
     {
         if (request()->ajax()) {
-            $query = '';
-
-            if (auth()->user()->type == 'Juri') {
-                $query = Pendaftaran::with('user', 'golongan')
-                    ->join('users', 'pendaftaran.user_id', '=', 'users.id')
-                    ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
-                    ->orderBy('users.name', 'asc')
-                    ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.*', 'pendaftaran.*')
-                    ->where('tahap_1', 'Selesai')
-                    ->where('golongan.name', 'Penggalang')
-                    ->where('status', 2);
-            } else {
-                $query = Pendaftaran::with('user', 'golongan')
-                    ->join('users', 'pendaftaran.user_id', '=', 'users.id')
-                    ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
-                    ->orderBy('users.name', 'asc')
-                    ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.*', 'pendaftaran.*')
-                    ->where('golongan.name', 'Penggalang');
-            }
+            $query = Pendaftaran::with('user', 'golongan')
+                ->join('users', 'pendaftaran.user_id', '=', 'users.id')
+                ->orderBy('users.name', 'asc')
+                ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
+                ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.*', 'pendaftaran.*')
+                ->where('tahap_1', 'Selesai')
+                ->where('status', 2)
+                ->where('golongan.name', 'Penggalang');
 
             if ($request->has('start_date') && $request->has('end_date')) {
                 $start_date = $request->input('start_date');
@@ -454,6 +591,24 @@ class PenilaianController extends Controller
 
                     return $berkas;
                 })
+                ->addColumn('status_1', function ($pendaftaran) {
+                    $statusText = '';
+                    $badgeClass = '';
+
+                    if ($pendaftaran->status == 1) {
+                        $badgeClass = 'badge-soft-info';
+                        $statusText = 'Dalam Proses';
+                    } elseif ($pendaftaran->status == 2) {
+                        $badgeClass = 'badge-soft-success';
+                        $statusText = 'Terima';
+                    } else {
+                        $badgeClass = 'badge-soft-danger';
+                        $statusText = 'Tolak';
+                    }
+                    $status = '<span class="badge ' . $badgeClass . '">' . $statusText . '</span>';
+
+                    return $status;
+                })
                 ->addColumn('status_2', function ($pendaftaran) {
                     $statusText = '';
                     $badgeClass = '';
@@ -464,6 +619,9 @@ class PenilaianController extends Controller
                     } elseif ($pendaftaran->status_2 == 2) {
                         $badgeClass = 'badge-soft-success';
                         $statusText = 'Terima';
+                    } elseif ($pendaftaran->status_2 == 4) {
+                        $badgeClass = 'badge-soft-warning';
+                        $statusText = 'Pertimbangkan';
                     } else {
                         $badgeClass = 'badge-soft-danger';
                         $statusText = 'Tolak';
@@ -475,19 +633,26 @@ class PenilaianController extends Controller
                 ->addColumn('aksi', function ($pendaftaran) {
                     $btn = '';
                     if ($pendaftaran->tahap_2 == null) {
-                        $btn = '<a href="' . route('penilaian.penggalang.nilai', $pendaftaran->pendaftaran_id) . '" class="btn btn-sm btn-warning text-light me-2"><i class="fas fa-pencil-alt"></i></a>';
+                        $btn .= '<a href="' . route('penilaian.penggalang.nilai', $pendaftaran->pendaftaran_id) . '" class="btn btn-sm btn-warning text-light me-2"><i class="fas fa-pencil-alt"></i></a>';
                         $btn .= '<button type="button" class="btn btn-sm btn-danger text-light" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnHapus" title="Hapus"><i class="fas fa-trash"></i></button>';
                     } elseif ($pendaftaran->status_2 == 1) {
+                        $btn .= '<a href="' . route('penilaian.penggalang.nilai.edit', $pendaftaran->pendaftaran_id) . '" class="btn btn-sm btn-warning text-light me-2"><i class="fas fa-pencil-alt"></i></a>';
+                        $btn .= '<button type="button" class="btn btn-sm btn-secondary text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnPertimbangkan"><i class="fas fa-users"></i></button>';
+                        $btn .= '<button type="button" class="btn btn-sm btn-success text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnTerima"><i class="fas fa-check"></i></button>';
+                        $btn .= '<button type="button" class="btn btn-sm btn-danger text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnTolak" title="Tolak"><i class="fas fa-times"></i></button>';
+                    } elseif ($pendaftaran->status_2 == 4) {
+                        $btn .= '<a href="' . route('penilaian.penggalang.nilai.edit', $pendaftaran->pendaftaran_id) . '" class="btn btn-sm btn-warning text-light me-2"><i class="fas fa-pencil-alt"></i></a>';
                         $btn .= '<button type="button" class="btn btn-sm btn-success text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnTerima"><i class="fas fa-check"></i></button>';
                         $btn .= '<button type="button" class="btn btn-sm btn-danger text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnTolak" title="Tolak"><i class="fas fa-times"></i></button>';
                     } else {
+                        $btn = '<a href="' . route('penilaian.penggalang.detail', $pendaftaran->pendaftaran_id) . '" class="btn btn-sm btn-info text-light me-2"><i class="fas fa-eye"></i></a>';
                         $btn .= '<button type="button" class="btn btn-sm btn-danger text-light" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnHapus" title="Hapus"><i class="fas fa-trash"></i></button>';
                     }
 
                     return $btn;
                 })
 
-                ->rawColumns(['nta', 'aksi', 'berkas', 'status_2'])
+                ->rawColumns(['nta', 'aksi', 'berkas', 'status_1', 'status_2'])
                 ->make(true);
         }
         return view('backend.penilaian.penggalang.index');
@@ -497,7 +662,7 @@ class PenilaianController extends Controller
     {
         $pendaftaran = Pendaftaran::find($id);
         $soal = Soal::where('golongan_id', $pendaftaran->golongan_id)->get();
-        return view('backend.penilaian.all.nilai', compact('soal', 'pendaftaran'));
+        return view('backend.penilaian.penggalang.nilai', compact('soal', 'pendaftaran'));
     }
 
     public function simpanPenilaianPenggalang(Request $request)
@@ -542,6 +707,42 @@ class PenilaianController extends Controller
         }
     }
 
+    public function nilaiEditPenggalang($id)
+    {
+        $pendaftar = Pendaftaran::with('user', 'golongan')->findOrFail($id);
+        $penilaian = Penilaian::with('soal')->where('pendaftaran_id', $pendaftar->id)->get();
+        return view('backend.penilaian.penggalang.nilai_edit', compact('pendaftar', 'penilaian'));
+    }
+
+    public function updatePenilaianPenggalang(Request $request)
+    {
+        $pendaftaranId = $request->input('pendaftaran_id');
+        $nilai = $request->input('nilai');
+
+        // Update nilai di tabel Penilaian
+        foreach ($nilai as $soalId => $nilaiSoal) {
+            $penilaian = Penilaian::updateOrCreate(
+                ['pendaftaran_id' => $pendaftaranId, 'soal_id' => $soalId],
+                ['nilai' => $nilaiSoal]
+            );
+        }
+
+        // Menghitung rata-rata nilai
+        $totalNilai = array_sum($nilai);
+        $jumlahNilai = count($nilai);
+        $rataRata = $jumlahNilai > 0 ? $totalNilai / $jumlahNilai : 0;
+
+        // Update nilai rata-rata di tabel Pendaftaran
+        $pendaftaran = Pendaftaran::find($pendaftaranId);
+        if ($pendaftaran) {
+            $pendaftaran->nilai = $rataRata;
+            $pendaftaran->save();
+            return response()->json(['message' => 'Data dan rata-rata berhasil disimpan'], 200);
+        } else {
+            return response()->json(['message' => 'Pendaftaran tidak ditemukan'], 404);
+        }
+    }
+
     public function terimaPenggalang(Request $request)
     {
         $pendaftaran = Pendaftaran::with('user', 'golongan')->findOrFail($request->id);
@@ -564,6 +765,15 @@ class PenilaianController extends Controller
         return response()->json(['success' => 'Status berhasil diubah menjadi "Tolak"']);
     }
 
+    public function pertimbangkanPenggalang(Request $request)
+    {
+        $pendaftaran = Pendaftaran::with('user', 'golongan')->findOrFail($request->id);
+        $pendaftaran->tahap_2 = "Selesai";
+        $pendaftaran->status_2 = 4;
+        $pendaftaran->save();
+        return response()->json(['success' => 'Status berhasil diubah menjadi "Pertimbangkan"']);
+    }
+
     public function printPenggalang()
     {
         $pendaftaran = Pendaftaran::with('user', 'golongan')
@@ -571,9 +781,10 @@ class PenilaianController extends Controller
             ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
             ->orderBy('users.name', 'asc')
             ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.name', 'golongan.name as golongan_name', 'pangkalan')
-            ->where('golongan.name', 'Penggalang')
+            ->where('tahap_1', 'Selesai')
+            ->where('status', 2)
             ->get();
-        return view('backend.penilaian.all.print', compact('pendaftaran'));
+        return view('backend.penilaian.penggalang.print', compact('pendaftaran'));
     }
 
     public function printPDFPenggalang()
@@ -583,35 +794,32 @@ class PenilaianController extends Controller
             ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
             ->orderBy('users.name', 'asc')
             ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.name', 'golongan.name as golongan_name', 'pangkalan')
-            ->where('golongan.name', 'Penggalang')
+            ->where('tahap_1', 'Selesai')
+            ->where('status', 2)
             ->get();
 
-        $pdf = Pdf::loadView('backend.penilaian.all.printPDF', compact('pendaftaran'));
-        return $pdf->download('pendaftaran-penggalang-' . time() . '.pdf');
+        $pdf = Pdf::loadView('backend.penilaian.penggalang.printPDF', compact('pendaftaran'));
+        return $pdf->download('pendaftaran-semua-' . time() . '.pdf');
+    }
+
+    public function detailPenggalang($id)
+    {
+        $detail_user = Pendaftaran::with('user', 'golongan')->findOrFail($id);
+        $penilaian = Penilaian::with('soal')->where('pendaftaran_id', $detail_user->id)->get();
+        return view('backend.penilaian.penggalang.detail', compact('detail_user', 'penilaian'));
     }
 
     public function indexPenegak(Request $request)
     {
         if (request()->ajax()) {
-            $query = '';
-
-            if (auth()->user()->type == 'Juri') {
-                $query = Pendaftaran::with('user', 'golongan')
-                    ->join('users', 'pendaftaran.user_id', '=', 'users.id')
-                    ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
-                    ->orderBy('users.name', 'asc')
-                    ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.*', 'pendaftaran.*')
-                    ->where('tahap_1', 'Selesai')
-                    ->where('golongan.name', 'Penegak')
-                    ->where('status', 2);
-            } else {
-                $query = Pendaftaran::with('user', 'golongan')
-                    ->join('users', 'pendaftaran.user_id', '=', 'users.id')
-                    ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
-                    ->orderBy('users.name', 'asc')
-                    ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.*', 'pendaftaran.*')
-                    ->where('golongan.name', 'Penegak');
-            }
+            $query = Pendaftaran::with('user', 'golongan')
+                ->join('users', 'pendaftaran.user_id', '=', 'users.id')
+                ->orderBy('users.name', 'asc')
+                ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
+                ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.*', 'pendaftaran.*')
+                ->where('tahap_1', 'Selesai')
+                ->where('status', 2)
+                ->where('golongan.name', 'Penegak');
 
             if ($request->has('start_date') && $request->has('end_date')) {
                 $start_date = $request->input('start_date');
@@ -648,6 +856,24 @@ class PenilaianController extends Controller
 
                     return $berkas;
                 })
+                ->addColumn('status_1', function ($pendaftaran) {
+                    $statusText = '';
+                    $badgeClass = '';
+
+                    if ($pendaftaran->status == 1) {
+                        $badgeClass = 'badge-soft-info';
+                        $statusText = 'Dalam Proses';
+                    } elseif ($pendaftaran->status == 2) {
+                        $badgeClass = 'badge-soft-success';
+                        $statusText = 'Terima';
+                    } else {
+                        $badgeClass = 'badge-soft-danger';
+                        $statusText = 'Tolak';
+                    }
+                    $status = '<span class="badge ' . $badgeClass . '">' . $statusText . '</span>';
+
+                    return $status;
+                })
                 ->addColumn('status_2', function ($pendaftaran) {
                     $statusText = '';
                     $badgeClass = '';
@@ -658,6 +884,9 @@ class PenilaianController extends Controller
                     } elseif ($pendaftaran->status_2 == 2) {
                         $badgeClass = 'badge-soft-success';
                         $statusText = 'Terima';
+                    } elseif ($pendaftaran->status_2 == 4) {
+                        $badgeClass = 'badge-soft-warning';
+                        $statusText = 'Pertimbangkan';
                     } else {
                         $badgeClass = 'badge-soft-danger';
                         $statusText = 'Tolak';
@@ -669,19 +898,26 @@ class PenilaianController extends Controller
                 ->addColumn('aksi', function ($pendaftaran) {
                     $btn = '';
                     if ($pendaftaran->tahap_2 == null) {
-                        $btn = '<a href="' . route('penilaian.penegak.nilai', $pendaftaran->pendaftaran_id) . '" class="btn btn-sm btn-warning text-light me-2"><i class="fas fa-pencil-alt"></i></a>';
+                        $btn .= '<a href="' . route('penilaian.penegak.nilai', $pendaftaran->pendaftaran_id) . '" class="btn btn-sm btn-warning text-light me-2"><i class="fas fa-pencil-alt"></i></a>';
                         $btn .= '<button type="button" class="btn btn-sm btn-danger text-light" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnHapus" title="Hapus"><i class="fas fa-trash"></i></button>';
                     } elseif ($pendaftaran->status_2 == 1) {
+                        $btn .= '<a href="' . route('penilaian.penegak.nilai.edit', $pendaftaran->pendaftaran_id) . '" class="btn btn-sm btn-warning text-light me-2"><i class="fas fa-pencil-alt"></i></a>';
+                        $btn .= '<button type="button" class="btn btn-sm btn-secondary text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnPertimbangkan"><i class="fas fa-users"></i></button>';
+                        $btn .= '<button type="button" class="btn btn-sm btn-success text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnTerima"><i class="fas fa-check"></i></button>';
+                        $btn .= '<button type="button" class="btn btn-sm btn-danger text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnTolak" title="Tolak"><i class="fas fa-times"></i></button>';
+                    } elseif ($pendaftaran->status_2 == 4) {
+                        $btn .= '<a href="' . route('penilaian.penegak.nilai.edit', $pendaftaran->pendaftaran_id) . '" class="btn btn-sm btn-warning text-light me-2"><i class="fas fa-pencil-alt"></i></a>';
                         $btn .= '<button type="button" class="btn btn-sm btn-success text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnTerima"><i class="fas fa-check"></i></button>';
                         $btn .= '<button type="button" class="btn btn-sm btn-danger text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnTolak" title="Tolak"><i class="fas fa-times"></i></button>';
                     } else {
+                        $btn = '<a href="' . route('penilaian.penegak.detail', $pendaftaran->pendaftaran_id) . '" class="btn btn-sm btn-info text-light me-2"><i class="fas fa-eye"></i></a>';
                         $btn .= '<button type="button" class="btn btn-sm btn-danger text-light" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnHapus" title="Hapus"><i class="fas fa-trash"></i></button>';
                     }
 
                     return $btn;
                 })
 
-                ->rawColumns(['nta', 'aksi', 'berkas', 'status_2'])
+                ->rawColumns(['nta', 'aksi', 'berkas', 'status_1', 'status_2'])
                 ->make(true);
         }
         return view('backend.penilaian.penegak.index');
@@ -691,7 +927,7 @@ class PenilaianController extends Controller
     {
         $pendaftaran = Pendaftaran::find($id);
         $soal = Soal::where('golongan_id', $pendaftaran->golongan_id)->get();
-        return view('backend.penilaian.all.nilai', compact('soal', 'pendaftaran'));
+        return view('backend.penilaian.penegak.nilai', compact('soal', 'pendaftaran'));
     }
 
     public function simpanPenilaianPenegak(Request $request)
@@ -736,6 +972,42 @@ class PenilaianController extends Controller
         }
     }
 
+    public function nilaiEditPenegak($id)
+    {
+        $pendaftar = Pendaftaran::with('user', 'golongan')->findOrFail($id);
+        $penilaian = Penilaian::with('soal')->where('pendaftaran_id', $pendaftar->id)->get();
+        return view('backend.penilaian.penegak.nilai_edit', compact('pendaftar', 'penilaian'));
+    }
+
+    public function updatePenilaianPenegak(Request $request)
+    {
+        $pendaftaranId = $request->input('pendaftaran_id');
+        $nilai = $request->input('nilai');
+
+        // Update nilai di tabel Penilaian
+        foreach ($nilai as $soalId => $nilaiSoal) {
+            $penilaian = Penilaian::updateOrCreate(
+                ['pendaftaran_id' => $pendaftaranId, 'soal_id' => $soalId],
+                ['nilai' => $nilaiSoal]
+            );
+        }
+
+        // Menghitung rata-rata nilai
+        $totalNilai = array_sum($nilai);
+        $jumlahNilai = count($nilai);
+        $rataRata = $jumlahNilai > 0 ? $totalNilai / $jumlahNilai : 0;
+
+        // Update nilai rata-rata di tabel Pendaftaran
+        $pendaftaran = Pendaftaran::find($pendaftaranId);
+        if ($pendaftaran) {
+            $pendaftaran->nilai = $rataRata;
+            $pendaftaran->save();
+            return response()->json(['message' => 'Data dan rata-rata berhasil disimpan'], 200);
+        } else {
+            return response()->json(['message' => 'Pendaftaran tidak ditemukan'], 404);
+        }
+    }
+
     public function terimaPenegak(Request $request)
     {
         $pendaftaran = Pendaftaran::with('user', 'golongan')->findOrFail($request->id);
@@ -758,6 +1030,15 @@ class PenilaianController extends Controller
         return response()->json(['success' => 'Status berhasil diubah menjadi "Tolak"']);
     }
 
+    public function pertimbangkanPenegak(Request $request)
+    {
+        $pendaftaran = Pendaftaran::with('user', 'golongan')->findOrFail($request->id);
+        $pendaftaran->tahap_2 = "Selesai";
+        $pendaftaran->status_2 = 4;
+        $pendaftaran->save();
+        return response()->json(['success' => 'Status berhasil diubah menjadi "Pertimbangkan"']);
+    }
+
     public function printPenegak()
     {
         $pendaftaran = Pendaftaran::with('user', 'golongan')
@@ -765,9 +1046,10 @@ class PenilaianController extends Controller
             ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
             ->orderBy('users.name', 'asc')
             ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.name', 'golongan.name as golongan_name', 'pangkalan')
-            ->where('golongan.name', 'Penegak')
+            ->where('tahap_1', 'Selesai')
+            ->where('status', 2)
             ->get();
-        return view('backend.penilaian.all.print', compact('pendaftaran'));
+        return view('backend.penilaian.penegak.print', compact('pendaftaran'));
     }
 
     public function printPDFPenegak()
@@ -777,35 +1059,32 @@ class PenilaianController extends Controller
             ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
             ->orderBy('users.name', 'asc')
             ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.name', 'golongan.name as golongan_name', 'pangkalan')
-            ->where('golongan.name', 'Penegak')
+            ->where('tahap_1', 'Selesai')
+            ->where('status', 2)
             ->get();
 
-        $pdf = Pdf::loadView('backend.penilaian.all.printPDF', compact('pendaftaran'));
-        return $pdf->download('pendaftaran-penegak-' . time() . '.pdf');
+        $pdf = Pdf::loadView('backend.penilaian.penegak.printPDF', compact('pendaftaran'));
+        return $pdf->download('pendaftaran-semua-' . time() . '.pdf');
+    }
+
+    public function detailPenegak($id)
+    {
+        $detail_user = Pendaftaran::with('user', 'golongan')->findOrFail($id);
+        $penilaian = Penilaian::with('soal')->where('pendaftaran_id', $detail_user->id)->get();
+        return view('backend.penilaian.penegak.detail', compact('detail_user', 'penilaian'));
     }
 
     public function indexPandega(Request $request)
     {
         if (request()->ajax()) {
-            $query = '';
-
-            if (auth()->user()->type == 'Juri') {
-                $query = Pendaftaran::with('user', 'golongan')
-                    ->join('users', 'pendaftaran.user_id', '=', 'users.id')
-                    ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
-                    ->orderBy('users.name', 'asc')
-                    ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.*', 'pendaftaran.*')
-                    ->where('tahap_1', 'Selesai')
-                    ->where('golongan.name', 'Pandega')
-                    ->where('status', 2);
-            } else {
-                $query = Pendaftaran::with('user', 'golongan')
-                    ->join('users', 'pendaftaran.user_id', '=', 'users.id')
-                    ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
-                    ->orderBy('users.name', 'asc')
-                    ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.*', 'pendaftaran.*')
-                    ->where('golongan.name', 'Pandega');
-            }
+            $query = Pendaftaran::with('user', 'golongan')
+                ->join('users', 'pendaftaran.user_id', '=', 'users.id')
+                ->orderBy('users.name', 'asc')
+                ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
+                ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.*', 'pendaftaran.*')
+                ->where('tahap_1', 'Selesai')
+                ->where('status', 2)
+                ->where('golongan.name', 'Pandega');
 
             if ($request->has('start_date') && $request->has('end_date')) {
                 $start_date = $request->input('start_date');
@@ -842,6 +1121,24 @@ class PenilaianController extends Controller
 
                     return $berkas;
                 })
+                ->addColumn('status_1', function ($pendaftaran) {
+                    $statusText = '';
+                    $badgeClass = '';
+
+                    if ($pendaftaran->status == 1) {
+                        $badgeClass = 'badge-soft-info';
+                        $statusText = 'Dalam Proses';
+                    } elseif ($pendaftaran->status == 2) {
+                        $badgeClass = 'badge-soft-success';
+                        $statusText = 'Terima';
+                    } else {
+                        $badgeClass = 'badge-soft-danger';
+                        $statusText = 'Tolak';
+                    }
+                    $status = '<span class="badge ' . $badgeClass . '">' . $statusText . '</span>';
+
+                    return $status;
+                })
                 ->addColumn('status_2', function ($pendaftaran) {
                     $statusText = '';
                     $badgeClass = '';
@@ -852,6 +1149,9 @@ class PenilaianController extends Controller
                     } elseif ($pendaftaran->status_2 == 2) {
                         $badgeClass = 'badge-soft-success';
                         $statusText = 'Terima';
+                    } elseif ($pendaftaran->status_2 == 4) {
+                        $badgeClass = 'badge-soft-warning';
+                        $statusText = 'Pertimbangkan';
                     } else {
                         $badgeClass = 'badge-soft-danger';
                         $statusText = 'Tolak';
@@ -863,19 +1163,26 @@ class PenilaianController extends Controller
                 ->addColumn('aksi', function ($pendaftaran) {
                     $btn = '';
                     if ($pendaftaran->tahap_2 == null) {
-                        $btn = '<a href="' . route('penilaian.pandega.nilai', $pendaftaran->pendaftaran_id) . '" class="btn btn-sm btn-warning text-light me-2"><i class="fas fa-pencil-alt"></i></a>';
+                        $btn .= '<a href="' . route('penilaian.pandega.nilai', $pendaftaran->pendaftaran_id) . '" class="btn btn-sm btn-warning text-light me-2"><i class="fas fa-pencil-alt"></i></a>';
                         $btn .= '<button type="button" class="btn btn-sm btn-danger text-light" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnHapus" title="Hapus"><i class="fas fa-trash"></i></button>';
                     } elseif ($pendaftaran->status_2 == 1) {
+                        $btn .= '<a href="' . route('penilaian.pandega.nilai.edit', $pendaftaran->pendaftaran_id) . '" class="btn btn-sm btn-warning text-light me-2"><i class="fas fa-pencil-alt"></i></a>';
+                        $btn .= '<button type="button" class="btn btn-sm btn-secondary text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnPertimbangkan"><i class="fas fa-users"></i></button>';
+                        $btn .= '<button type="button" class="btn btn-sm btn-success text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnTerima"><i class="fas fa-check"></i></button>';
+                        $btn .= '<button type="button" class="btn btn-sm btn-danger text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnTolak" title="Tolak"><i class="fas fa-times"></i></button>';
+                    } elseif ($pendaftaran->status_2 == 4) {
+                        $btn .= '<a href="' . route('penilaian.pandega.nilai.edit', $pendaftaran->pendaftaran_id) . '" class="btn btn-sm btn-warning text-light me-2"><i class="fas fa-pencil-alt"></i></a>';
                         $btn .= '<button type="button" class="btn btn-sm btn-success text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnTerima"><i class="fas fa-check"></i></button>';
                         $btn .= '<button type="button" class="btn btn-sm btn-danger text-light me-2" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnTolak" title="Tolak"><i class="fas fa-times"></i></button>';
                     } else {
+                        $btn = '<a href="' . route('penilaian.pandega.detail', $pendaftaran->pendaftaran_id) . '" class="btn btn-sm btn-info text-light me-2"><i class="fas fa-eye"></i></a>';
                         $btn .= '<button type="button" class="btn btn-sm btn-danger text-light" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnHapus" title="Hapus"><i class="fas fa-trash"></i></button>';
                     }
 
                     return $btn;
                 })
 
-                ->rawColumns(['nta', 'aksi', 'berkas', 'status_2'])
+                ->rawColumns(['nta', 'aksi', 'berkas', 'status_1', 'status_2'])
                 ->make(true);
         }
         return view('backend.penilaian.pandega.index');
@@ -885,7 +1192,7 @@ class PenilaianController extends Controller
     {
         $pendaftaran = Pendaftaran::find($id);
         $soal = Soal::where('golongan_id', $pendaftaran->golongan_id)->get();
-        return view('backend.penilaian.all.nilai', compact('soal', 'pendaftaran'));
+        return view('backend.penilaian.pandega.nilai', compact('soal', 'pendaftaran'));
     }
 
     public function simpanPenilaianPandega(Request $request)
@@ -930,6 +1237,42 @@ class PenilaianController extends Controller
         }
     }
 
+    public function nilaiEditPandega($id)
+    {
+        $pendaftar = Pendaftaran::with('user', 'golongan')->findOrFail($id);
+        $penilaian = Penilaian::with('soal')->where('pendaftaran_id', $pendaftar->id)->get();
+        return view('backend.penilaian.pandega.nilai_edit', compact('pendaftar', 'penilaian'));
+    }
+
+    public function updatePenilaianPandega(Request $request)
+    {
+        $pendaftaranId = $request->input('pendaftaran_id');
+        $nilai = $request->input('nilai');
+
+        // Update nilai di tabel Penilaian
+        foreach ($nilai as $soalId => $nilaiSoal) {
+            $penilaian = Penilaian::updateOrCreate(
+                ['pendaftaran_id' => $pendaftaranId, 'soal_id' => $soalId],
+                ['nilai' => $nilaiSoal]
+            );
+        }
+
+        // Menghitung rata-rata nilai
+        $totalNilai = array_sum($nilai);
+        $jumlahNilai = count($nilai);
+        $rataRata = $jumlahNilai > 0 ? $totalNilai / $jumlahNilai : 0;
+
+        // Update nilai rata-rata di tabel Pendaftaran
+        $pendaftaran = Pendaftaran::find($pendaftaranId);
+        if ($pendaftaran) {
+            $pendaftaran->nilai = $rataRata;
+            $pendaftaran->save();
+            return response()->json(['message' => 'Data dan rata-rata berhasil disimpan'], 200);
+        } else {
+            return response()->json(['message' => 'Pendaftaran tidak ditemukan'], 404);
+        }
+    }
+
     public function terimaPandega(Request $request)
     {
         $pendaftaran = Pendaftaran::with('user', 'golongan')->findOrFail($request->id);
@@ -952,6 +1295,15 @@ class PenilaianController extends Controller
         return response()->json(['success' => 'Status berhasil diubah menjadi "Tolak"']);
     }
 
+    public function pertimbangkanPandega(Request $request)
+    {
+        $pendaftaran = Pendaftaran::with('user', 'golongan')->findOrFail($request->id);
+        $pendaftaran->tahap_2 = "Selesai";
+        $pendaftaran->status_2 = 4;
+        $pendaftaran->save();
+        return response()->json(['success' => 'Status berhasil diubah menjadi "Pertimbangkan"']);
+    }
+
     public function printPandega()
     {
         $pendaftaran = Pendaftaran::with('user', 'golongan')
@@ -959,9 +1311,10 @@ class PenilaianController extends Controller
             ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
             ->orderBy('users.name', 'asc')
             ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.name', 'golongan.name as golongan_name', 'pangkalan')
-            ->where('golongan.name', 'Pandega')
+            ->where('tahap_1', 'Selesai')
+            ->where('status', 2)
             ->get();
-        return view('backend.penilaian.all.print', compact('pendaftaran'));
+        return view('backend.penilaian.pandega.print', compact('pendaftaran'));
     }
 
     public function printPDFPandega()
@@ -971,13 +1324,20 @@ class PenilaianController extends Controller
             ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
             ->orderBy('users.name', 'asc')
             ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.name', 'golongan.name as golongan_name', 'pangkalan')
-            ->where('golongan.name', 'Pandega')
+            ->where('tahap_1', 'Selesai')
+            ->where('status', 2)
             ->get();
 
-        $pdf = Pdf::loadView('backend.penilaian.all.printPDF', compact('pendaftaran'));
-        return $pdf->download('pendaftaran-pandega-' . time() . '.pdf');
+        $pdf = Pdf::loadView('backend.penilaian.pandega.printPDF', compact('pendaftaran'));
+        return $pdf->download('pendaftaran-semua-' . time() . '.pdf');
     }
 
+    public function detailPandega($id)
+    {
+        $detail_user = Pendaftaran::with('user', 'golongan')->findOrFail($id);
+        $penilaian = Penilaian::with('soal')->where('pendaftaran_id', $detail_user->id)->get();
+        return view('backend.penilaian.pandega.detail', compact('detail_user', 'penilaian'));
+    }
 
     public function destroy(Request $request)
     {

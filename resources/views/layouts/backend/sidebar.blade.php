@@ -9,11 +9,15 @@
                     <li class="{{ request()->routeIs(['dashboard.index']) ? 'active' : '' }}">
                         <a href="{{ route('dashboard.index') }}"><i class="feather-grid"></i> <span>Dashboard</span></a>
                     </li>
+                    <li class="{{ request()->routeIs(['riwayat.index']) ? 'active' : '' }}">
+                        <a href="{{ route('riwayat.index') }}"><i class="fas fa-clock"></i> <span>Riwayat
+                                Pendaftar</span></a>
+                    </li>
+                    <li class="{{ request()->routeIs(['timeline.index']) ? 'active' : '' }}">
+                        <a href="{{ route('timeline.index') }}"><i class="fas fa-clipboard-list"></i> <span>Time
+                                Line</span></a>
+                    </li>
                 @endif
-                <li class="{{ request()->routeIs(['timeline.index']) ? 'active' : '' }}">
-                    <a href="{{ route('timeline.index') }}"><i class="fas fa-clipboard-list"></i> <span>Time
-                            Line</span></a>
-                </li>
                 @if (auth()->user()->type != 'Juri' && auth()->user()->type != 'Peserta')
                     <li
                         class="{{ request()->routeIs(['konten.index', 'konten.create', 'konten.edit']) ? 'active' : '' }}">

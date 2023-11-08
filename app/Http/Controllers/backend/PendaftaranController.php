@@ -20,9 +20,7 @@ class PendaftaranController extends Controller
             $query = Pendaftaran::with('user', 'golongan')
                 ->join('users', 'pendaftaran.user_id', '=', 'users.id')
                 ->orderBy('users.name', 'asc')
-                ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.*', 'pendaftaran.*')
-                ->where('tahap_1', null)
-                ->where('status', 1);
+                ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.*', 'pendaftaran.*');
 
             if ($request->has('start_date') && $request->has('end_date')) {
                 $start_date = $request->input('start_date');
@@ -147,8 +145,6 @@ class PendaftaranController extends Controller
             ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
             ->orderBy('users.name', 'asc')
             ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.name', 'golongan.name as golongan_name', 'pangkalan')
-            ->where('tahap_1', null)
-            ->where('status', 1)
             ->get();
 
         return view('backend.pendaftaran.all.print', compact('pendaftaran'));
@@ -161,8 +157,6 @@ class PendaftaranController extends Controller
             ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
             ->orderBy('users.name', 'asc')
             ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.name', 'golongan.name as golongan_name', 'pangkalan')
-            ->where('tahap_1', null)
-            ->where('status', 1)
             ->get();
 
         $pdf = Pdf::loadView('backend.pendaftaran.all.printPDF', compact('pendaftaran'));
@@ -177,8 +171,6 @@ class PendaftaranController extends Controller
                 ->join('users', 'pendaftaran.user_id', '=', 'users.id')
                 ->orderBy('users.name', 'asc')
                 ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.*', 'pendaftaran.*')
-                ->where('tahap_1', null)
-                ->where('status', 1)
                 ->where('golongan.name', 'Siaga');
 
             if ($request->has('start_date') && $request->has('end_date')) {
@@ -304,8 +296,6 @@ class PendaftaranController extends Controller
             ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
             ->orderBy('users.name', 'asc')
             ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.name', 'golongan.name as golongan_name', 'pangkalan')
-            ->where('tahap_1', null)
-            ->where('status', 1)
             ->where('golongan.name', 'Siaga')
             ->get();
 
@@ -319,8 +309,6 @@ class PendaftaranController extends Controller
             ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
             ->orderBy('users.name', 'asc')
             ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.name', 'golongan.name as golongan_name', 'pangkalan')
-            ->where('tahap_1', null)
-            ->where('status', 1)
             ->where('golongan.name', 'Siaga')
             ->get();
 
@@ -336,8 +324,6 @@ class PendaftaranController extends Controller
                 ->join('users', 'pendaftaran.user_id', '=', 'users.id')
                 ->orderBy('users.name', 'asc')
                 ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.*', 'pendaftaran.*')
-                ->where('tahap_1', null)
-                ->where('status', 1)
                 ->where('golongan.name', 'Penggalang');
 
             if ($request->has('start_date') && $request->has('end_date')) {
@@ -463,8 +449,6 @@ class PendaftaranController extends Controller
             ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
             ->orderBy('users.name', 'asc')
             ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.name', 'golongan.name as golongan_name', 'pangkalan')
-            ->where('tahap_1', null)
-            ->where('status', 1)
             ->where('golongan.name', 'Penggalang')
             ->get();
 
@@ -478,8 +462,6 @@ class PendaftaranController extends Controller
             ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
             ->orderBy('users.name', 'asc')
             ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.name', 'golongan.name as golongan_name', 'pangkalan')
-            ->where('tahap_1', null)
-            ->where('status', 1)
             ->where('golongan.name', 'Penggalang')
             ->get();
 
@@ -495,8 +477,6 @@ class PendaftaranController extends Controller
                 ->join('users', 'pendaftaran.user_id', '=', 'users.id')
                 ->orderBy('users.name', 'asc')
                 ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.*', 'pendaftaran.*')
-                ->where('tahap_1', null)
-                ->where('status', 1)
                 ->where('golongan.name', 'Penegak');
 
             if ($request->has('start_date') && $request->has('end_date')) {
@@ -622,8 +602,6 @@ class PendaftaranController extends Controller
             ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
             ->orderBy('users.name', 'asc')
             ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.name', 'golongan.name as golongan_name', 'pangkalan')
-            ->where('tahap_1', null)
-            ->where('status', 1)
             ->where('golongan.name', 'Penegak')
             ->get();
 
@@ -637,8 +615,6 @@ class PendaftaranController extends Controller
             ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
             ->orderBy('users.name', 'asc')
             ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.name', 'golongan.name as golongan_name', 'pangkalan')
-            ->where('tahap_1', null)
-            ->where('status', 1)
             ->where('golongan.name', 'Penegak')
             ->get();
 
@@ -654,8 +630,6 @@ class PendaftaranController extends Controller
                 ->join('users', 'pendaftaran.user_id', '=', 'users.id')
                 ->orderBy('users.name', 'asc')
                 ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.*', 'pendaftaran.*')
-                ->where('tahap_1', null)
-                ->where('status', 1)
                 ->where('golongan.name', 'Pandega');
 
             if ($request->has('start_date') && $request->has('end_date')) {
@@ -781,8 +755,6 @@ class PendaftaranController extends Controller
             ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
             ->orderBy('users.name', 'asc')
             ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.name', 'golongan.name as golongan_name', 'pangkalan')
-            ->where('tahap_1', null)
-            ->where('status', 1)
             ->where('golongan.name', 'Pandega')
             ->get();
 
@@ -796,8 +768,6 @@ class PendaftaranController extends Controller
             ->join('golongan', 'pendaftaran.golongan_id', '=', 'golongan.id')
             ->orderBy('users.name', 'asc')
             ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.name', 'golongan.name as golongan_name', 'pangkalan')
-            ->where('tahap_1', null)
-            ->where('status', 1)
             ->where('golongan.name', 'Pandega')
             ->get();
 
