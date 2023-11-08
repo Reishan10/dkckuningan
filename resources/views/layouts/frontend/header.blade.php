@@ -34,14 +34,14 @@
                      <a href="{{ route('login') }}" class="login-btn-light btn btn-light">Masuk</a>
                  </li>
              @else
-                 <li class="list-inline-item mb-0">
+                 {{-- <li class="list-inline-item mb-0">
                      <button type="button" class="login-btn-primary btn btn-icon btn-pills btn-primary"
                          data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i data-feather="bell"
                              class="icons"></i></button>
                      <button type="button" class="login-btn-light btn btn-icon btn-pills btn-light"
                          data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i data-feather="bell"
                              class="icons"></i></button>
-                 </li>
+                 </li> --}}
                  <li class="list-inline-item mb-0">
                      <div class="dropdown dropdown-primary">
                          <button type="button" class="login-btn-primary btn btn-icon btn-pills btn-primary dropdown-toggle"
