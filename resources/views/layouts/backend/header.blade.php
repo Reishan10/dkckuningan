@@ -20,6 +20,45 @@
 
     <ul class="nav user-menu">
 
+        @if (auth()->user()->type == 'Peserta')
+            <li class="nav-item dropdown noti-dropdown me-2">
+                <a href="#" class="dropdown-toggle nav-link header-nav-list" data-bs-toggle="dropdown">
+                    <img src="{{ asset('assets') }}/img/icons/header-icon-05.svg" alt="">
+                </a>
+                <div class="dropdown-menu notifications">
+                    <div class="topnav-dropdown-header">
+                        <span class="notification-title">Notifikasi</span>
+                    </div>
+                    <div class="noti-content">
+                        <ul class="notification-list">
+                            @foreach ($notifikasi as $row)
+                                <li class="notification-message">
+                                    <a href="#">
+                                        <div class="media d-flex">
+                                            <span class="avatar avatar-sm flex-shrink-0">
+                                                <img class="rounded-circle"
+                                                    src="{{ $row->sender->avatar == '' ? 'https://ui-avatars.com/api/?background=random&name=' . $row->sender->name : asset('storage/avatar/' . $row->sender->avatar) }}"
+                                                    width="31" alt="{{ $row->sender->name }}">
+                                            </span>
+                                            <div class="media-body flex-grow-1">
+                                                <p class="noti-details"><span
+                                                        class="noti-title">{{ $row->sender->name }}</span><br>
+                                                    <span class="noti-title">{{ $row->message }}<span>
+                                                </p>
+                                                <span
+                                                    class="notification-time">{{ \Carbon\Carbon::parse($row->created_at)->diffForHumans() }}</span>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+                </div>
+            </li>
+        @endif
+
         <li class="nav-item zoom-screen me-2">
             <a href="#" class="nav-link header-nav-list win-maximize">
                 <img src="{{ asset('assets') }}/img/icons/header-icon-04.svg" alt="">

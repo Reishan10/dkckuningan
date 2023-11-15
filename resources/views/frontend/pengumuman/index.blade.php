@@ -43,7 +43,7 @@
                                                         dalam
                                                         proses</strong></span>
                                             @elseif ($pendaftaran->status_2 == 2)
-                                                <span class="badge rounded-pill bg-success"> <strong>Selemat anda lolos
+                                                <span class="badge rounded-pill bg-success"> <strong>Selamat anda lolos
                                                         seleksi
                                                         tahap administrasi</strong></span>
                                             @elseif ($pendaftaran->status_2 == 3)
@@ -57,7 +57,7 @@
                                                         dalam
                                                         proses</strong></span>
                                             @elseif ($pendaftaran->status_2 == 2)
-                                                <span class="badge rounded-pill bg-success"> <strong>Selemat anda lolos
+                                                <span class="badge rounded-pill bg-success"> <strong>Selamat anda lolos
                                                         seleksi
                                                         tahap akhir</strong></span>
                                             @elseif ($pendaftaran->status_2 == 3)

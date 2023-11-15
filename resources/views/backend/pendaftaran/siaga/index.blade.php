@@ -62,8 +62,8 @@
                                             <th>No Telepon</th>
                                             <th>Golongan</th>
                                             <th>Pangkalan</th>
-                                            <th>Berkas</th>
                                             <th>Status</th>
+                                            <th>Berkas</th>
                                             <th class="text-end">Aksi</th>
                                         </tr>
                                     </thead>
@@ -197,12 +197,12 @@
                             name: 'pangkalan'
                         },
                         {
-                            data: 'berkas',
-                            name: 'berkas'
-                        },
-                        {
                             data: 'status',
                             name: 'status',
+                        },
+                        {
+                            data: 'berkas',
+                            name: 'berkas',
                             orderable: false,
                             searchable: false
                         },
@@ -253,12 +253,12 @@
                                 name: 'no_telepon'
                             },
                             {
-                                data: 'berkas',
-                                name: 'berkas'
-                            },
-                            {
                                 data: 'status',
                                 name: 'status',
+                            },
+                            {
+                                data: 'berkas',
+                                name: 'berkas',
                                 orderable: false,
                                 searchable: false
                             },

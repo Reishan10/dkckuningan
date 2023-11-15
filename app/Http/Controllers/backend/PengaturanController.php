@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
+use App\Models\Notifikasi;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -13,7 +14,8 @@ class PengaturanController extends Controller
 {
     public function profile()
     {
-        return view('backend.pengaturan.profile');
+        $notifikasi = Notifikasi::where('receiver_id', auth()->user()->id)->orderBy('created_at', 'desc')->get();
+        return view('backend.pengaturan.profile', compact('notifikasi'));
     }
 
     public function updateProfile(Request $request)
@@ -96,7 +98,8 @@ class PengaturanController extends Controller
 
     public function gantiPassword()
     {
-        return view('backend.pengaturan.ganti_password');
+        $notifikasi = Notifikasi::where('receiver_id', auth()->user()->id)->orderBy('created_at', 'desc')->get();
+        return view('backend.pengaturan.ganti_password', compact('notifikasi'));
     }
 
     public function updatePassword(Request $request)
@@ -131,7 +134,8 @@ class PengaturanController extends Controller
 
     public function nonaktif()
     {
-        return view('backend.pengaturan.nonaktif');
+        $notifikasi = Notifikasi::where('receiver_id', auth()->user()->id)->orderBy('created_at', 'desc')->get();
+        return view('backend.pengaturan.nonaktif', compact('notifikasi'));
     }
 
     public function updateStatus()

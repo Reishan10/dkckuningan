@@ -103,7 +103,9 @@ class PenilaianController extends Controller
                 ->addColumn('aksi', function ($pendaftaran) {
                     $btn = '';
                     if ($pendaftaran->tahap_2 == null) {
-                        $btn .= '<a href="' . route('penilaian.all.nilai', $pendaftaran->pendaftaran_id) . '" class="btn btn-sm btn-warning text-light me-2"><i class="fas fa-pencil-alt"></i></a>';
+                        if (auth()->user()->type == 'Juri') {
+                            $btn .= '<a href="' . route('penilaian.all.nilai', $pendaftaran->pendaftaran_id) . '" class="btn btn-sm btn-warning text-light me-2"><i class="fas fa-pencil-alt"></i></a>';
+                        }
                         $btn .= '<button type="button" class="btn btn-sm btn-danger text-light" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnHapus" title="Hapus"><i class="fas fa-trash"></i></button>';
                     } elseif ($pendaftaran->status_2 == 1) {
                         $btn .= '<a href="' . route('penilaian.all.nilai.edit', $pendaftaran->pendaftaran_id) . '" class="btn btn-sm btn-warning text-light me-2"><i class="fas fa-pencil-alt"></i></a>';
@@ -368,7 +370,9 @@ class PenilaianController extends Controller
                 ->addColumn('aksi', function ($pendaftaran) {
                     $btn = '';
                     if ($pendaftaran->tahap_2 == null) {
-                        $btn .= '<a href="' . route('penilaian.siaga.nilai', $pendaftaran->pendaftaran_id) . '" class="btn btn-sm btn-warning text-light me-2"><i class="fas fa-pencil-alt"></i></a>';
+                        if (auth()->user()->type == 'Juri') {
+                            $btn .= '<a href="' . route('penilaian.all.nilai', $pendaftaran->pendaftaran_id) . '" class="btn btn-sm btn-warning text-light me-2"><i class="fas fa-pencil-alt"></i></a>';
+                        }
                         $btn .= '<button type="button" class="btn btn-sm btn-danger text-light" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnHapus" title="Hapus"><i class="fas fa-trash"></i></button>';
                     } elseif ($pendaftaran->status_2 == 1) {
                         $btn .= '<a href="' . route('penilaian.siaga.nilai.edit', $pendaftaran->pendaftaran_id) . '" class="btn btn-sm btn-warning text-light me-2"><i class="fas fa-pencil-alt"></i></a>';
@@ -633,7 +637,9 @@ class PenilaianController extends Controller
                 ->addColumn('aksi', function ($pendaftaran) {
                     $btn = '';
                     if ($pendaftaran->tahap_2 == null) {
-                        $btn .= '<a href="' . route('penilaian.penggalang.nilai', $pendaftaran->pendaftaran_id) . '" class="btn btn-sm btn-warning text-light me-2"><i class="fas fa-pencil-alt"></i></a>';
+                        if (auth()->user()->type == 'Juri') {
+                            $btn .= '<a href="' . route('penilaian.all.nilai', $pendaftaran->pendaftaran_id) . '" class="btn btn-sm btn-warning text-light me-2"><i class="fas fa-pencil-alt"></i></a>';
+                        }
                         $btn .= '<button type="button" class="btn btn-sm btn-danger text-light" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnHapus" title="Hapus"><i class="fas fa-trash"></i></button>';
                     } elseif ($pendaftaran->status_2 == 1) {
                         $btn .= '<a href="' . route('penilaian.penggalang.nilai.edit', $pendaftaran->pendaftaran_id) . '" class="btn btn-sm btn-warning text-light me-2"><i class="fas fa-pencil-alt"></i></a>';
@@ -898,7 +904,9 @@ class PenilaianController extends Controller
                 ->addColumn('aksi', function ($pendaftaran) {
                     $btn = '';
                     if ($pendaftaran->tahap_2 == null) {
-                        $btn .= '<a href="' . route('penilaian.penegak.nilai', $pendaftaran->pendaftaran_id) . '" class="btn btn-sm btn-warning text-light me-2"><i class="fas fa-pencil-alt"></i></a>';
+                        if (auth()->user()->type == 'Juri') {
+                            $btn .= '<a href="' . route('penilaian.all.nilai', $pendaftaran->pendaftaran_id) . '" class="btn btn-sm btn-warning text-light me-2"><i class="fas fa-pencil-alt"></i></a>';
+                        }
                         $btn .= '<button type="button" class="btn btn-sm btn-danger text-light" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnHapus" title="Hapus"><i class="fas fa-trash"></i></button>';
                     } elseif ($pendaftaran->status_2 == 1) {
                         $btn .= '<a href="' . route('penilaian.penegak.nilai.edit', $pendaftaran->pendaftaran_id) . '" class="btn btn-sm btn-warning text-light me-2"><i class="fas fa-pencil-alt"></i></a>';
@@ -1163,7 +1171,9 @@ class PenilaianController extends Controller
                 ->addColumn('aksi', function ($pendaftaran) {
                     $btn = '';
                     if ($pendaftaran->tahap_2 == null) {
-                        $btn .= '<a href="' . route('penilaian.pandega.nilai', $pendaftaran->pendaftaran_id) . '" class="btn btn-sm btn-warning text-light me-2"><i class="fas fa-pencil-alt"></i></a>';
+                        if (auth()->user()->type == 'Juri') {
+                            $btn .= '<a href="' . route('penilaian.all.nilai', $pendaftaran->pendaftaran_id) . '" class="btn btn-sm btn-warning text-light me-2"><i class="fas fa-pencil-alt"></i></a>';
+                        }
                         $btn .= '<button type="button" class="btn btn-sm btn-danger text-light" data-id="' . $pendaftaran->pendaftaran_id . '" id="btnHapus" title="Hapus"><i class="fas fa-trash"></i></button>';
                     } elseif ($pendaftaran->status_2 == 1) {
                         $btn .= '<a href="' . route('penilaian.pandega.nilai.edit', $pendaftaran->pendaftaran_id) . '" class="btn btn-sm btn-warning text-light me-2"><i class="fas fa-pencil-alt"></i></a>';

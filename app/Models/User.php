@@ -45,6 +45,10 @@ class User extends Authenticatable
         return $this->hasMany(Konten::class);
     }
 
+    public function notifikasi() {
+        return $this->hasMany(Notifikasi::class);
+    }
+
     /**
      * The attributes that are mass assignable.
      *
