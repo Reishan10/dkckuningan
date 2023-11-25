@@ -66,6 +66,8 @@
                                             <th>Tahap 1</th>
                                             <th>Tahap 2</th>
                                             <th>Berkas</th>
+                                            <th>Original</th>
+                                            <th>Kompres</th>
                                             <th class="text-end">Aksi</th>
                                         </tr>
                                     </thead>
@@ -136,6 +138,18 @@
                             name: 'berkas'
                         },
                         {
+                            data: 'original_size',
+                            name: 'original_size',
+                            orderable: false,
+                            searchable: false
+                        },
+                        {
+                            data: 'compress_size',
+                            name: 'compress_size',
+                            orderable: false,
+                            searchable: false
+                        },
+                        {
                             data: 'aksi',
                             name: 'aksi',
                             orderable: false,
@@ -204,6 +218,18 @@
                             {
                                 data: 'berkas',
                                 name: 'berkas'
+                            },
+                            {
+                                data: 'original_size',
+                                name: 'original_size',
+                                orderable: false,
+                                searchable: false
+                            },
+                            {
+                                data: 'compress_size',
+                                name: 'compress_size',
+                                orderable: false,
+                                searchable: false
                             },
                             {
                                 data: 'aksi',
@@ -307,8 +333,8 @@
                     });
                 });
 
-                 // Pertimbangkan Data
-                 $('body').on('click', '#btnPertimbangkan', function() {
+                // Pertimbangkan Data
+                $('body').on('click', '#btnPertimbangkan', function() {
                     var id = $(this).data('id');
                     Swal.fire({
                         title: 'Ubah Status',

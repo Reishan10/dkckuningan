@@ -9,11 +9,14 @@
         "barryvdh/laravel-dompdf": "^2.0",
         "elibyy/tcpdf-laravel": "^10.0",
         "guzzlehttp/guzzle": "^7.2",
+        "ilovepdf/ilovepdf-php": "^1.2",
         "laravel/framework": "^9.19",
         "laravel/sanctum": "^3.0",
         "laravel/tinker": "^2.7",
         "laravel/ui": "^4.2",
         "ramsey/uuid": "^4.7",
+        "spatie/image": "^2.2",
+        "tecnickcom/tcpdf": "^6.6",
         "yajra/laravel-datatables": "9.0"
     },
     "require-dev": {

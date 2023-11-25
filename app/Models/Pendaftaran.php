@@ -57,6 +57,8 @@ class Pendaftaran extends Model
         'pangkalan',
         'golongan_id',
         'berkas',
-        'status'
+        'status',
+        'original_size',
+        'compress_size',
     ];
 }
