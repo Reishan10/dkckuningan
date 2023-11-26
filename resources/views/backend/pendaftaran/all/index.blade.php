@@ -144,7 +144,6 @@
                                 <td>:</td>
                                 <td id="status"></td>
                             </tr>
-
                         </table>
                     </div>
                     <div class="modal-footer">

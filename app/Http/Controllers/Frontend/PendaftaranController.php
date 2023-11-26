@@ -14,8 +14,8 @@ class PendaftaranController extends Controller
     public function index()
     {
         $golongan = Golongan::orderBy('name', 'asc')->get();
-        $user = Pendaftaran::where('user_id', auth()->user()->id)->whereYear('created_at', now()->year)->get();
-        return view('frontend.pendaftaran.index', compact('golongan', 'user'));
+        $pendaftaran = Pendaftaran::with('user', 'golongan')->where('user_id', auth()->user()->id)->whereYear('created_at', now()->year)->get();
+        return view('frontend.pendaftaran.index', compact('golongan', 'pendaftaran'));
     }
 
     public function store(Request $request)

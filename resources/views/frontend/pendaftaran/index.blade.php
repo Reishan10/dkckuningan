@@ -31,7 +31,7 @@
                 <div class="col-lg-12 col-md-5 order-2 order-md-1 mt-4 pt-2 mt-sm-0 pt-sm-0">
                     <div class="bg-white shadow rounded position-relative overflow-hidden">
                         <div class="tab-content" id="pills-tabContent">
-                            @if (!$user->count() > 0)
+                            @if (!$pendaftaran->count() > 0)
                                 <div class="card" id="user">
                                     <form id="form">
                                         <div class="card-body">
@@ -162,7 +162,8 @@
                                                                 class="text-danger">*</span></label>
                                                         <div class="form-icon position-relative">
                                                             <input type="file" class="form-control" name="berkas"
-                                                                id="berkas" placeholder="Berkas"  onchange="updateFileSize()">
+                                                                id="berkas" placeholder="Berkas"
+                                                                onchange="updateFileSize()">
                                                             <small class="text-danger errorBerkas"></small>
                                                         </div>
                                                         <small class="text-muted">Ukuran berkas: <span
@@ -181,9 +182,65 @@
                                     </form><!--end form-->
                                 </div><!--end teb pane-->
                             @else
-                                <div class="card">
-                                    <h6 class="text-center">Anda sudah terdaftar</h6>
-                                </div>
+                                <table class="table">
+                                    <tr>
+                                        <td>Nomor Tanda Anggota</td>
+                                        <td>:</td>
+                                        <td>{{ $pendaftaran[0]->nta }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Nama</td>
+                                        <td>:</td>
+                                        <td>{{ $pendaftaran[0]->user->name }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Email</td>
+                                        <td>:</td>
+                                        <td>{{ $pendaftaran[0]->user->email }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>No Telepon</td>
+                                        <td>:</td>
+                                        <td>{{ $pendaftaran[0]->user->no_telepon }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Tempat, Tanggal Lahir</td>
+                                        <td>:</td>
+                                        <td>{{ $pendaftaran[0]->tempat_lahir }},
+                                            {{ \Carbon\Carbon::parse($pendaftaran[0]->tanggal_lahir)->locale('id')->isoFormat('D MMMM Y') }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Alamat</td>
+                                        <td>:</td>
+                                        <td>{{ $pendaftaran[0]->alamat }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Jenis Kelamin</td>
+                                        <td>:</td>
+                                        <td>{{ $pendaftaran[0]->jenis_kelamin }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Kwartir Ranting</td>
+                                        <td>:</td>
+                                        <td>{{ $pendaftaran[0]->kwaran }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Gugus Depan</td>
+                                        <td>:</td>
+                                        <td>{{ $pendaftaran[0]->gudep }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Pangkalan</td>
+                                        <td>:</td>
+                                        <td>{{ $pendaftaran[0]->pangkalan }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Golongan</td>
+                                        <td>:</td>
+                                        <td>{{ $pendaftaran[0]->golongan->name }}</td>
+                                    </tr>
+                                </table>
                             @endif
                         </div><!--end tab content-->
                     </div>
