@@ -162,9 +162,11 @@
                                                                 class="text-danger">*</span></label>
                                                         <div class="form-icon position-relative">
                                                             <input type="file" class="form-control" name="berkas"
-                                                                id="berkas" placeholder="Berkas">
+                                                                id="berkas" placeholder="Berkas"  onchange="updateFileSize()">
                                                             <small class="text-danger errorBerkas"></small>
                                                         </div>
+                                                        <small class="text-muted">Ukuran berkas: <span
+                                                                id="fileSizeDisplay">-</span></small>
                                                     </div>
                                                 </div><!--end col-->
 
@@ -190,6 +192,16 @@
         </div><!--end container-->
     </section><!--end section-->
     <script>
+        function updateFileSize() {
+            // Ambil elemen input file
+            var inputBerkas = document.getElementById('berkas');
+
+            // Ambil ukuran berkas (dalam bytes) dan konversi ke kilobytes (KB)
+            var fileSizeKB = inputBerkas.files[0].size / 1024;
+
+            // Tampilkan ukuran berkas dalam elemen dengan id 'fileSizeDisplay'
+            document.getElementById('fileSizeDisplay').textContent = fileSizeKB.toFixed(2) + ' KB';
+        }
         $(document).ready(function() {
             $.ajaxSetup({
                 headers: {

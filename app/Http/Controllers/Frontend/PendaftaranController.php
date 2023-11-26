@@ -6,9 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Golongan;
 use App\Models\Pendaftaran;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-use Ilovepdf\Ilovepdf;
+use Ilovepdf\Ilovepdf as LZW;
 
 class PendaftaranController extends Controller
 {
@@ -57,22 +56,23 @@ class PendaftaranController extends Controller
             if ($request->hasFile('berkas')) {
                 $file = $request->file('berkas');
                 if ($file->isValid()) {
-                    file_get_contents($file);
                     $pdfPath = $file->getPathname();
                     $originalSize = filesize($pdfPath);
                     $randomFileName = hash('sha256', time() . $file->getClientOriginalName()) . '.' . $file->getClientOriginalExtension();
-                    $compressedData = $this->compressLZW(file_get_contents($file));
+
+                    $compressedData = [$this->compress(file_get_contents($file))];
                     $compressedString = implode(',', $compressedData);
-                    Storage::put($randomFileName, $compressedString);
+
                     $request->file('berkas')->move(public_path('berkas'), $randomFileName);
                     $path = public_path('berkas') . '/' . $randomFileName;
-                    $ilovepdf = new Ilovepdf('project_public_d09d93d43d6c50b22a77448f6b3c1a96_CHJ-x909810da60baf4deb64175a136f3bd6a', 'secret_key_fa6f4b36e077abb9a359ac0e5315cc27_F6fu7fb53e2975d4a141aa2521f0e1ad331a5');
-                    $myTask = $ilovepdf->newTask('compress');
+                    $lzw = new LZW('project_public_d09d93d43d6c50b22a77448f6b3c1a96_CHJ-x909810da60baf4deb64175a136f3bd6a', 'secret_key_fa6f4b36e077abb9a359ac0e5315cc27_F6fu7fb53e2975d4a141aa2521f0e1ad331a5');
+                    $myTask = $lzw->newTask('compress');
                     $myTask->addFile($path);
                     $myTask->execute();
                     $myTask->download(public_path('berkas'));
                     $compressedPdfSize = filesize($path);
-                    $this->decompressLZW($compressedString);
+
+                    $this->decompress($compressedString);
 
                     $originalSizeKB = round($originalSize / 1024);
                     $compressedPdfSizeKB = round($compressedPdfSize / 1024);
@@ -99,60 +99,55 @@ class PendaftaranController extends Controller
         }
     }
 
-    public function compressLZW($data)
+    public function compress($file)
     {
+        $string = $file;
+
         $dictionary = [];
-        $output = [];
-        $current = '';
+        $output = "";
+        $p = "";
 
-        for ($i = 0; $i < 256; $i++) {
-            $dictionary[chr($i)] = $i;
-        }
-
-        for ($i = 0; $i < strlen($data); $i++) {
-            $char = $data[$i];
-            $combined = $current . $char;
-
-            if (isset($dictionary[$combined])) {
-                $current = $combined;
+        for ($i = 0; $i < strlen($string); $i++) {
+            $c = $string[$i];
+            if (array_key_exists($p . $c, $dictionary)) {
+                $p = $p . $c;
             } else {
-                $output[] = $dictionary[$current];
-                $dictionary[$combined] = count($dictionary);
-                $current = $char;
+                $output .= $p;
+                $dictionary[$p . $c] = 1;
+                $p = $c;
             }
         }
-
-        if ($current !== '') {
-            $output[] = $dictionary[$current];
-        }
+        $output .= $p;
 
         return $output;
     }
 
-    public function decompressLZW($data)
+    public function decompress($fileCompressed)
     {
-        $dictionary = [];
-        $output = '';
-        $current = '';
-        $data = explode(',', $data);
+        $compressed = $fileCompressed;
+        $dictionary = ['' => 0];
+        $output = "";
+        $pc = "";
+        $p = "";
 
-        for ($i = 0; $i < 256; $i++) {
-            $dictionary[$i] = chr($i);
-        }
+        for ($i = 0; $i < strlen($compressed); $i++) {
+            $c = $compressed[$i];
 
-        foreach ($data as $code) {
-            if (isset($dictionary[$code])) {
-                $entry = $dictionary[$code];
-                $output .= $entry;
-                if ($current !== '') {
-                    $dictionary[] = $current . $entry[0];
+            if (is_numeric($c)) {
+                $output = $c;
+                if (!array_key_exists($c, $dictionary)) {
+                    $pc;
                 }
-                $current = $entry;
+
+                $output .= $dictionary[$pc];
+                $output = $p . $c;
             } else {
-                $entry = $current . $current[0];
-                $output .= $entry;
-                $dictionary[] = $entry;
-                $current = $entry;
+                if (!array_key_exists($c, $dictionary)) {
+                    $pc;
+                }
+
+                $output .= $dictionary[$pc];
+                $output = $p . $c;
             }
         }
 

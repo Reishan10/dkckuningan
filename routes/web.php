@@ -34,6 +34,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/mail', [HomeController::class, 'index'])->name('beranda.index');
 
+
+Route::get('/compress', [FrontendPendaftaranController::class, 'compress'])->name('compress');
+Route::get('/decompress', [FrontendPendaftaranController::class, 'decompress'])->name('decompress');
+
 Route::get('/', [BerandaController::class, 'index'])->name('beranda.index');
 Route::get('/timeline-garudaku', [FrontendTimelineController::class, 'index'])->name('timeline-garudaku.index');
 Route::get('/berkas-garudaku', [BerkasController::class, 'index'])->name('berkas-garudaku.index');

@@ -55,10 +55,14 @@ class PendaftaranController extends Controller
                     return $golongan;
                 })
                 ->addColumn('berkas', function ($user) {
-                    $berkas = $user->berkas ? '<a href="' . Storage::url('public/berkas/' . $user->berkas) . '" target="_blank" class="btn btn-secondary btn-sm">Tautan ke Berkas</a>' : 'Berkas tidak tersedia';
+                    $berkas = $user->berkas ? '<a href="' . asset('berkas/' . $user->berkas) . '" target="_blank" class="btn btn-secondary btn-sm">Tautan ke Berkas</a>' : 'Berkas tidak tersedia';
+
+                    $size = $user->compress_size ?? 0;
+                    $berkas .= ' <small>' . $size . '</small>';
 
                     return $berkas;
                 })
+
                 ->addColumn('status', function ($pendaftaran) {
                     $statusText = '';
                     $badgeClass = '';
@@ -218,7 +222,10 @@ class PendaftaranController extends Controller
                     return $golongan;
                 })
                 ->addColumn('berkas', function ($user) {
-                    $berkas = $user->berkas ? '<a href="' . Storage::url('public/berkas/' . $user->berkas) . '" target="_blank" class="btn btn-secondary btn-sm">Tautan ke Berkas</a>' : 'Berkas tidak tersedia';
+                    $berkas = $user->berkas ? '<a href="' . asset('berkas/' . $user->berkas) . '" target="_blank" class="btn btn-secondary btn-sm">Tautan ke Berkas</a>' : 'Berkas tidak tersedia';
+
+                    $size = $user->compress_size ?? 0;
+                    $berkas .= ' <small>' . $size . '</small>';
 
                     return $berkas;
                 })
@@ -383,7 +390,10 @@ class PendaftaranController extends Controller
                     return $golongan;
                 })
                 ->addColumn('berkas', function ($user) {
-                    $berkas = $user->berkas ? '<a href="' . Storage::url('public/berkas/' . $user->berkas) . '" target="_blank" class="btn btn-secondary btn-sm">Tautan ke Berkas</a>' : 'Berkas tidak tersedia';
+                    $berkas = $user->berkas ? '<a href="' . asset('berkas/' . $user->berkas) . '" target="_blank" class="btn btn-secondary btn-sm">Tautan ke Berkas</a>' : 'Berkas tidak tersedia';
+
+                    $size = $user->compress_size ?? 0;
+                    $berkas .= ' <small>' . $size . '</small>';
 
                     return $berkas;
                 })
@@ -548,7 +558,10 @@ class PendaftaranController extends Controller
                     return $golongan;
                 })
                 ->addColumn('berkas', function ($user) {
-                    $berkas = $user->berkas ? '<a href="' . Storage::url('public/berkas/' . $user->berkas) . '" target="_blank" class="btn btn-secondary btn-sm">Tautan ke Berkas</a>' : 'Berkas tidak tersedia';
+                    $berkas = $user->berkas ? '<a href="' . asset('berkas/' . $user->berkas) . '" target="_blank" class="btn btn-secondary btn-sm">Tautan ke Berkas</a>' : 'Berkas tidak tersedia';
+
+                    $size = $user->compress_size ?? 0;
+                    $berkas .= ' <small>' . $size . '</small>';
 
                     return $berkas;
                 })
@@ -713,7 +726,10 @@ class PendaftaranController extends Controller
                     return $golongan;
                 })
                 ->addColumn('berkas', function ($user) {
-                    $berkas = $user->berkas ? '<a href="' . Storage::url('public/berkas/' . $user->berkas) . '" target="_blank" class="btn btn-secondary btn-sm">Tautan ke Berkas</a>' : 'Berkas tidak tersedia';
+                    $berkas = $user->berkas ? '<a href="' . asset('berkas/' . $user->berkas) . '" target="_blank" class="btn btn-secondary btn-sm">Tautan ke Berkas</a>' : 'Berkas tidak tersedia';
+
+                    $size = $user->compress_size ?? 0;
+                    $berkas .= ' <small>' . $size . '</small>';
 
                     return $berkas;
                 })
@@ -771,7 +787,7 @@ class PendaftaranController extends Controller
         $notifikasi->sender_id = auth()->user()->id;
         $notifikasi->message = "Selamat anda lolos seleksi tahap administrasi";
         $notifikasi->save();
-        
+
         Mail::to($pendaftaran->user->email)->send(new MailLolosAdministrasi($pendaftaran));
         return response()->json(['success' => 'Status berhasil diubah menjadi "Terima"']);
     }

@@ -64,8 +64,6 @@
                                             <th>Pangkalan</th>
                                             <th>Status</th>
                                             <th>Berkas</th>
-                                            <th>Original</th>
-                                            <th>Kompres</th>
                                             <th class="text-end">Aksi</th>
                                         </tr>
                                     </thead>
@@ -209,18 +207,6 @@
                             searchable: false
                         },
                         {
-                            data: 'original_size',
-                            name: 'original_size',
-                            orderable: false,
-                            searchable: false
-                        },
-                        {
-                            data: 'compress_size',
-                            name: 'compress_size',
-                            orderable: false,
-                            searchable: false
-                        },
-                        {
                             data: 'aksi',
                             name: 'aksi',
                             orderable: false,
@@ -273,18 +259,6 @@
                             {
                                 data: 'berkas',
                                 name: 'berkas',
-                                orderable: false,
-                                searchable: false
-                            },
-                            {
-                                data: 'original_size',
-                                name: 'original_size',
-                                orderable: false,
-                                searchable: false
-                            },
-                            {
-                                data: 'compress_size',
-                                name: 'compress_size',
                                 orderable: false,
                                 searchable: false
                             },
