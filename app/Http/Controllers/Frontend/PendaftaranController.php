@@ -3,11 +3,12 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\FileCompressor;
 use App\Models\Golongan;
 use App\Models\Pendaftaran;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use Ilovepdf\Ilovepdf as LZW;
+
 
 class PendaftaranController extends Controller
 {
@@ -62,16 +63,10 @@ class PendaftaranController extends Controller
 
                     $compressedData = [$this->compress(file_get_contents($file))];
                     $compressedString = implode(',', $compressedData);
-
                     $request->file('berkas')->move(public_path('berkas'), $randomFileName);
                     $path = public_path('berkas') . '/' . $randomFileName;
-                    $lzw = new LZW('project_public_d09d93d43d6c50b22a77448f6b3c1a96_CHJ-x909810da60baf4deb64175a136f3bd6a', 'secret_key_fa6f4b36e077abb9a359ac0e5315cc27_F6fu7fb53e2975d4a141aa2521f0e1ad331a5');
-                    $myTask = $lzw->newTask('compress');
-                    $myTask->addFile($path);
-                    $myTask->execute();
-                    $myTask->download(public_path('berkas'));
+                    $compressedPdfSize = FileCompressor::compressFile($path);
                     $compressedPdfSize = filesize($path);
-
                     $this->decompress($compressedString);
 
                     $originalSizeKB = round($originalSize / 1024);

@@ -24,7 +24,7 @@
                     </div>
                 </div><!--end col-->
 
-                <div class="col-md-6 mt-4 pt-2 mt-sm-0 pt-sm-0">
+                <div class="col-md-6 mt-4 pt-2 mt-sm-0 pt-sm-0 ms-auto">
                     <div class="freelance-hero position-relative">
                         <div class="bg-shape position-relative">
                             <img src="{{ asset('assets_frontend') }}/images/hero-jokowi.png"
@@ -32,6 +32,7 @@
                         </div>
                     </div>
                 </div><!--end col-->
+
             </div><!--end row-->
         </div><!--end container-->
     </section><!--end section-->
