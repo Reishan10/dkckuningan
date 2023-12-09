@@ -61,16 +61,20 @@ class PendaftaranController extends Controller
                     $originalSize = filesize($pdfPath);
                     $randomFileName = hash('sha256', time() . $file->getClientOriginalName()) . '.' . $file->getClientOriginalExtension();
 
-                    $compressedData = [$this->compress(file_get_contents($file))];
+                    $compressedData = [$this->lzw_compress(file_get_contents($file))];
                     $compressedString = implode(',', $compressedData);
+                    $this->lzw_decompress($compressedString);
                     $request->file('berkas')->move(public_path('berkas'), $randomFileName);
                     $path = public_path('berkas') . '/' . $randomFileName;
                     $compressedPdfSize = FileCompressor::compressFile($path);
                     $compressedPdfSize = filesize($path);
-                    $this->decompress($compressedString);
 
+                   
                     $originalSizeKB = round($originalSize / 1024);
                     $compressedPdfSizeKB = round($compressedPdfSize / 1024);
+
+                    $persentaseKompresi = (1 - ($compressedPdfSize / $originalSize)) * 100;
+                    $persentase = number_format($persentaseKompresi, 2) . '%';
 
                     $pendaftaran = new Pendaftaran();
                     $pendaftaran->user_id = $request->id_user;
@@ -88,64 +92,87 @@ class PendaftaranController extends Controller
                     $pendaftaran->compress_size = $compressedPdfSizeKB . " KB";
                     $pendaftaran->save();
 
-                    return response()->json(['success' => 'Data berhasil disimpan']);
+                    return response()->json(['success' => 'Data berhasil disimpan', 'persentase' => $persentase]);
                 }
             }
         }
     }
 
-    public function compress($file)
+    function lzw_compress($uncompressed)
     {
-        $string = $file;
-
+        $MAX_BITS = 12;
         $dictionary = [];
-        $output = "";
-        $p = "";
 
-        for ($i = 0; $i < strlen($string); $i++) {
-            $c = $string[$i];
-            if (array_key_exists($p . $c, $dictionary)) {
-                $p = $p . $c;
-            } else {
-                $output .= $p;
-                $dictionary[$p . $c] = 1;
-                $p = $c;
+        for ($i = 0; $i < 256; $i++) {
+            $dictionary[chr($i)] = $i;
+        }
+
+        $dict_size = 256;
+        $bits = 9;
+        $result = "";
+        $current_code = "";
+        $compressed_data = "";
+
+        for ($i = 0; $i < strlen($uncompressed); $i++) {
+            $char = $uncompressed[$i];
+            $current_code .= $char;
+            if (!isset($dictionary[$current_code])) {
+                $dictionary[$current_code] = $dict_size++;
+                $result .= pack('n', $dictionary[substr($current_code, 0, -1)]);
+                if ($dict_size >= (1 << $bits)) {
+                    if ($bits < $MAX_BITS) {
+                        $bits++;
+                    }
+                }
+                $current_code = $char;
             }
         }
-        $output .= $p;
-
-        return $output;
+        $result .= pack('n', $dictionary[$current_code]);
+        $compressed_data = pack('n', $dict_size) . $result;
+        return $compressed_data;
     }
 
-    public function decompress($fileCompressed)
+    function lzw_decompress($compressed_data)
     {
-        $compressed = $fileCompressed;
-        $dictionary = ['' => 0];
-        $output = "";
-        $pc = "";
-        $p = "";
+        $MAX_BITS = 12;
+        $dictionary = [];
 
-        for ($i = 0; $i < strlen($compressed); $i++) {
-            $c = $compressed[$i];
+        for ($i = 0; $i < 256; $i++) {
+            $dictionary[$i] = chr($i);
+        }
 
-            if (is_numeric($c)) {
-                $output = $c;
-                if (!array_key_exists($c, $dictionary)) {
-                    $pc;
+        $dict_size = 256;
+        $bits = 9;
+        $current_code = null;
+        $uncompressed = "";
+        $compressed_data = unpack('n*', $compressed_data);
+        $compressed_data = array_values($compressed_data);
+
+        if (count($compressed_data) > 0) {
+            $current_code = $compressed_data[0];
+            $uncompressed .= isset($dictionary[$current_code]) ? $dictionary[$current_code] : '';
+
+            for ($i = 1; $i < count($compressed_data); $i++) {
+                $code = $compressed_data[$i];
+
+                if (!isset($dictionary[$code])) {
+                    $entry = isset($dictionary[$current_code]) ? $dictionary[$current_code] . $dictionary[substr($dictionary[$current_code], 0, 1)] : '';
+                } else {
+                    $entry = $dictionary[$code];
                 }
 
-                $output .= $dictionary[$pc];
-                $output = $p . $c;
-            } else {
-                if (!array_key_exists($c, $dictionary)) {
-                    $pc;
+                $uncompressed .= $entry;
+
+                $dictionary[$dict_size++] = isset($dictionary[$current_code]) ? $dictionary[$current_code] . substr($entry, 0, 1) : '';
+
+                if ($dict_size >= (1 << $bits) && $bits < $MAX_BITS) {
+                    $bits++;
                 }
 
-                $output .= $dictionary[$pc];
-                $output = $p . $c;
+                $current_code = $code;
             }
         }
 
-        return $output;
+        return $uncompressed;
     }
 }

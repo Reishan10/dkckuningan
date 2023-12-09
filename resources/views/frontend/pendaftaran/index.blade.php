@@ -349,7 +349,8 @@
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Sukses',
-                                text: 'Data berhasil disimpan',
+                                text: 'Data berhasil disimpan, Dengan persentase kompres ' +
+                                    response.persentase,
                             }).then(function() {
                                 top.location.href =
                                     "{{ route('pendaftaran.index') }}";
