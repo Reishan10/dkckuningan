@@ -66,7 +66,6 @@
                                             <th>Tahap 1</th>
                                             <th>Tahap 2</th>
                                             <th>Berkas</th>
-                                            <th>Original</th>
                                             <th>Kompres</th>
                                             <th class="text-end">Aksi</th>
                                         </tr>
@@ -135,17 +134,13 @@
                         },
                         {
                             data: 'berkas',
-                            name: 'berkas'
-                        },
-                        {
-                            data: 'original_size',
-                            name: 'original_size',
+                            name: 'berkas',
                             orderable: false,
                             searchable: false
                         },
                         {
-                            data: 'compress_size',
-                            name: 'compress_size',
+                            data: 'persentase',
+                            name: 'persentase',
                             orderable: false,
                             searchable: false
                         },
@@ -217,17 +212,13 @@
                             },
                             {
                                 data: 'berkas',
-                                name: 'berkas'
-                            },
-                            {
-                                data: 'original_size',
-                                name: 'original_size',
+                                name: 'berkas',
                                 orderable: false,
                                 searchable: false
                             },
                             {
-                                data: 'compress_size',
-                                name: 'compress_size',
+                                data: 'persentase',
+                                name: 'persentase',
                                 orderable: false,
                                 searchable: false
                             },

@@ -50,7 +50,7 @@ class RiwayatPendaftarController extends Controller
                     return $golongan;
                 })
                 ->addColumn('berkas', function ($user) {
-                    $berkas = $user->berkas ? '<a href="' . Storage::url('public/berkas/' . $user->berkas) . '" target="_blank" class="btn btn-secondary btn-sm">Tautan ke Berkas</a>' : 'Berkas tidak tersedia';
+                    $berkas = $user->berkas ? '<a href="' . asset('berkas/' . $user->berkas) . '" target="_blank" class="btn btn-secondary btn-sm">Tautan ke Berkas</a>' : 'Berkas tidak tersedia';
 
                     return $berkas;
                 })

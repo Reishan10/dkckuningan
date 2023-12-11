@@ -45,7 +45,9 @@
                                         <select name="golongan" id="golongan" class="form-control">
                                             <option value="">Pilih Golongan</option>
                                             @foreach ($golongan as $row)
-                                                <option value="{{ $row->id }}">{{ $row->name }}</option>
+                                                <option value="{{ $row->id }}"
+                                                    {{ $row->name == 'Pandega' ? 'selected' : '' }}>{{ $row->name }}
+                                                </option>
                                             @endforeach
                                         </select>
                                         <div class="invalid-feedback errorGolongan"></div>

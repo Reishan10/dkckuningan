@@ -66,7 +66,7 @@ Route::middleware(['auth', 'user-access:Panitia,Juri,Kwarcab,Peserta'])->group(f
   Route::post('/pengaturan/nonaktif-akun', [PengaturanController::class, 'updateStatus'])->name('pengaturan.updateStatus');
 });
 
-// Panitia, Juri, Kwarcab & Peserta
+// Panitia, Juri, Kwarcab
 Route::middleware(['auth', 'user-access:Panitia,Juri,Kwarcab'])->group(function () {
   Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
@@ -79,6 +79,86 @@ Route::middleware(['auth', 'user-access:Panitia,Juri,Kwarcab'])->group(function 
   Route::get('/konten/{id}/edit', [KontenController::class, 'edit'])->name('konten.edit');
   Route::post('/konten/update/{id}', [KontenController::class, 'update'])->name('konten.update');
   Route::delete('/konten/delete/{id}', [KontenController::class, 'destroy'])->name('konten.delete');
+
+  // Timeline
+  Route::get('/timeline', [TimelineController::class, 'index'])->name('timeline.index');
+  Route::get('/timeline/tambah', [TimelineController::class, 'create'])->name('timeline.create');
+  Route::post('/timeline/store', [TimelineController::class, 'store'])->name('timeline.store');
+  Route::get('/timeline/{id}/edit', [TimelineController::class, 'edit'])->name('timeline.edit');
+  Route::post('/timeline/update/{id}', [TimelineController::class, 'update'])->name('timeline.update');
+  Route::delete('/timeline/delete/{id}', [TimelineController::class, 'destroy'])->name('timeline.delete');
+
+  // Riwayat
+  Route::get('/riwayat-pendaftar', [RiwayatPendaftarController::class, 'index'])->name('riwayat.index');
+});
+
+// Panitia & Juri
+Route::middleware(['auth', 'user-access:Panitia,Juri'])->group(function () {
+  // Penilaian
+  Route::get('/penilaian/semua/print', [PenilaianController::class, 'printAll'])->name('penilaian.all.print');
+  Route::get('/penilaian/semua/printPDF', [PenilaianController::class, 'printPDFAll'])->name('penilaian.all.printPDF');
+  Route::get('/penilaian/semua', [PenilaianController::class, 'indexAll'])->name('penilaian.all.index');
+  Route::get('/penilaian/semua/{id}', [PenilaianController::class, 'nilaiAll'])->name('penilaian.all.nilai');
+  Route::get('/penilaian/semua/edit/{id}', [PenilaianController::class, 'nilaiEditAll'])->name('penilaian.all.nilai.edit');
+  Route::get('/penilaian/semua/detail/{id}', [PenilaianController::class, 'detailAll'])->name('penilaian.all.detail');
+  Route::post('/penilaian/semua/update-penilaian', [PenilaianController::class, 'updatePenilaianAll'])->name('penilaian.all.update');
+  Route::post('/penilaian/semua/simpan-penilaian', [PenilaianController::class, 'simpanPenilaianAll'])->name('penilaian.all.simpan');
+  Route::post('/penilaian/semua/terima/{id}', [PenilaianController::class, 'terimaAll'])->name('penilaian.all.terima');
+  Route::post('/penilaian/semua/tolak/{id}', [PenilaianController::class, 'tolakAll'])->name('pendaftaran.all.tolak');
+  Route::post('/penilaian/semua/pertimbangkan/{id}', [PenilaianController::class, 'pertimbangkanAll'])->name('pendaftaran.all.pertimbangkan');
+  Route::delete('/penilaian/semua/delete/{id}', [PenilaianController::class, 'destroy'])->name('penilaian.all.delete');
+
+  // Penilaian
+  Route::get('/penilaian/siaga/print', [PenilaianController::class, 'printSiaga'])->name('penilaian.siaga.print');
+  Route::get('/penilaian/siaga/printPDF', [PenilaianController::class, 'printPDFSiaga'])->name('penilaian.siaga.printPDF');
+  Route::get('/penilaian/siaga/', [PenilaianController::class, 'indexSiaga'])->name('penilaian.siaga.index');
+  Route::get('/penilaian/siaga/{id}', [PenilaianController::class, 'nilaiSiaga'])->name('penilaian.siaga.nilai');
+  Route::get('/penilaian/siaga/edit/{id}', [PenilaianController::class, 'nilaiEdit'])->name('penilaian.siaga.nilai.edit');
+  Route::get('/penilaian/siaga/detail/{id}', [PenilaianController::class, 'detailSiaga'])->name('penilaian.siaga.detail');
+  Route::post('/penilaian/siaga/update-penilaian', [PenilaianController::class, 'updatePenilaianSiaga'])->name('penilaian.siaga.update');
+  Route::post('/penilaian/siaga/simpan-penilaian', [PenilaianController::class, 'simpanPenilaianSiaga'])->name('penilaian.siaga.simpan');
+  Route::post('/penilaian/siaga/terima/{id}', [PenilaianController::class, 'terimaSiaga'])->name('penilaian.siaga.terima');
+  Route::post('/penilaian/siaga/pertimbangkan/{id}', [PenilaianController::class, 'pertimbangkanSiaga'])->name('pendaftaran.siaga.pertimbangkan');
+  Route::post('/penilaian/siaga/tolak/{id}', [PenilaianController::class, 'tolakSiaga'])->name('pendaftaran.siaga.tolak');
+
+  // Penilaian
+  Route::get('/penilaian/penggalang/print', [PenilaianController::class, 'printPenggalang'])->name('penilaian.penggalang.print');
+  Route::get('/penilaian/penggalang/printPDF', [PenilaianController::class, 'printPDFPenggalang'])->name('penilaian.penggalang.printPDF');
+  Route::get('/penilaian/penggalang/', [PenilaianController::class, 'indexPenggalang'])->name('penilaian.penggalang.index');
+  Route::get('/penilaian/penggalang/{id}', [PenilaianController::class, 'nilaiPenggalang'])->name('penilaian.penggalang.nilai');
+  Route::get('/penilaian/penggalang/edit/{id}', [PenilaianController::class, 'nilaiEdit'])->name('penilaian.penggalang.nilai.edit');
+  Route::get('/penilaian/penggalang/detail/{id}', [PenilaianController::class, 'detailPenggalang'])->name('penilaian.penggalang.detail');
+  Route::post('/penilaian/penggalang/update-penilaian', [PenilaianController::class, 'updatePenilaianPenggalang'])->name('penilaian.penggalang.update');
+  Route::post('/penilaian/penggalang/simpan-penilaian', [PenilaianController::class, 'simpanPenilaianPenggalang'])->name('penilaian.penggalang.simpan');
+  Route::post('/penilaian/penggalang/terima/{id}', [PenilaianController::class, 'terimaPenggalang'])->name('penilaian.penggalang.terima');
+  Route::post('/penilaian/penggalang/pertimbangkan/{id}', [PenilaianController::class, 'pertimbangkanPenggalang'])->name('pendaftaran.penggalang.pertimbangkan');
+  Route::post('/penilaian/penggalang/tolak/{id}', [PenilaianController::class, 'tolakPenggalang'])->name('pendaftaran.penggalang.tolak');
+
+  // Penilaian
+  Route::get('/penilaian/penegak/print', [PenilaianController::class, 'printPenegak'])->name('penilaian.penegak.print');
+  Route::get('/penilaian/penegak/printPDF', [PenilaianController::class, 'printPDFPenegak'])->name('penilaian.penegak.printPDF');
+  Route::get('/penilaian/penegak/', [PenilaianController::class, 'indexPenegak'])->name('penilaian.penegak.index');
+  Route::get('/penilaian/penegak/{id}', [PenilaianController::class, 'nilaiPenegak'])->name('penilaian.penegak.nilai');
+  Route::get('/penilaian/penegak/edit/{id}', [PenilaianController::class, 'nilaiEdit'])->name('penilaian.penegak.nilai.edit');
+  Route::get('/penilaian/penegak/detail/{id}', [PenilaianController::class, 'detailPenegak'])->name('penilaian.penegak.detail');
+  Route::post('/penilaian/penegak/update-penilaian', [PenilaianController::class, 'updatePenilaianPenegak'])->name('penilaian.penegak.update');
+  Route::post('/penilaian/penegak/simpan-penilaian', [PenilaianController::class, 'simpanPenilaianPenegak'])->name('penilaian.penegak.simpan');
+  Route::post('/penilaian/penegak/terima/{id}', [PenilaianController::class, 'terimaPenegak'])->name('penilaian.penegak.terima');
+  Route::post('/penilaian/penegak/pertimbangkan/{id}', [PenilaianController::class, 'pertimbangkanPenegak'])->name('pendaftaran.penegak.pertimbangkan');
+  Route::post('/penilaian/penegak/tolak/{id}', [PenilaianController::class, 'tolakPenegak'])->name('pendaftaran.penegak.tolak');
+
+  // Penilaian
+  Route::get('/penilaian/pandega/print', [PenilaianController::class, 'printPandega'])->name('penilaian.pandega.print');
+  Route::get('/penilaian/pandega/printPDF', [PenilaianController::class, 'printPDFPandega'])->name('penilaian.pandega.printPDF');
+  Route::get('/penilaian/pandega/', [PenilaianController::class, 'indexPandega'])->name('penilaian.pandega.index');
+  Route::get('/penilaian/pandega/{id}', [PenilaianController::class, 'nilaiPandega'])->name('penilaian.pandega.nilai');
+  Route::get('/penilaian/pandega/edit/{id}', [PenilaianController::class, 'nilaiEdit'])->name('penilaian.pandega.nilai.edit');
+  Route::get('/penilaian/pandega/detail/{id}', [PenilaianController::class, 'detailPandega'])->name('penilaian.pandega.detail');
+  Route::post('/penilaian/pandega/update-penilaian', [PenilaianController::class, 'updatePenilaianPandega'])->name('penilaian.pandega.update');
+  Route::post('/penilaian/pandega/simpan-penilaian', [PenilaianController::class, 'simpanPenilaianPandega'])->name('penilaian.pandega.simpan');
+  Route::post('/penilaian/pandega/terima/{id}', [PenilaianController::class, 'terimaPandega'])->name('penilaian.pandega.terima');
+  Route::post('/penilaian/pandega/pertimbangkan/{id}', [PenilaianController::class, 'pertimbangkanPandega'])->name('pendaftaran.pandega.pertimbangkan');
+  Route::post('/penilaian/pandega/tolak/{id}', [PenilaianController::class, 'tolakPandega'])->name('pendaftaran.pandega.tolak');
 
   // Soal
   Route::get('/soal', [SoalController::class, 'index'])->name('soal.index');
@@ -111,17 +191,6 @@ Route::middleware(['auth', 'user-access:Panitia,Juri,Kwarcab'])->group(function 
   Route::get('/soal-pandega/{id}/edit', [SoalController::class, 'editPandega'])->name('soal.editPandega');
   Route::post('/soal-pandega/update/{id}', [SoalController::class, 'updatePandega'])->name('soal.updatePandega');
   Route::delete('/soal/delete/{id}', [SoalController::class, 'destroy'])->name('soal.delete');
-
-  // Timeline
-  Route::get('/timeline', [TimelineController::class, 'index'])->name('timeline.index');
-  Route::get('/timeline/tambah', [TimelineController::class, 'create'])->name('timeline.create');
-  Route::post('/timeline/store', [TimelineController::class, 'store'])->name('timeline.store');
-  Route::get('/timeline/{id}/edit', [TimelineController::class, 'edit'])->name('timeline.edit');
-  Route::post('/timeline/update/{id}', [TimelineController::class, 'update'])->name('timeline.update');
-  Route::delete('/timeline/delete/{id}', [TimelineController::class, 'destroy'])->name('timeline.delete');
-
-  // Riwayat
-  Route::get('/riwayat-pendaftar', [RiwayatPendaftarController::class, 'index'])->name('riwayat.index');
 
   // Pendaftaran all
   Route::get('/pendaftaran/semua', [PendaftaranController::class, 'indexAll'])->name('pendaftaran.semua.index');
@@ -193,77 +262,8 @@ Route::middleware(['auth', 'user-access:Panitia,Juri,Kwarcab'])->group(function 
   Route::delete('/berkas-lain/delete/{id}', [ArsipController::class, 'destroyLain'])->name('berkas-lain.delete');
 });
 
-// Panitia & Juri
-Route::middleware(['auth', 'user-access:Panitia,Juri'])->group(function () {
-  // Penilaian
-  Route::get('/penilaian/semua/print', [PenilaianController::class, 'printAll'])->name('penilaian.all.print');
-  Route::get('/penilaian/semua/printPDF', [PenilaianController::class, 'printPDFAll'])->name('penilaian.all.printPDF');
-  Route::get('/penilaian/semua', [PenilaianController::class, 'indexAll'])->name('penilaian.all.index');
-  Route::get('/penilaian/semua/{id}', [PenilaianController::class, 'nilaiAll'])->name('penilaian.all.nilai');
-  Route::get('/penilaian/semua/edit/{id}', [PenilaianController::class, 'nilaiEditAll'])->name('penilaian.all.nilai.edit');
-  Route::get('/penilaian/semua/detail/{id}', [PenilaianController::class, 'detailAll'])->name('penilaian.all.detail');
-  Route::post('/penilaian/semua/update-penilaian', [PenilaianController::class, 'updatePenilaianAll'])->name('penilaian.all.update');
-  Route::post('/penilaian/semua/simpan-penilaian', [PenilaianController::class, 'simpanPenilaianAll'])->name('penilaian.all.simpan');
-  Route::post('/penilaian/semua/terima/{id}', [PenilaianController::class, 'terimaAll'])->name('penilaian.all.terima');
-  Route::post('/penilaian/semua/tolak/{id}', [PenilaianController::class, 'tolakAll'])->name('pendaftaran.all.tolak');
-  Route::post('/penilaian/semua/pertimbangkan/{id}', [PenilaianController::class, 'pertimbangkanAll'])->name('pendaftaran.all.pertimbangkan');
-  Route::delete('/penilaian/semua/delete/{id}', [PenilaianController::class, 'destroy'])->name('penilaian.all.delete');
-
-  // Penilaian
-  Route::get('/penilaian/siaga/print', [PenilaianController::class, 'printSiaga'])->name('penilaian.siaga.print');
-  Route::get('/penilaian/siaga/printPDF', [PenilaianController::class, 'printPDFSiaga'])->name('penilaian.siaga.printPDF');
-  Route::get('/penilaian/siaga/', [PenilaianController::class, 'indexSiaga'])->name('penilaian.siaga.index');
-  Route::get('/penilaian/siaga/{id}', [PenilaianController::class, 'nilaiSiaga'])->name('penilaian.siaga.nilai');
-  Route::get('/penilaian/siaga/edit/{id}', [PenilaianController::class, 'nilaiEdit'])->name('penilaian.siaga.nilai.edit');
-  Route::get('/penilaian/siaga/detail/{id}', [PenilaianController::class, 'detailSiaga'])->name('penilaian.siaga.detail');
-  Route::post('/penilaian/siaga/update-penilaian', [PenilaianController::class, 'updatePenilaianSiaga'])->name('penilaian.siaga.update');
-  Route::post('/penilaian/siaga/simpan-penilaian', [PenilaianController::class, 'simpanPenilaianSiaga'])->name('penilaian.siaga.simpan');
-  Route::post('/penilaian/siaga/terima/{id}', [PenilaianController::class, 'terimaSiaga'])->name('penilaian.siaga.terima');
-  Route::post('/penilaian/siaga/pertimbangkan/{id}', [PenilaianController::class, 'pertimbangkanSiaga'])->name('pendaftaran.siaga.pertimbangkan');
-  Route::post('/penilaian/siaga/tolak/{id}', [PenilaianController::class, 'tolakSiaga'])->name('pendaftaran.siaga.tolak');
-
-  // Penilaian
-  Route::get('/penilaian/penggalang/print', [PenilaianController::class, 'printPenggalang'])->name('penilaian.penggalang.print');
-  Route::get('/penilaian/penggalang/printPDF', [PenilaianController::class, 'printPDFPenggalang'])->name('penilaian.penggalang.printPDF');
-  Route::get('/penilaian/penggalang/', [PenilaianController::class, 'indexPenggalang'])->name('penilaian.penggalang.index');
-  Route::get('/penilaian/penggalang/{id}', [PenilaianController::class, 'nilaiPenggalang'])->name('penilaian.penggalang.nilai');
-  Route::get('/penilaian/penggalang/edit/{id}', [PenilaianController::class, 'nilaiEdit'])->name('penilaian.penggalang.nilai.edit');
-  Route::get('/penilaian/penggalang/detail/{id}', [PenilaianController::class, 'detailPenggalang'])->name('penilaian.penggalang.detail');
-  Route::post('/penilaian/penggalang/update-penilaian', [PenilaianController::class, 'updatePenilaianPenggalang'])->name('penilaian.penggalang.update');
-  Route::post('/penilaian/penggalang/simpan-penilaian', [PenilaianController::class, 'simpanPenilaianPenggalang'])->name('penilaian.penggalang.simpan');
-  Route::post('/penilaian/penggalang/terima/{id}', [PenilaianController::class, 'terimaPenggalang'])->name('penilaian.penggalang.terima');
-  Route::post('/penilaian/penggalang/pertimbangkan/{id}', [PenilaianController::class, 'pertimbangkanPenggalang'])->name('pendaftaran.penggalang.pertimbangkan');
-  Route::post('/penilaian/penggalang/tolak/{id}', [PenilaianController::class, 'tolakPenggalang'])->name('pendaftaran.penggalang.tolak');
-
-  // Penilaian
-  Route::get('/penilaian/penegak/print', [PenilaianController::class, 'printPenegak'])->name('penilaian.penegak.print');
-  Route::get('/penilaian/penegak/printPDF', [PenilaianController::class, 'printPDFPenegak'])->name('penilaian.penegak.printPDF');
-  Route::get('/penilaian/penegak/', [PenilaianController::class, 'indexPenegak'])->name('penilaian.penegak.index');
-  Route::get('/penilaian/penegak/{id}', [PenilaianController::class, 'nilaiPenegak'])->name('penilaian.penegak.nilai');
-  Route::get('/penilaian/penegak/edit/{id}', [PenilaianController::class, 'nilaiEdit'])->name('penilaian.penegak.nilai.edit');
-  Route::get('/penilaian/penegak/detail/{id}', [PenilaianController::class, 'detailPenegak'])->name('penilaian.penegak.detail');
-  Route::post('/penilaian/penegak/update-penilaian', [PenilaianController::class, 'updatePenilaianPenegak'])->name('penilaian.penegak.update');
-  Route::post('/penilaian/penegak/simpan-penilaian', [PenilaianController::class, 'simpanPenilaianPenegak'])->name('penilaian.penegak.simpan');
-  Route::post('/penilaian/penegak/terima/{id}', [PenilaianController::class, 'terimaPenegak'])->name('penilaian.penegak.terima');
-  Route::post('/penilaian/penegak/pertimbangkan/{id}', [PenilaianController::class, 'pertimbangkanPenegak'])->name('pendaftaran.penegak.pertimbangkan');
-  Route::post('/penilaian/penegak/tolak/{id}', [PenilaianController::class, 'tolakPenegak'])->name('pendaftaran.penegak.tolak');
-
-  // Penilaian
-  Route::get('/penilaian/pandega/print', [PenilaianController::class, 'printPandega'])->name('penilaian.pandega.print');
-  Route::get('/penilaian/pandega/printPDF', [PenilaianController::class, 'printPDFPandega'])->name('penilaian.pandega.printPDF');
-  Route::get('/penilaian/pandega/', [PenilaianController::class, 'indexPandega'])->name('penilaian.pandega.index');
-  Route::get('/penilaian/pandega/{id}', [PenilaianController::class, 'nilaiPandega'])->name('penilaian.pandega.nilai');
-  Route::get('/penilaian/pandega/edit/{id}', [PenilaianController::class, 'nilaiEdit'])->name('penilaian.pandega.nilai.edit');
-  Route::get('/penilaian/pandega/detail/{id}', [PenilaianController::class, 'detailPandega'])->name('penilaian.pandega.detail');
-  Route::post('/penilaian/pandega/update-penilaian', [PenilaianController::class, 'updatePenilaianPandega'])->name('penilaian.pandega.update');
-  Route::post('/penilaian/pandega/simpan-penilaian', [PenilaianController::class, 'simpanPenilaianPandega'])->name('penilaian.pandega.simpan');
-  Route::post('/penilaian/pandega/terima/{id}', [PenilaianController::class, 'terimaPandega'])->name('penilaian.pandega.terima');
-  Route::post('/penilaian/pandega/pertimbangkan/{id}', [PenilaianController::class, 'pertimbangkanPandega'])->name('pendaftaran.pandega.pertimbangkan');
-  Route::post('/penilaian/pandega/tolak/{id}', [PenilaianController::class, 'tolakPandega'])->name('pendaftaran.pandega.tolak');
-});
-
-// Panitia & Kwarcab
-Route::middleware(['auth', 'user-access:Panitia,Kwarcab'])->group(function () {
+// Panitia
+Route::middleware(['auth', 'user-access:Panitia'])->group(function () {
   // Golongan
   Route::get('/golongan', [GolonganController::class, 'index'])->name('golongan.index');
   Route::get('/golongan/tambah', [GolonganController::class, 'create'])->name('golongan.create');

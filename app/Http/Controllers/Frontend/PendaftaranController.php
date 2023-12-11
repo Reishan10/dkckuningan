@@ -69,12 +69,9 @@ class PendaftaranController extends Controller
                     $compressedPdfSize = FileCompressor::compressFile($path);
                     $compressedPdfSize = filesize($path);
 
-                   
+
                     $originalSizeKB = round($originalSize / 1024);
                     $compressedPdfSizeKB = round($compressedPdfSize / 1024);
-
-                    $persentaseKompresi = (1 - ($compressedPdfSize / $originalSize)) * 100;
-                    $persentase = number_format($persentaseKompresi, 2) . '%';
 
                     $pendaftaran = new Pendaftaran();
                     $pendaftaran->user_id = $request->id_user;
@@ -88,11 +85,11 @@ class PendaftaranController extends Controller
                     $pendaftaran->golongan_id = $request->golongan;
                     $pendaftaran->gudep = $request->gudep;
                     $pendaftaran->berkas = $randomFileName;
-                    $pendaftaran->original_size = $originalSizeKB . " KB";
-                    $pendaftaran->compress_size = $compressedPdfSizeKB . " KB";
+                    $pendaftaran->original_size = $originalSizeKB;
+                    $pendaftaran->compress_size = $compressedPdfSizeKB;
                     $pendaftaran->save();
 
-                    return response()->json(['success' => 'Data berhasil disimpan', 'persentase' => $persentase]);
+                    return response()->json(['success' => 'Data berhasil disimpan']);
                 }
             }
         }
@@ -100,79 +97,105 @@ class PendaftaranController extends Controller
 
     function lzw_compress($uncompressed)
     {
-        $MAX_BITS = 12;
+        // Inisialisasi Dictionary
         $dictionary = [];
 
+        // Mengisi dictionary dengan karakter ASCII sebagai kunci dan indeks sebagai nilai
         for ($i = 0; $i < 256; $i++) {
             $dictionary[chr($i)] = $i;
         }
 
-        $dict_size = 256;
-        $bits = 9;
-        $result = "";
-        $current_code = "";
-        $compressed_data = "";
+        // Inisialisasi Variabel
+        $dict_size = 256;        // Jumlah awal entri dalam dictionary
+        $bits = 9;               // Jumlah awal bit untuk merepresentasikan setiap indeks dalam dictionary
+        $result = "";            // String untuk menyimpan hasil kompresi
+        $current_code = "";      // String untuk membangun kode saat memproses data tidak terkompres
+        $compressed_data = "";   // String untuk menyimpan data yang sudah terkompres
 
+        // Loop melalui Data Tidak Terkompres
         for ($i = 0; $i < strlen($uncompressed); $i++) {
             $char = $uncompressed[$i];
             $current_code .= $char;
+
+            // Proses Kompresi
             if (!isset($dictionary[$current_code])) {
+                // Jika kode saat ini tidak ada dalam dictionary, tambahkan ke dictionary
                 $dictionary[$current_code] = $dict_size++;
+                // Tambahkan indeks dari kode sebelumnya ke hasil kompresi
                 $result .= pack('n', $dictionary[substr($current_code, 0, -1)]);
+
+                // Periksa apakah dictionary sudah penuh, jika ya, tingkatkan jumlah bit
                 if ($dict_size >= (1 << $bits)) {
-                    if ($bits < $MAX_BITS) {
-                        $bits++;
-                    }
+                    $bits++;
                 }
+                // Set ulang kode saat ini
                 $current_code = $char;
             }
         }
+        // Tambahkan indeks dari kode terakhir ke hasil kompresi
         $result .= pack('n', $dictionary[$current_code]);
+        // Bangun string data terkompresi
         $compressed_data = pack('n', $dict_size) . $result;
+
+        // Kembalikan nilai compressed_data
         return $compressed_data;
     }
 
     function lzw_decompress($compressed_data)
     {
-        $MAX_BITS = 12;
+        // Inisialisasi Dictionary
         $dictionary = [];
 
+        // Mengisi dictionary dengan karakter ASCII sebagai kunci dan karakter tersebut sebagai nilai
         for ($i = 0; $i < 256; $i++) {
             $dictionary[$i] = chr($i);
         }
 
-        $dict_size = 256;
-        $bits = 9;
-        $current_code = null;
-        $uncompressed = "";
+        // Inisialisasi Variabel
+        $dict_size = 256;          // Jumlah awal entri dalam dictionary
+        $bits = 9;                 // Jumlah awal bit untuk merepresentasikan setiap indeks dalam dictionary
+        $current_code = null;      // Variabel untuk menyimpan kode saat memproses data terkompres
+        $uncompressed = "";        // String untuk menyimpan hasil dekompresi
+
+        // Unpack Data Terkompres
         $compressed_data = unpack('n*', $compressed_data);
         $compressed_data = array_values($compressed_data);
 
+        // Periksa apakah ada data yang terkompres
         if (count($compressed_data) > 0) {
             $current_code = $compressed_data[0];
             $uncompressed .= isset($dictionary[$current_code]) ? $dictionary[$current_code] : '';
 
+            // Loop melalui Data Terkompres
             for ($i = 1; $i < count($compressed_data); $i++) {
                 $code = $compressed_data[$i];
 
+                // Proses Dekompresi
                 if (!isset($dictionary[$code])) {
+                    // Jika kode tidak ada dalam dictionary, buat entri baru
                     $entry = isset($dictionary[$current_code]) ? $dictionary[$current_code] . $dictionary[substr($dictionary[$current_code], 0, 1)] : '';
                 } else {
+                    // Jika kode ada dalam dictionary, gunakan entri yang ada
                     $entry = $dictionary[$code];
                 }
 
+                // Tambahkan entri ke hasil dekompresi
                 $uncompressed .= $entry;
 
+                // Tambahkan entri baru ke dictionary
                 $dictionary[$dict_size++] = isset($dictionary[$current_code]) ? $dictionary[$current_code] . substr($entry, 0, 1) : '';
 
-                if ($dict_size >= (1 << $bits) && $bits < $MAX_BITS) {
+                // Periksa apakah dictionary sudah penuh, jika ya, tingkatkan jumlah bit
+                if ($dict_size >= (1 << $bits)) {
                     $bits++;
                 }
 
+                // Set ulang kode saat ini
                 $current_code = $code;
             }
         }
 
+        // Kembalikan nilai uncompressed
         return $uncompressed;
     }
 }

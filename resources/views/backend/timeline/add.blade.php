@@ -36,7 +36,7 @@
                                     <div class="col-12">
                                         <div class="form-group">
                                             <label>Foto</label>
-                                            <input class="dropify" type="file" name="foto" id="foto">
+                                            <input class="dropify" type="file" name="foto" id="foto" accept="image/*">
                                             <small class="text-danger errorFoto"></small>
                                         </div>
                                     </div>

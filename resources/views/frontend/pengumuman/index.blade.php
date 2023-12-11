@@ -129,6 +129,12 @@
                                         @endforeach
                                     </td>
                                 </tr>
+                                <tr>
+                                    <th>Berkas</td>
+                                    <td>:</td>
+                                    <td><a href="{{ asset('berkas/' . $pendaftaran->berkas) }}" target="_blank"
+                                            class="btn btn-secondary btn-sm">Tautan ke Berkas</a></td>
+                                </tr>
                             </table>
                         </div>
                     @else

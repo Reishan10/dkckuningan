@@ -47,7 +47,7 @@
                                         <td>{{ $row->name }}</td>
                                         </td>
                                         <td><a href="{{ asset('storage/arsip/pendaftaran/' . $row->file) }}" target="_blank"
-                                                class="btn btn-secondary btn-sm">Tautan ke Berkas</a>'</td>
+                                                class="btn btn-secondary btn-sm">Tautan ke Berkas</a></td>
                                     </tr>
                                 @empty
                                     <tr>

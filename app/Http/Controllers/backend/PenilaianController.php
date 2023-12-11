@@ -57,9 +57,20 @@ class PenilaianController extends Controller
                     return $golongan;
                 })
                 ->addColumn('berkas', function ($user) {
-                    $berkas = $user->berkas ? '<a href="' . Storage::url('public/berkas/' . $user->berkas) . '" target="_blank" class="btn btn-secondary btn-sm">Tautan ke Berkas</a>' : 'Berkas tidak tersedia';
+                    $berkasLink = $user->berkas ? asset('berkas/' . $user->berkas) : null;
+
+                    $berkas = $berkasLink
+                        ? '<div class="d-flex flex-column"><a href="' . $berkasLink . '" target="_blank" class="btn btn-secondary btn-sm mr-2">Tautan ke Berkas</a><small class="text-muted text-center mt-2">' . ($user->original_size ?? 0) . ' KB - ' . ($user->compress_size ?? 0) . ' KB</small></div>'
+                        : '<span class="text-muted">Berkas tidak tersedia</span>';
 
                     return $berkas;
+                })
+
+                ->addColumn('persentase', function ($user) {
+                    $persentaseKompresi = (1 - ($user->compress_size / $user->original_size)) * 100;
+                    $persentase = number_format($persentaseKompresi, 2) . '%';
+
+                    return $persentase;
                 })
                 ->addColumn('status_1', function ($pendaftaran) {
                     $statusText = '';
@@ -324,9 +335,20 @@ class PenilaianController extends Controller
                     return $golongan;
                 })
                 ->addColumn('berkas', function ($user) {
-                    $berkas = $user->berkas ? '<a href="' . Storage::url('public/berkas/' . $user->berkas) . '" target="_blank" class="btn btn-secondary btn-sm">Tautan ke Berkas</a>' : 'Berkas tidak tersedia';
+                    $berkasLink = $user->berkas ? asset('berkas/' . $user->berkas) : null;
+
+                    $berkas = $berkasLink
+                        ? '<div class="d-flex flex-column"><a href="' . $berkasLink . '" target="_blank" class="btn btn-secondary btn-sm mr-2">Tautan ke Berkas</a><small class="text-muted text-center mt-2">' . ($user->original_size ?? 0) . ' KB - ' . ($user->compress_size ?? 0) . ' KB</small></div>'
+                        : '<span class="text-muted">Berkas tidak tersedia</span>';
 
                     return $berkas;
+                })
+
+                ->addColumn('persentase', function ($user) {
+                    $persentaseKompresi = (1 - ($user->compress_size / $user->original_size)) * 100;
+                    $persentase = number_format($persentaseKompresi, 2) . '%';
+
+                    return $persentase;
                 })
                 ->addColumn('status_1', function ($pendaftaran) {
                     $statusText = '';
@@ -591,9 +613,20 @@ class PenilaianController extends Controller
                     return $golongan;
                 })
                 ->addColumn('berkas', function ($user) {
-                    $berkas = $user->berkas ? '<a href="' . Storage::url('public/berkas/' . $user->berkas) . '" target="_blank" class="btn btn-secondary btn-sm">Tautan ke Berkas</a>' : 'Berkas tidak tersedia';
+                    $berkasLink = $user->berkas ? asset('berkas/' . $user->berkas) : null;
+
+                    $berkas = $berkasLink
+                        ? '<div class="d-flex flex-column"><a href="' . $berkasLink . '" target="_blank" class="btn btn-secondary btn-sm mr-2">Tautan ke Berkas</a><small class="text-muted text-center mt-2">' . ($user->original_size ?? 0) . ' KB - ' . ($user->compress_size ?? 0) . ' KB</small></div>'
+                        : '<span class="text-muted">Berkas tidak tersedia</span>';
 
                     return $berkas;
+                })
+
+                ->addColumn('persentase', function ($user) {
+                    $persentaseKompresi = (1 - ($user->compress_size / $user->original_size)) * 100;
+                    $persentase = number_format($persentaseKompresi, 2) . '%';
+
+                    return $persentase;
                 })
                 ->addColumn('status_1', function ($pendaftaran) {
                     $statusText = '';
@@ -858,9 +891,20 @@ class PenilaianController extends Controller
                     return $golongan;
                 })
                 ->addColumn('berkas', function ($user) {
-                    $berkas = $user->berkas ? '<a href="' . Storage::url('public/berkas/' . $user->berkas) . '" target="_blank" class="btn btn-secondary btn-sm">Tautan ke Berkas</a>' : 'Berkas tidak tersedia';
+                    $berkasLink = $user->berkas ? asset('berkas/' . $user->berkas) : null;
+
+                    $berkas = $berkasLink
+                        ? '<div class="d-flex flex-column"><a href="' . $berkasLink . '" target="_blank" class="btn btn-secondary btn-sm mr-2">Tautan ke Berkas</a><small class="text-muted text-center mt-2">' . ($user->original_size ?? 0) . ' KB - ' . ($user->compress_size ?? 0) . ' KB</small></div>'
+                        : '<span class="text-muted">Berkas tidak tersedia</span>';
 
                     return $berkas;
+                })
+
+                ->addColumn('persentase', function ($user) {
+                    $persentaseKompresi = (1 - ($user->compress_size / $user->original_size)) * 100;
+                    $persentase = number_format($persentaseKompresi, 2) . '%';
+
+                    return $persentase;
                 })
                 ->addColumn('status_1', function ($pendaftaran) {
                     $statusText = '';
@@ -1125,9 +1169,20 @@ class PenilaianController extends Controller
                     return $golongan;
                 })
                 ->addColumn('berkas', function ($user) {
-                    $berkas = $user->berkas ? '<a href="' . Storage::url('public/berkas/' . $user->berkas) . '" target="_blank" class="btn btn-secondary btn-sm">Tautan ke Berkas</a>' : 'Berkas tidak tersedia';
+                    $berkasLink = $user->berkas ? asset('berkas/' . $user->berkas) : null;
+
+                    $berkas = $berkasLink
+                        ? '<div class="d-flex flex-column"><a href="' . $berkasLink . '" target="_blank" class="btn btn-secondary btn-sm mr-2">Tautan ke Berkas</a><small class="text-muted text-center mt-2">' . ($user->original_size ?? 0) . ' KB - ' . ($user->compress_size ?? 0) . ' KB</small></div>'
+                        : '<span class="text-muted">Berkas tidak tersedia</span>';
 
                     return $berkas;
+                })
+
+                ->addColumn('persentase', function ($user) {
+                    $persentaseKompresi = (1 - ($user->compress_size / $user->original_size)) * 100;
+                    $persentase = number_format($persentaseKompresi, 2) . '%';
+
+                    return $persentase;
                 })
                 ->addColumn('status_1', function ($pendaftaran) {
                     $statusText = '';

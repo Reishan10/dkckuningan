@@ -38,7 +38,7 @@
                                     <div class="col-12">
                                         <div class="form-group">
                                             <label>Foto</label>
-                                            <input class="dropify" type="file" name="foto" id="foto" value="{{ $timeline->foto }}"
+                                            <input class="dropify" type="file" name="foto" id="foto" value="{{ $timeline->foto }}" accept="image/*"
                                                 data-default-file="{{ asset('storage/timeline/' . $timeline->foto) }}">
                                             <small class="text-danger errorFoto"></small>
                                         </div>

@@ -46,7 +46,7 @@
                             alt="">
                         <div class="card-body content">
 
-                            <p class="text-muted mt-3">{{ $konten->content }}</p>
+                            <span class="text-muted mt-3">{!!  $konten->content !!}</span>
 
                         </div>
                     </div>

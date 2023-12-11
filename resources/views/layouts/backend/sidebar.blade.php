@@ -13,7 +13,8 @@
                         <a href="{{ route('riwayat.index') }}"><i class="fas fa-clock"></i> <span>Riwayat
                                 Pendaftar</span></a>
                     </li>
-                    <li class="{{ request()->routeIs(['timeline.index']) ? 'active' : '' }}">
+                    <li
+                        class="{{ request()->routeIs(['timeline.index', 'timeline.create', 'timeline.edit']) ? 'active' : '' }}">
                         <a href="{{ route('timeline.index') }}"><i class="fas fa-clipboard-list"></i> <span>Time
                                 Line</span></a>
                     </li>
@@ -24,15 +25,15 @@
                         <a href="{{ route('konten.index') }}"><i class="fa fa-newspaper"></i> <span>Konten</span></a>
                     </li>
                 @endif
-                @if (auth()->user()->type != 'Peserta')
+                @if (auth()->user()->type != 'Peserta' && auth()->user()->type != 'Kwarcab')
                     <li
-                        class="submenu {{ request()->routeIs(['pendaftaran.semua.index', 'pendaftaran.siaga.index', 'pendaftaran.penggalang.index', 'pendaftaran.penegak.index', 'pendaftaran.pandega.index', 'penilaian.all.index', 'penilaian.all.nilai', 'penilaian.siaga.index', 'penilaian.siaga.nilai', 'penilaian.penggalang.index', 'penilaian.penggalang.nilai', 'penilaian.penegak.index', 'penilaian.penegak.nilai', 'penilaian.pandega.index', 'penilaian.pandega.nilai']) ? 'active' : '' }}">
+                        class="submenu {{ request()->routeIs(['pendaftaran.semua.index', 'pendaftaran.siaga.index', 'pendaftaran.penggalang.index', 'pendaftaran.penegak.index', 'pendaftaran.pandega.index', 'penilaian.all.index', 'penilaian.all.nilai', 'penilaian.all.nilai.edit', 'penilaian.all.detail', 'penilaian.siaga.index', 'penilaian.siaga.nilai', 'penilaian.siaga.nilai.edit', 'penilaian.siaga.detail', 'penilaian.penggalang.index', 'penilaian.penggalang.nilai', 'penilaian.penggalang.nilai.edit', 'penilaian.penggalang.detail', 'penilaian.penegak.index', 'penilaian.penegak.nilai', 'penilaian.penegak.nilai.edit', 'penilaian.penegak.detail', 'penilaian.pandega.index', 'penilaian.pandega.nilai', 'penilaian.pandega.nilai.edit', 'penilaian.pandega.detail']) ? 'active' : '' }}">
                         <a href="javascript:void(0);"><i class="fas fa-graduation-cap"></i>
                             <span>{{ auth()->user()->type == 'Juri' ? 'Penilaian' : 'Pendaftaran' }}</span>
                             <span class="menu-arrow"></span></a>
                         <ul>
                             <li
-                                class="submenu {{ request()->routeIs(['pendaftaran.semua.index', 'penilaian.all.index', 'penilaian.all.nilai']) ? 'active' : '' }}">
+                                class="submenu {{ request()->routeIs(['pendaftaran.semua.index', 'penilaian.all.index', 'penilaian.all.nilai', 'penilaian.all.nilai.edit', 'penilaian.all.detail']) ? 'active' : '' }}">
                                 <a href="javascript:void(0);"> <span> Semua Data</span> <span
                                         class="menu-arrow"></span></a>
                                 <ul>
@@ -42,12 +43,14 @@
                                             <a href="{{ route('pendaftaran.semua.index') }}">Administrasi</a>
                                     @endif
                             </li>
-                            <li class="{{ request()->routeIs(['penilaian.all.index']) ? 'active' : '' }}"><a
-                                    href="{{ route('penilaian.all.index') }}">Interview</a></li>
+                            <li
+                                class="{{ request()->routeIs(['penilaian.all.index', 'penilaian.all.nilai', 'penilaian.all.nilai.edit', 'penilaian.all.detail']) ? 'active' : '' }}">
+                                <a href="{{ route('penilaian.all.index') }}">Interview</a>
+                            </li>
                         </ul>
                     </li>
                     <li
-                        class="submenu {{ request()->routeIs(['pendaftaran.siaga.index', 'penilaian.siaga.index', 'penilaian.siaga.nilai']) ? 'active' : '' }}">
+                        class="submenu {{ request()->routeIs(['pendaftaran.siaga.index', 'penilaian.siaga.index', 'penilaian.siaga.nilai', 'penilaian.siaga.nilai.edit', 'penilaian.siaga.detail']) ? 'active' : '' }}">
                         <a href="javascript:void(0);"> <span> Siaga</span> <span class="menu-arrow"></span></a>
                         <ul>
                             @if (auth()->user()->type != 'Juri')
@@ -55,12 +58,13 @@
                                     <a href="{{ route('pendaftaran.siaga.index') }}">Administrasi</a>
                                 </li>
                             @endif
-                            <li class="{{ request()->routeIs(['penilaian.siaga.index']) ? 'active' : '' }}"><a
-                                    href="{{ route('penilaian.siaga.index') }}">Interview</a></li>
+                            <li
+                                class="{{ request()->routeIs(['penilaian.siaga.index', 'penilaian.siaga.nilai', 'penilaian.siaga.nilai.edit', 'penilaian.siaga.detail']) ? 'active' : '' }}">
+                                <a href="{{ route('penilaian.siaga.index') }}">Interview</a></li>
                         </ul>
                     </li>
                     <li
-                        class="submenu {{ request()->routeIs(['pendaftaran.penggalang.index', 'penilaian.penggalang.index', 'penilaian.penggalang.nilai']) ? 'active' : '' }}">
+                        class="submenu {{ request()->routeIs(['pendaftaran.penggalang.index', 'penilaian.penggalang.index', 'penilaian.penggalang.nilai', 'penilaian.penggalang.nilai.edit', 'penilaian.penggalang.detail']) ? 'active' : '' }}">
                         <a href="javascript:void(0);"> <span> Penggalang</span> <span class="menu-arrow"></span></a>
                         <ul>
                             @if (auth()->user()->type != 'Juri')
@@ -68,13 +72,14 @@
                                     <a href="{{ route('pendaftaran.penggalang.index') }}">Administrasi</a>
                                 </li>
                             @endif
-                            <li class="{{ request()->routeIs(['penilaian.penggalang.index']) ? 'active' : '' }}">
+                            <li
+                                class="{{ request()->routeIs(['penilaian.penggalang.index', 'penilaian.penggalang.nilai', 'penilaian.penggalang.nilai.edit', 'penilaian.penggalang.detail']) ? 'active' : '' }}">
                                 <a href="{{ route('penilaian.penggalang.index') }}">Interview</a>
                             </li>
                         </ul>
                     </li>
                     <li
-                        class="submenu {{ request()->routeIs(['pendaftaran.penegak.index', 'penilaian.penegak.index', 'penilaian.penegak.nilai']) ? 'active' : '' }}">
+                        class="submenu {{ request()->routeIs(['pendaftaran.penegak.index', 'penilaian.penegak.index', 'penilaian.penegak.nilai', 'penilaian.penegak.nilai.edit', 'penilaian.penegak.detail']) ? 'active' : '' }}">
                         <a href="javascript:void(0);"> <span> Penegak</span> <span class="menu-arrow"></span></a>
                         <ul>
                             @if (auth()->user()->type != 'Juri')
@@ -82,13 +87,14 @@
                                     <a href="{{ route('pendaftaran.penegak.index') }}">Administrasi</a>
                                 </li>
                             @endif
-                            <li class="{{ request()->routeIs(['penilaian.penegak.index']) ? 'active' : '' }}">
+                            <li
+                                class="{{ request()->routeIs(['penilaian.penegak.index', 'penilaian.penegak.nilai', 'penilaian.penegak.nilai.edit', 'penilaian.penegak.detail']) ? 'active' : '' }}">
                                 <a href="{{ route('penilaian.penegak.index') }}">Interview</a>
                             </li>
                         </ul>
                     </li>
                     <li
-                        class="submenu {{ request()->routeIs(['pendaftaran.pandega.index', 'penilaian.pandega.index', 'penilaian.pandega.nilai']) ? 'active' : '' }}">
+                        class="submenu {{ request()->routeIs(['pendaftaran.pandega.index', 'penilaian.pandega.index', 'penilaian.pandega.nilai', 'penilaian.pandega.nilai.edit', 'penilaian.pandega.detail']) ? 'active' : '' }}">
                         <a href="javascript:void(0);"> <span> Pandega</span> <span class="menu-arrow"></span></a>
                         <ul>
                             @if (auth()->user()->type != 'Juri')
@@ -96,7 +102,8 @@
                                     <a href="{{ route('pendaftaran.pandega.index') }}">Administrasi</a>
                                 </li>
                             @endif
-                            <li class="{{ request()->routeIs(['penilaian.pandega.index']) ? 'active' : '' }}">
+                            <li
+                                class="{{ request()->routeIs(['penilaian.pandega.index', 'penilaian.pandega.nilai', 'penilaian.pandega.nilai.edit', 'penilaian.pandega.detail']) ? 'active' : '' }}">
                                 <a href="{{ route('penilaian.pandega.index') }}">Interview</a>
                             </li>
                         </ul>
@@ -131,12 +138,12 @@
                 </ul>
             </li>
             @endif
-            @if (auth()->user()->type != 'Juri' && auth()->user()->type != 'Peserta')
+            @if (auth()->user()->type == 'Panitia')
                 <li class="{{ request()->routeIs(['golongan.index']) ? 'active' : '' }}">
                     <a href="{{ route('golongan.index') }}"><i class="fas fa-box"></i> <span>Golongan</span></a>
                 </li>
             @endif
-            @if (auth()->user()->type != 'Peserta')
+            @if (auth()->user()->type != 'Peserta' && auth()->user()->type != 'Kwarcab')
                 <li
                     class="submenu {{ request()->routeIs(['surat-kelulusan.index', 'surat-kelulusan.create', 'surat-kelulusan.edit', 'berkas-pendaftaran.index', 'berkas-pendaftaran.create', 'berkas-pendaftaran.edit', 'berkas-lain.index', 'berkas-lain.create', 'berkas-lain.edit']) ? 'active' : '' }}">
                     <a href="#"><i class="fas fa-clipboard"></i> <span> Arsip</span> <span
@@ -151,7 +158,6 @@
                     </ul>
                 </li>
             @endif
-
             @if (auth()->user()->type == 'Panitia')
                 <li
                     class="submenu {{ request()->routeIs(['pengguna.semua.index', 'pengguna.semua.create', 'pengguna.semua.edit', 'pengguna.juri.index', 'pengguna.juri.create', 'pengguna.juri.edit', 'pengguna.kwarcab.index', 'pengguna.kwarcab.create', 'pengguna.kwarcab.edit', 'pengguna.peserta.index', 'pengguna.peserta.create', 'pengguna.peserta.edit']) ? 'active' : '' }}">

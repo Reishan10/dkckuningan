@@ -1,5 +1,5 @@
 @extends('layouts.backend.main')
-@section('title', 'Penilaian')
+@section('title', 'Isi Nilai')
 @section('content')
     <style>
         table {
@@ -35,7 +35,7 @@
                         <div class="page-sub-header">
                             <h3 class="page-title">@yield('title')</h3>
                             <ul class="breadcrumb">
-                                <li class="breadcrumb-item"><a href="{{ route('dashboard.index') }}">Dashboard</a></li>
+                                <li class="breadcrumb-item"><a href="{{ route('penilaian.all.index') }}">Penilaian</a></li>
                                 <li class="breadcrumb-item active">@yield('title')</li>
                             </ul>
                         </div>

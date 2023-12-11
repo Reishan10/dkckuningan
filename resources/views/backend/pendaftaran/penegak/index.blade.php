@@ -64,6 +64,7 @@
                                             <th>Pangkalan</th>
                                             <th>Status</th>
                                             <th>Berkas</th>
+                                            <th>Kompres</th>
                                             <th class="text-end">Aksi</th>
                                         </tr>
                                     </thead>
@@ -203,6 +204,12 @@
                         {
                             data: 'berkas',
                             name: 'berkas',
+                            orderable: false,
+                            searchable: false
+                        },
+                        {
+                            data: 'persentase',
+                            name: 'persentase',
                             orderable: false,
                             searchable: false
                         },

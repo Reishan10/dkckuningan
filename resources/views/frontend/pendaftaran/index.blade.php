@@ -163,7 +163,7 @@
                                                         <div class="form-icon position-relative">
                                                             <input type="file" class="form-control" name="berkas"
                                                                 id="berkas" placeholder="Berkas"
-                                                                onchange="updateFileSize()">
+                                                                onchange="updateFileSize()" accept="application/pdf">
                                                             <small class="text-danger errorBerkas"></small>
                                                         </div>
                                                         <small class="text-muted">Ukuran berkas: <span
@@ -182,65 +182,20 @@
                                     </form><!--end form-->
                                 </div><!--end teb pane-->
                             @else
-                                <table class="table">
-                                    <tr>
-                                        <td>Nomor Tanda Anggota</td>
-                                        <td>:</td>
-                                        <td>{{ $pendaftaran[0]->nta }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Nama</td>
-                                        <td>:</td>
-                                        <td>{{ $pendaftaran[0]->user->name }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Email</td>
-                                        <td>:</td>
-                                        <td>{{ $pendaftaran[0]->user->email }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>No Telepon</td>
-                                        <td>:</td>
-                                        <td>{{ $pendaftaran[0]->user->no_telepon }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Tempat, Tanggal Lahir</td>
-                                        <td>:</td>
-                                        <td>{{ $pendaftaran[0]->tempat_lahir }},
-                                            {{ \Carbon\Carbon::parse($pendaftaran[0]->tanggal_lahir)->locale('id')->isoFormat('D MMMM Y') }}
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Alamat</td>
-                                        <td>:</td>
-                                        <td>{{ $pendaftaran[0]->alamat }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Jenis Kelamin</td>
-                                        <td>:</td>
-                                        <td>{{ $pendaftaran[0]->jenis_kelamin }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Kwartir Ranting</td>
-                                        <td>:</td>
-                                        <td>{{ $pendaftaran[0]->kwaran }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Gugus Depan</td>
-                                        <td>:</td>
-                                        <td>{{ $pendaftaran[0]->gudep }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Pangkalan</td>
-                                        <td>:</td>
-                                        <td>{{ $pendaftaran[0]->pangkalan }}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Golongan</td>
-                                        <td>:</td>
-                                        <td>{{ $pendaftaran[0]->golongan->name }}</td>
-                                    </tr>
-                                </table>
+                                <div class="col-lg-12 col-md-6 col-12">
+                                    <div class="card bg-light rounded shadow border-0">
+                                        <div class="card-body py-5">
+                                            <i class="uil uil-exchange h2 text-primary"></i>
+                                            <div class="mt-2">
+                                                <h5 class="card-title"><a href="javascript:void(0)" class="text-primary">
+                                                        Pengumuman</a></h5>
+                                                <p class="text-muted mt-3 mb-0">Jangan lewatkan berita terbaru Garudaku!
+                                                    Kunjungi <a href="{{ route('pengumuman-garudaku.index') }}">halaman
+                                                        Pengumuman</a> untuk informasi lebih lanjut.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div><!--end col-->
                             @endif
                         </div><!--end tab content-->
                     </div>
@@ -250,15 +205,11 @@
     </section><!--end section-->
     <script>
         function updateFileSize() {
-            // Ambil elemen input file
             var inputBerkas = document.getElementById('berkas');
-
-            // Ambil ukuran berkas (dalam bytes) dan konversi ke kilobytes (KB)
             var fileSizeKB = inputBerkas.files[0].size / 1024;
-
-            // Tampilkan ukuran berkas dalam elemen dengan id 'fileSizeDisplay'
             document.getElementById('fileSizeDisplay').textContent = fileSizeKB.toFixed(2) + ' KB';
         }
+
         $(document).ready(function() {
             $.ajaxSetup({
                 headers: {
@@ -349,8 +300,7 @@
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Sukses',
-                                text: 'Data berhasil disimpan, Dengan persentase kompres ' +
-                                    response.persentase,
+                                text: 'Data berhasil disimpan',
                             }).then(function() {
                                 top.location.href =
                                     "{{ route('pendaftaran.index') }}";

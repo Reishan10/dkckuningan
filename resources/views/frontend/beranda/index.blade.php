@@ -27,7 +27,7 @@
                 <div class="col-md-6 mt-4 pt-2 mt-sm-0 pt-sm-0 ms-auto">
                     <div class="freelance-hero position-relative">
                         <div class="bg-shape position-relative">
-                            <img src="{{ asset('assets_frontend') }}/images/hero-jokowi.png"
+                            <img src="{{ asset('assets_frontend') }}/images/jokowi.png" width="350"
                                 class="mx-auto d-block img-fluid" alt="">
                         </div>
                     </div>
@@ -93,8 +93,8 @@
 
                         <div class="card-body">
                             <h5 class="text-dark">Mengisi Biodata</h5>
-                            {{-- <p class="text-muted mb-0">The most well-known dummy text is the 'Lorem Ipsum', which is
-                                said to have originated</p> --}}
+                            <p class="text-muted mb-0">Isi informasi pribadi dengan cermat untuk pengalaman pengguna yang
+                                lebih baik.</p>
                         </div>
                     </div>
                 </div><!--end col-->
@@ -108,9 +108,10 @@
 
                         <div class="card-body">
                             <h5 class="text-dark">Test & Seleksi</h5>
-                            {{-- <p class="text-muted mb-0">Generators convallis odio, vel pharetra quam malesuada vel. Nam
-                                porttitor malesuada.</p> --}}
+                            <p class="text-muted mb-0">Hadapi tes dan seleksi dengan sungguh-sungguh untuk hasil terbaik.
+                            </p>
                         </div>
+
                     </div>
                 </div><!--end col-->
 
@@ -123,8 +124,8 @@
 
                         <div class="card-body">
                             <h5 class="text-dark">Pengumuman</h5>
-                            {{-- <p class="text-muted mb-0">Internet Proin tempus odio, vel pharetra quam malesuada vel. Nam
-                                porttitor malesuada.</p> --}}
+                            <p class="text-muted mb-0">Periksa pengumuman secara berkala untuk mendapatkan informasi
+                                terkini.</p>
                         </div>
                     </div>
                 </div><!--end col-->
