@@ -34,15 +34,15 @@
                      <a href="{{ route('login') }}" class="login-btn-light btn btn-light">Masuk</a>
                  </li>
              @else
-                 {{-- <li class="list-inline-item mb-0">
+                 <li class="list-inline-item mb-0">
                      <button type="button" class="login-btn-primary btn btn-icon btn-pills btn-primary"
-                         data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i data-feather="bell"
+                         onclick="window.location.href='{{ route('notifikasi-garudaku.index') }}'"><i data-feather="bell"
                              class="icons"></i></button>
                      <button type="button" class="login-btn-light btn btn-icon btn-pills btn-light"
-                         data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i data-feather="bell"
+                         onclick="window.location.href='{{ route('notifikasi-garudaku.index') }}'"><i data-feather="bell"
                              class="icons"></i></button>
-                 </li> --}}
-                 <li class="list-inline-item mb-0">
+                 </li>
+                 <li class="list-inline-item ps-1 mb-0">
                      <div class="dropdown dropdown-primary">
                          <button type="button" class="login-btn-primary btn btn-icon btn-pills btn-primary dropdown-toggle"
                              data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i data-feather="user"
@@ -50,6 +50,7 @@
                          <button type="button" class="login-btn-light btn btn-icon btn-pills btn-light dropdown-toggle"
                              data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i data-feather="user"
                                  class="icons"></i></button>
+
                          <div class="dropdown-menu dd-menu dropdown-menu-end bg-white shadow rounded border-0 mt-3 py-3"
                              style="width: 200px;">
                              <a class="dropdown-item text-dark" href="{{ route('pengaturan.profile') }}"><i

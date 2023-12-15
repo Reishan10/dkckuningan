@@ -187,7 +187,7 @@
                                         <div class="card-body py-5">
                                             <i class="uil uil-exchange h2 text-primary"></i>
                                             <div class="mt-2">
-                                                <h5 class="card-title"><a href="javascript:void(0)" class="text-primary">
+                                                <h5 class="card-title"><a href="{{ route('pengumuman-garudaku.index') }}" class="text-primary">
                                                         Pengumuman</a></h5>
                                                 <p class="text-muted mt-3 mb-0">Jangan lewatkan berita terbaru Garudaku!
                                                     Kunjungi <a href="{{ route('pengumuman-garudaku.index') }}">halaman

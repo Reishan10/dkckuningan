@@ -59,12 +59,6 @@
             </li>
         @endif
 
-        <li class="nav-item zoom-screen me-2">
-            <a href="#" class="nav-link header-nav-list win-maximize">
-                <img src="{{ asset('assets') }}/img/icons/header-icon-04.svg" alt="">
-            </a>
-        </li>
-
         <li class="nav-item dropdown has-arrow new-user-menus">
             <a href="#" class="dropdown-toggle nav-link" data-bs-toggle="dropdown">
                 <span class="user-img">

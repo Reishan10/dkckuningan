@@ -14,6 +14,7 @@ use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\Frontend\BerandaController;
 use App\Http\Controllers\Frontend\BeritaController;
 use App\Http\Controllers\Frontend\BerkasController;
+use App\Http\Controllers\Frontend\NotifikasiController;
 use App\Http\Controllers\Frontend\PendaftaranController as FrontendPendaftaranController;
 use App\Http\Controllers\Frontend\PengumumanController;
 use App\Http\Controllers\Frontend\TimelineController as FrontendTimelineController;
@@ -44,6 +45,7 @@ Route::get('/berkas-garudaku', [BerkasController::class, 'index'])->name('berkas
 Route::get('/berita-garudaku', [BeritaController::class, 'index'])->name('berita-garudaku.index');
 Route::get('/berita-garudaku/detail/{slug}', [BeritaController::class, 'detail'])->name('berita-garudaku.detail');
 
+Route::get('/notifikasi-garudaku', [NotifikasiController::class, 'index'])->name('notifikasi-garudaku.index');
 Auth::routes();
 
 // Peserta
