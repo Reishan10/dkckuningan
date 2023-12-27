@@ -42,8 +42,8 @@
                                     <thead class="student-thread">
                                         <tr>
                                             <th>No</th>
-                                            <th>Tanggal Terbit</th>
                                             <th>Surat</th>
+                                            <th>Tanggal Penetapan</th>
                                             <th>File</th>
                                             <th class="text-end">Aksi</th>
                                         </tr>
@@ -56,6 +56,8 @@
             </div>
         </div>
 
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/locale/id.js"></script>
         <script>
             $(document).ready(function() {
                 $.ajaxSetup({
@@ -75,16 +77,21 @@
                             searchable: false
                         },
                         {
-                            data: 'tanggal_terbit',
-                            name: 'tanggal_terbit'
-                        },
-                        {
                             data: 'name',
                             name: 'name'
                         },
                         {
+                            data: 'tanggal_penetapan',
+                            name: 'tanggal_penetapan',
+                            render: function(data) {
+                                return moment(data).locale('id').format('DD MMMM YYYY');
+                            }
+                        },
+                        {
                             data: 'file',
-                            name: 'file'
+                            name: 'file',
+                            orderable: false,
+                            searchable: false
                         },
                         {
                             data: 'aksi',

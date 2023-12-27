@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\Mail\MailLolosAdministrasi;
 use App\Mail\MailTolakAdministrasi;
-use App\Models\Notifikasi;
 use App\Models\Pendaftaran;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -121,13 +120,6 @@ class PendaftaranController extends Controller
         $pendaftaran->tahap_1 = "Selesai";
         $pendaftaran->status = 2;
         $pendaftaran->save();
-
-        $notifikasi = new Notifikasi();
-        $notifikasi->receiver_id = $pendaftaran->user->id;
-        $notifikasi->sender_id = auth()->user()->id;
-        $notifikasi->message = "Selamat anda lolos seleksi tahap administrasi";
-        $notifikasi->save();
-
         Mail::to($pendaftaran->user->email)->send(new MailLolosAdministrasi($pendaftaran));
         return response()->json(['success' => 'Status berhasil diubah menjadi "Terima"']);
     }
@@ -138,12 +130,6 @@ class PendaftaranController extends Controller
         $pendaftaran->tahap_1 = "Selesai";
         $pendaftaran->status = 3;
         $pendaftaran->save();
-
-        $notifikasi = new Notifikasi();
-        $notifikasi->receiver_id = $pendaftaran->user->id;
-        $notifikasi->sender_id = auth()->user()->id;
-        $notifikasi->message = "Mohon maaf anda belum lolos seleksi tahap administrasi";
-        $notifikasi->save();
 
         Mail::to($pendaftaran->user->email)->send(new MailTolakAdministrasi($pendaftaran));
         return response()->json(['success' => 'Status berhasil diubah menjadi "Tolak"']);
@@ -296,12 +282,6 @@ class PendaftaranController extends Controller
         $pendaftaran->status = 2;
         $pendaftaran->save();
 
-        $notifikasi = new Notifikasi();
-        $notifikasi->receiver_id = $pendaftaran->user->id;
-        $notifikasi->sender_id = auth()->user()->id;
-        $notifikasi->message = "Selamat anda lolos seleksi tahap administrasi";
-        $notifikasi->save();
-
         Mail::to($pendaftaran->user->email)->send(new MailLolosAdministrasi($pendaftaran));
         return response()->json(['success' => 'Status berhasil diubah menjadi "Terima"']);
     }
@@ -312,12 +292,6 @@ class PendaftaranController extends Controller
         $pendaftaran->tahap_1 = "Selesai";
         $pendaftaran->status = 3;
         $pendaftaran->save();
-
-        $notifikasi = new Notifikasi();
-        $notifikasi->receiver_id = $pendaftaran->user->id;
-        $notifikasi->sender_id = auth()->user()->id;
-        $notifikasi->message = "Mohon maaf anda belum lolos seleksi tahap administrasi";
-        $notifikasi->save();
 
         Mail::to($pendaftaran->user->email)->send(new MailTolakAdministrasi($pendaftaran));
         return response()->json(['success' => 'Status berhasil diubah menjadi "Tolak"']);
@@ -472,12 +446,6 @@ class PendaftaranController extends Controller
         $pendaftaran->status = 2;
         $pendaftaran->save();
 
-        $notifikasi = new Notifikasi();
-        $notifikasi->receiver_id = $pendaftaran->user->id;
-        $notifikasi->sender_id = auth()->user()->id;
-        $notifikasi->message = "Selamat anda lolos seleksi tahap administrasi";
-        $notifikasi->save();
-
         Mail::to($pendaftaran->user->email)->send(new MailLolosAdministrasi($pendaftaran));
         return response()->json(['success' => 'Status berhasil diubah menjadi "Terima"']);
     }
@@ -488,12 +456,6 @@ class PendaftaranController extends Controller
         $pendaftaran->tahap_1 = "Selesai";
         $pendaftaran->status = 3;
         $pendaftaran->save();
-
-        $notifikasi = new Notifikasi();
-        $notifikasi->receiver_id = $pendaftaran->user->id;
-        $notifikasi->sender_id = auth()->user()->id;
-        $notifikasi->message = "Mohon maaf anda belum lolos seleksi tahap administrasi";
-        $notifikasi->save();
 
         Mail::to($pendaftaran->user->email)->send(new MailTolakAdministrasi($pendaftaran));
         return response()->json(['success' => 'Status berhasil diubah menjadi "Tolak"']);
@@ -648,12 +610,6 @@ class PendaftaranController extends Controller
         $pendaftaran->status = 2;
         $pendaftaran->save();
 
-        $notifikasi = new Notifikasi();
-        $notifikasi->receiver_id = $pendaftaran->user->id;
-        $notifikasi->sender_id = auth()->user()->id;
-        $notifikasi->message = "Selamat anda lolos seleksi tahap administrasi";
-        $notifikasi->save();
-
         Mail::to($pendaftaran->user->email)->send(new MailLolosAdministrasi($pendaftaran));
         return response()->json(['success' => 'Status berhasil diubah menjadi "Terima"']);
     }
@@ -664,12 +620,6 @@ class PendaftaranController extends Controller
         $pendaftaran->tahap_1 = "Selesai";
         $pendaftaran->status = 3;
         $pendaftaran->save();
-
-        $notifikasi = new Notifikasi();
-        $notifikasi->receiver_id = $pendaftaran->user->id;
-        $notifikasi->sender_id = auth()->user()->id;
-        $notifikasi->message = "Mohon maaf anda belum lolos seleksi tahap administrasi";
-        $notifikasi->save();
 
         Mail::to($pendaftaran->user->email)->send(new MailTolakAdministrasi($pendaftaran));
         return response()->json(['success' => 'Status berhasil diubah menjadi "Tolak"']);
@@ -823,12 +773,6 @@ class PendaftaranController extends Controller
         $pendaftaran->tahap_1 = "Selesai";
         $pendaftaran->status = 2;
 
-        $notifikasi = new Notifikasi();
-        $notifikasi->receiver_id = $pendaftaran->user->id;
-        $notifikasi->sender_id = auth()->user()->id;
-        $notifikasi->message = "Selamat anda lolos seleksi tahap administrasi";
-        $notifikasi->save();
-
         Mail::to($pendaftaran->user->email)->send(new MailLolosAdministrasi($pendaftaran));
         return response()->json(['success' => 'Status berhasil diubah menjadi "Terima"']);
     }
@@ -839,12 +783,6 @@ class PendaftaranController extends Controller
         $pendaftaran->tahap_1 = "Selesai";
         $pendaftaran->status = 3;
         $pendaftaran->save();
-
-        $notifikasi = new Notifikasi();
-        $notifikasi->receiver_id = $pendaftaran->user->id;
-        $notifikasi->sender_id = auth()->user()->id;
-        $notifikasi->message = "Mohon maaf anda belum lolos seleksi tahap administrasi";
-        $notifikasi->save();
 
         Mail::to($pendaftaran->user->email)->send(new MailTolakAdministrasi($pendaftaran));
         return response()->json(['success' => 'Status berhasil diubah menjadi "Tolak"']);

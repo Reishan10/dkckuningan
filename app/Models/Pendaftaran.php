@@ -58,6 +58,7 @@ class Pendaftaran extends Model
         'golongan_id',
         'berkas',
         'status',
+        'status_2',
         'original_size',
         'compress_size',
     ];

@@ -39,8 +39,7 @@
         </div>
     </div>
     <!-- Loader -->
-
-
+    
     @include('layouts.frontend.header')
 
     @yield('content')

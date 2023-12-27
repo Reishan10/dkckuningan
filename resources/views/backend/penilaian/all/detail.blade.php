@@ -152,7 +152,7 @@
 
                                     <tr>
                                         <td colspan="3">Rata-Rata Nilai</td>
-                                        <td>{{ $detail_user->nilai }}</td>
+                                        <td>{{ number_format($detail_user->nilai, 1) }}</td>
                                     </tr>
                                 </tbody>
                             </table>

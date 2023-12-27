@@ -282,7 +282,7 @@ class PenilaianController extends Controller
             ->get();
 
         $pdf = Pdf::loadView('backend.penilaian.all.printPDF', compact('pendaftaran'));
-        return $pdf->download('pendaftaran-semua-' . time() . '.pdf');
+        return $pdf->download('interview-semua-' . time() . '.pdf');
     }
 
     public function detailAll($id)
@@ -544,6 +544,7 @@ class PenilaianController extends Controller
             ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.name', 'golongan.name as golongan_name', 'pangkalan')
             ->where('tahap_1', 'Selesai')
             ->where('status', 2)
+            ->where('golongan.name', 'Siaga')
             ->get();
         return view('backend.penilaian.siaga.print', compact('pendaftaran'));
     }
@@ -557,10 +558,11 @@ class PenilaianController extends Controller
             ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.name', 'golongan.name as golongan_name', 'pangkalan')
             ->where('tahap_1', 'Selesai')
             ->where('status', 2)
+            ->where('golongan.name', 'Siaga')
             ->get();
 
         $pdf = Pdf::loadView('backend.penilaian.siaga.printPDF', compact('pendaftaran'));
-        return $pdf->download('pendaftaran-semua-' . time() . '.pdf');
+        return $pdf->download('interview-siaga-' . time() . '.pdf');
     }
 
     public function detailSiaga($id)
@@ -822,6 +824,7 @@ class PenilaianController extends Controller
             ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.name', 'golongan.name as golongan_name', 'pangkalan')
             ->where('tahap_1', 'Selesai')
             ->where('status', 2)
+            ->where('golongan.name', 'Penggalang')
             ->get();
         return view('backend.penilaian.penggalang.print', compact('pendaftaran'));
     }
@@ -835,10 +838,11 @@ class PenilaianController extends Controller
             ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.name', 'golongan.name as golongan_name', 'pangkalan')
             ->where('tahap_1', 'Selesai')
             ->where('status', 2)
+            ->where('golongan.name', 'Penggalang')
             ->get();
 
         $pdf = Pdf::loadView('backend.penilaian.penggalang.printPDF', compact('pendaftaran'));
-        return $pdf->download('pendaftaran-semua-' . time() . '.pdf');
+        return $pdf->download('invertiew-penggalang-' . time() . '.pdf');
     }
 
     public function detailPenggalang($id)
@@ -1100,6 +1104,7 @@ class PenilaianController extends Controller
             ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.name', 'golongan.name as golongan_name', 'pangkalan')
             ->where('tahap_1', 'Selesai')
             ->where('status', 2)
+            ->where('golongan.name', 'Penegak')
             ->get();
         return view('backend.penilaian.penegak.print', compact('pendaftaran'));
     }
@@ -1113,10 +1118,11 @@ class PenilaianController extends Controller
             ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.name', 'golongan.name as golongan_name', 'pangkalan')
             ->where('tahap_1', 'Selesai')
             ->where('status', 2)
+            ->where('golongan.name', 'Penegak')
             ->get();
 
         $pdf = Pdf::loadView('backend.penilaian.penegak.printPDF', compact('pendaftaran'));
-        return $pdf->download('pendaftaran-semua-' . time() . '.pdf');
+        return $pdf->download('interview-penegak-' . time() . '.pdf');
     }
 
     public function detailPenegak($id)
@@ -1378,6 +1384,7 @@ class PenilaianController extends Controller
             ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.name', 'golongan.name as golongan_name', 'pangkalan')
             ->where('tahap_1', 'Selesai')
             ->where('status', 2)
+            ->where('golongan.name', 'Pandega')
             ->get();
         return view('backend.penilaian.pandega.print', compact('pendaftaran'));
     }
@@ -1391,10 +1398,11 @@ class PenilaianController extends Controller
             ->select('pendaftaran.id as pendaftaran_id', 'users.id as user_id', 'users.name', 'golongan.name as golongan_name', 'pangkalan')
             ->where('tahap_1', 'Selesai')
             ->where('status', 2)
+            ->where('golongan.name', 'Pandega')
             ->get();
 
         $pdf = Pdf::loadView('backend.penilaian.pandega.printPDF', compact('pendaftaran'));
-        return $pdf->download('pendaftaran-semua-' . time() . '.pdf');
+        return $pdf->download('interview-pandega-' . time() . '.pdf');
     }
 
     public function detailPandega($id)

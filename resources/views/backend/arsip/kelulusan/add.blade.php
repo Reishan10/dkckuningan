@@ -1,9 +1,6 @@
 @extends('layouts.backend.main')
 @section('title', 'Tambah Arsip')
 @section('content')
-    <link rel="stylesheet" href="{{ asset('assets/css/dropify.css') }}">
-    <script src="{{ asset('assets/js/dropify.js') }}"></script>
-
     <div class="page-wrapper">
         <div class="content container-fluid">
             <div class="page-header">
@@ -36,19 +33,53 @@
                                     </div>
                                     <div class="col-12">
                                         <div class="form-group local-forms mb-3">
-                                            <label>Tanggal Terbit <span class="login-danger">*</span></label>
-                                            <input class="form-control" type="date" name="tanggal_terbit"
-                                                id="tanggal_terbit">
-                                            <div class="invalid-feedback errorTanggalTerbit"></div>
+                                            <label>Tahun <span class="login-danger">*</span></label>
+                                            <input class="form-control"type="number" id="tahun" name="tahun"
+                                                min="1900" max="2100" value="{{ date('Y') }}">
+                                            <div class="invalid-feedback errorTahun"></div>
                                         </div>
                                     </div>
                                     <div class="col-12">
-                                        <div class="form-group">
-                                            <label>File</label>
-                                            <input class="dropify" type="file" name="file" id="file">
-                                            <small class="text-danger errorFile"></small>
+                                        <div class="form-group local-forms mb-3">
+                                            <label>Lokasi Terbit <span class="login-danger">*</span></label>
+                                            <input class="form-control"type="text" id="lokasi" name="lokasi"
+                                                value="Kuningan">
+                                            <div class="invalid-feedback errorLokasi"></div>
                                         </div>
                                     </div>
+                                    <div class="col-12">
+                                        <div class="form-group local-forms mb-3">
+                                            <label>Tanggal Penetapan <span class="login-danger">*</span></label>
+                                            <input class="form-control" type="date" name="tanggal_penetapan"
+                                                id="tanggal_penetapan" value="{{ date('Y-m-d') }}">
+                                            <div class="invalid-feedback errorTanggalPenetapan"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group local-forms mb-3">
+                                            <label>Nomor Lampiran <span class="login-danger">*</span></label>
+                                            <input class="form-control" type="text" name="nomor_lampiran"
+                                                id="nomor_lampiran">
+                                            <div class="invalid-feedback errorNomorLampiran"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group local-forms mb-3">
+                                            <label>Tamggal Lampiran <span class="login-danger">*</span></label>
+                                            <input class="form-control" type="date" name="tanggal_lampiran"
+                                                id="tanggal_lampiran">
+                                            <div class="invalid-feedback errorTanggalLampiran"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="form-group local-forms mb-3">
+                                            <label>Tentang Lampiran <span class="login-danger">*</span></label>
+                                            <input class="form-control" type="text" name="tentang_lampiran"
+                                                id="tentang_lampiran">
+                                            <div class="invalid-feedback errorTentangLampiran"></div>
+                                        </div>
+                                    </div>
+
                                     <div class="col-12">
                                         <div class="student-submit text-end">
                                             <button type="submit" class="btn btn-primary" id="simpan">Simpan</button>
@@ -64,8 +95,6 @@
     </div>
 
     <script>
-        $('.dropify').dropify();
-
         $(document).ready(function() {
             $.ajaxSetup({
                 headers: {
@@ -76,13 +105,10 @@
             $('#form').submit(function(e) {
                 e.preventDefault();
                 $.ajax({
-                    data: new FormData(this),
+                    data: $(this).serialize(),
                     url: "{{ route('surat-kelulusan.store') }}",
                     type: "POST",
                     dataType: 'json',
-                    processData: false,
-                    contentType: false,
-                    cache: false,
                     beforeSend: function() {
                         $('#simpan').attr('disabled', 'disabled');
                         $('#simpan').text('Proses...');
@@ -101,20 +127,53 @@
                                 $('.errorName').html('');
                             }
 
-                            if (response.errors.tanggal_terbit) {
-                                $('#tanggal_terbit').addClass('is-invalid');
-                                $('.errorTanggalTerbit').html(response.errors.tanggal_terbit);
+                            if (response.errors.tahun) {
+                                $('#tahun').addClass('is-invalid');
+                                $('.errorTahun').html(response.errors.tahun);
                             } else {
-                                $('#tanggal_terbit').removeClass('is-invalid');
-                                $('.errorTanggalTerbit').html('');
+                                $('#tahun').removeClass('is-invalid');
+                                $('.errorTahun').html('');
                             }
 
-                            if (response.errors.file) {
-                                $('#file').addClass('is-invalid');
-                                $('.errorFile').html(response.errors.file);
+                            if (response.errors.lokasi) {
+                                $('#lokasi').addClass('is-invalid');
+                                $('.errorLokasi').html(response.errors.lokasi);
                             } else {
-                                $('#file').removeClass('is-invalid');
-                                $('.errorFile').html('');
+                                $('#lokasi').removeClass('is-invalid');
+                                $('.errorLokasi').html('');
+                            }
+
+                            if (response.errors.tanggal_penetapan) {
+                                $('#tanggal_penetapan').addClass('is-invalid');
+                                $('.errorTanggalPenetapan').html(response.errors
+                                    .tanggal_penetapan);
+                            } else {
+                                $('#tanggal_penetapan').removeClass('is-invalid');
+                                $('.errorTanggalPenetapan').html('');
+                            }
+
+                            if (response.errors.nomor_lampiran) {
+                                $('#nomor_lampiran').addClass('is-invalid');
+                                $('.errorNomorLampiran').html(response.errors.nomor_lampiran);
+                            } else {
+                                $('#nomor_lampiran').removeClass('is-invalid');
+                                $('.errorNomorLampiran').html('');
+                            }
+
+                            if (response.errors.tanggal_lampiran) {
+                                $('#tanggal_lampiran').addClass('is-invalid');
+                                $('.errorTanggalLampiran').html(response.errors.tanggal_lampiran);
+                            } else {
+                                $('#tanggal_lampiran').removeClass('is-invalid');
+                                $('.errorTanggalLampiran').html('');
+                            }
+
+                            if (response.errors.tentang_lampiran) {
+                                $('#tentang_lampiran').addClass('is-invalid');
+                                $('.errorTentangLampiran').html(response.errors.tentang_lampiran);
+                            } else {
+                                $('#tentang_lampiran').removeClass('is-invalid');
+                                $('.errorTentangLampiran').html('');
                             }
                         } else {
                             Swal.fire({

@@ -29,7 +29,7 @@
                     <div class="col-md-6 col-xl-4 col-sm-12 d-flex">
                         <div class="blog grid-blog flex-fill">
                             <div class="blog-image">
-                                <a href="blog-details.html"><img class="img-fluid"
+                                <a href="{{ route('berita-garudaku.detail', $row->slug) }}" target="_blank"><img class="img-fluid"
                                         src="{{ asset('storage/konten/' . $row->image) }}" alt="Post Image"
                                         style="width: 300px; height: 200px; object-fit: cover;"></a>
                             </div>
@@ -49,7 +49,8 @@
                                         </div>
                                     </li>
                                 </ul>
-                                <h3 class="blog-title"><a href="blog-details.html">{{ $row->title }}
+                                <h3 class="blog-title"><a
+                                        href="{{ route('berita-garudaku.detail', $row->slug) }}" target="_blank">{{ $row->title }}
                                     </a></h3>
                                 <p>{{ \Illuminate\Support\Str::limit(
                                     strip_tags(htmlspecialchars_decode($row->content)),

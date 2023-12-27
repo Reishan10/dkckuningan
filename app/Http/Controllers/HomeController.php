@@ -2,29 +2,30 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\MailLolosAdministrasi;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
+use App\Models\Pendaftaran;
+use App\Models\User;
+use App\Notifications\NotificationsLolos;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Notification;
 
 class HomeController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
-
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
     public function index()
     {
-        // Mail::to('sigittitiw@gmail.com')->send(new MailLolosAdministrasi);
+        $user = User::with('pendaftaran')->whereHas('pendaftaran', function ($query) {
+            $query->where('status', 2)
+                ->where('status_2', 2);
+        })
+            ->with(['pendaftaran' => function ($query) {
+                $query->where('status', 2)
+                    ->where('status_2', 2);
+            }])
+            ->get();
+
+        $data = User::where('id', auth()->user()->id)->first();
+
+        Notification::send($user, new NotificationsLolos($data));
+        // $pdf = Pdf::loadView('backend.arsip.kelulusan.surat', compact('user'));
+        // return $pdf->download('pendaftaran-semua-' . time() . '.pdf');
     }
 }

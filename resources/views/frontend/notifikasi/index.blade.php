@@ -30,120 +30,38 @@
                 <div class="col-md-12 mt-4 pt-2">
                     <div class="rounded shadow p-4">
                         <div class="d-flex align-items-center justify-content-between">
-                            <h5 class="mb-1">Pesan :</h5>
+                            <h5 class="mb-1">Pesan Notifikasi :</h5>
                         </div>
                         <hr>
-                        <div class="d-flex border-bottom p-3">
-                            <div class="d-flex ms-2">
-                                <img src="{{ asset('assets_frontend') }}/images/client/01.jpg"
-                                    class="avatar avatar-md-sm rounded-pill shadow" alt="">
-                                <div class="flex-1 ms-3">
-                                    <h6 class="text-dark">Calvin Carlo</h6>
-                                    <p class="text-muted mb-0">This is required when, for example, the final text is
-                                        not
-                                        yet available. Dummy</p>
+
+                        @forelse ($notifications as $notification)
+                            <div class="d-flex border-bottom p-3">
+                                <div class="d-flex ms-2">
+                                    <img src="{{ asset('storage/avatar/' . $notification->data['avatar']) }}"
+                                        class="avatar avatar-md-sm rounded-pill shadow" alt="">
+                                    <div class="flex-1 ms-3">
+                                        <h6 class="text-dark">{{ $notification->data['name'] }}</h6>
+                                        <p class="text-muted mb-0"><strong>Hebat!</strong> Selamat, Anda telah melewati
+                                            seleksi Pramuka Garuda dengan sukses. Anda layak menjadi bagian dari perjalanan
+                                            luar biasa ini, <a href="{{ route('notifikasi-garudaku.download') }}">Download
+                                                Surat Keputusan</a></p>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="d-flex border-bottom bg-light p-3">
-                            <div class="d-flex ms-2">
-                                <img src="{{ asset('assets_frontend') }}/images/client/02.jpg"
-                                    class="avatar avatar-md-sm rounded-pill shadow" alt="">
-                                <div class="flex-1 ms-3">
-                                    <h6 class="text-dark">Miriam Walya</h6>
-                                    <p class="text-muted mb-0">This is required when, for example, the final text is
-                                        not
-                                        yet available. Dummy</p>
+                        @empty
+                            <div class="d-flex border-bottom p-3">
+                                <div class="d-flex ms-2 align-items-center justify-content-center w-100">
+                                    <div class="flex-1 ms-3 text-center">
+                                        <h6 class="text-muted mb-0">Tidak ada notifikasi.</h6>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        @endforelse
 
-                        <div class="d-flex border-bottom p-3">
-
-
-                            <div class="d-flex ms-2">
-                                <img src="{{ asset('assets_frontend') }}/images/client/03.jpg"
-                                    class="avatar avatar-md-sm rounded-pill shadow" alt="">
-                                <div class="flex-1 ms-3">
-                                    <h6 class="text-dark">Jenelia Parker</h6>
-                                    <p class="text-muted mb-0">This is required when, for example, the final text is
-                                        not
-                                        yet available. Dummy</p>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <div class="d-flex border-bottom bg-light p-3">
-                            <div class="d-flex ms-2">
-                                <img src="{{ asset('assets_frontend') }}/images/client/04.jpg"
-                                    class="avatar avatar-md-sm rounded-pill shadow" alt="">
-                                <div class="flex-1 ms-3">
-                                    <h6 class="text-dark">Jack Deo</h6>
-                                    <p class="text-muted mb-0">This is required when, for example, the final text is
-                                        not
-                                        yet available. Dummy</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="d-flex border-bottom p-3">
-                            <div class="d-flex ms-2">
-                                <img src="{{ asset('assets_frontend') }}/images/client/05.jpg"
-                                    class="avatar avatar-md-sm rounded-pill shadow" alt="">
-                                <div class="flex-1 ms-3">
-                                    <h6 class="text-dark">Marya Joseph</h6>
-                                    <p class="text-muted mb-0">This is required when, for example, the final text is
-                                        not
-                                        yet available. Dummy</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="d-flex border-bottom bg-light p-3">
-                            <div class="d-flex ms-2">
-                                <img src="{{ asset('assets_frontend') }}/images/client/06.jpg"
-                                    class="avatar avatar-md-sm rounded-pill shadow" alt="">
-                                <div class="flex-1 ms-3">
-                                    <h6 class="text-dark">Maninder Khan</h6>
-                                    <p class="text-muted mb-0">This is required when, for example, the final text is
-                                        not
-                                        yet available. Dummy</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="d-flex border-bottom p-3">
-                            <div class="d-flex ms-2">
-                                <img src="{{ asset('assets_frontend') }}/images/client/07.jpg"
-                                    class="avatar avatar-md-sm rounded-pill shadow" alt="">
-                                <div class="flex-1 ms-3">
-                                    <h6 class="text-dark">Pitambar Das</h6>
-                                    <p class="text-muted mb-0">This is required when, for example, the final text is
-                                        not
-                                        yet available. Dummy</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="d-flex border-bottom bg-light p-3">
-                            <div class="d-flex ms-2">
-                                <img src="{{ asset('assets_frontend') }}/images/client/08.jpg"
-                                    class="avatar avatar-md-sm rounded-pill shadow" alt="">
-                                <div class="flex-1 ms-3">
-                                    <h6 class="text-dark">Cristino Murfy</h6>
-                                    <p class="text-muted mb-0">This is required when, for example, the final text is
-                                        not
-                                        yet available. Dummy</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="d-flex align-items-center justify-content-between mt-4">
+                        {{-- <div class="d-flex align-items-center justify-content-between mt-4">
                             <span class="text-muted h6 mb-0">Showing 8 out of 33</span>
                             <a href="javascript:void(0)" class="btn btn-primary">See more</a>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
             </div><!--end row-->

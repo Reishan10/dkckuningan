@@ -18,7 +18,7 @@
                     <div class="col-md-6 col-xl-4 col-sm-12 d-flex">
                         <div class="blog grid-blog flex-fill">
                             <div class="blog-image">
-                                <a href="blog-details.html">
+                                <a href="{{ route('timeline-garudaku.index') }}" target="_blank">
                                     <img class="img-fluid" src="{{ asset('storage/timeline/' . $row->foto) }}"
                                         alt="{{ $row->foto }}" style="width: 300px; height: 200px; object-fit: cover;">
                                 </a>
@@ -27,14 +27,14 @@
                                 <ul class="entry-meta meta-item">
                                     <li>
                                         <div class="post-author">
-                                            <a href="profile.html">
-                                                <span class="post-date"><i class="far fa-clock"></i>
-                                                    {{ $formattedDate = \Carbon\Carbon::parse($row->created_at)->locale('id')->isoFormat('D MMMM Y') }}</span>
-                                            </a>
+                                            <span class="post-date"><i class="far fa-clock"></i>
+                                                {{ $formattedDate = \Carbon\Carbon::parse($row->created_at)->locale('id')->isoFormat('D MMMM Y') }}</span>
+
                                         </div>
                                     </li>
                                 </ul>
-                                <h3 class="blog-title"><a href="blog-details.html">{{ $row->name }}
+                                <h3 class="blog-title"><a href="{{ route('timeline-garudaku.index') }}"
+                                        target="_blank">{{ $row->name }}
                                     </a></h3>
                             </div>
                             @if (auth()->user()->type != 'Juri')

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Arsip;
+use App\Models\SKLulus;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -14,16 +15,20 @@ class ArsipController extends Controller
     public function indexKelulusan()
     {
         if (request()->ajax()) {
-            $kelulusan = Arsip::orderBy('created_at', 'desc')->where('type', '0')->get();
+            $kelulusan = SKLulus::orderBy('created_at', 'desc')->get();
 
             return DataTables::of($kelulusan)
                 ->addIndexColumn()
                 ->addColumn('file', function ($kelulusan) {
-                    $file = $kelulusan->file ? '<a href="' . Storage::url('public/arsip/kelulusan/' . $kelulusan->file) . '" target="_blank" class="btn btn-secondary btn-sm">Tautan ke Berkas</a>' : 'Berkas tidak tersedia';
+                    $file = '<a href="' . route('sk.download', ['id' => $kelulusan->id]) . '" class="btn btn-secondary btn-sm">Download</a>';
                     return $file;
                 })
                 ->addColumn('aksi', function ($kelulusan) {
-                    $btn = '<a href="' . route('surat-kelulusan.edit', ['id' => $kelulusan->id]) . '" class="btn btn-sm btn-warning me-2 text-light"><i class="fas fa-pencil-alt"></i></a>';
+                    $btn = '';
+                    if ($kelulusan->created_at == SKLulus::latest()->first()->created_at) {
+                        $btn .= '<a href="' . route('sk.send') . '" class="btn btn-sm btn-info me-2 text-light"><i class="fas fa-share"></i></a>';
+                    }
+                    $btn .= '<a href="' . route('surat-kelulusan.edit', ['id' => $kelulusan->id]) . '" class="btn btn-sm btn-warning me-2 text-light"><i class="fas fa-pencil-alt"></i></a>';
                     $btn .= '<button type="button" class="btn btn-sm btn-danger text-light" data-id="' . $kelulusan->id . '" id="btnHapus" title="Hapus"><i class="fas fa-trash"></i></button>';
 
                     return $btn;
@@ -34,6 +39,7 @@ class ArsipController extends Controller
 
         return view('backend.arsip.kelulusan.index');
     }
+
 
     public function createKelulusan()
     {
@@ -46,45 +52,46 @@ class ArsipController extends Controller
             $request->all(),
             [
                 'name' => 'required|unique:arsip,name',
-                'tanggal_terbit' => 'required|string',
-                'file' => 'required|mimes:pdf,jpg,jpeg,png'
+                'tahun' => 'required|string',
+                'lokasi' => 'required|string',
+                'tanggal_penetapan' => 'required|date',
+                'nomor_lampiran' => 'required|string',
+                'tanggal_lampiran' => 'required|date',
+                'tentang_lampiran' => 'required|string',
             ],
             [
                 'name.required' => 'Silakan isi nama terlebih dahulu!',
-                'name.unique' => 'Golongan sudah tersedia!',
-                'tanggal_terbit.required' => 'Silakan isi tanggal terbit terlebih dahulu!',
-                'file.required' => 'Silakan unggah file!',
-                'file.mimes' => 'Jenis file yang diizinkan adalah PDF, JPG, JPEG, atau PNG.'
+                'name.unique' => 'Nama arsip sudah tersedia!',
+                'tahun.required' => 'Silakan isi tahun terlebih dahulu!',
+                'lokasi.required' => 'Silakan isi lokasi terlebih dahulu!',
+                'tanggal_penetapan.required' => 'Silakan isi tanggal penetapan terlebih dahulu!',
+                'tanggal_penetapan.date' => 'Format tanggal penetapan tidak valid.',
+                'nomor_lampiran.required' => 'Silakan isi nomor lampiran terlebih dahulu!',
+                'tanggal_lampiran.required' => 'Silakan isi tanggal lampiran terlebih dahulu!',
+                'tanggal_lampiran.date' => 'Format tanggal lampiran tidak valid.',
+                'tentang_lampiran.required' => 'Silakan isi tentang lampiran terlebih dahulu!',
             ]
         );
 
         if ($validated->fails()) {
             return response()->json(['errors' => $validated->errors()]);
         } else {
-            if ($request->hasFile('file')) {
-                $file = $request->file('file');
-                if ($file->isValid()) {
-                    $randomFileName = uniqid() . '.' . $file->getClientOriginalExtension();
-                    $file->storeAs('arsip/kelulusan', $randomFileName, 'public');
-
-                    $arsip = new Arsip();
-                    $arsip->name = $request->name;
-                    $arsip->tanggal_terbit = $request->tanggal_terbit;
-                    $arsip->file = $randomFileName;
-                    $arsip->type = 0;
-                    $arsip->save();
-
-                    return response()->json($arsip);
-                }
-            } else {
-                return response()->json(['errors' => ['file' => 'File tidak ditemukan']]);
-            }
+            $skKelulus = new SKLulus();
+            $skKelulus->name = $request->name;
+            $skKelulus->tahun = $request->tahun;
+            $skKelulus->lokasi = $request->lokasi;
+            $skKelulus->tanggal_penetapan = $request->tanggal_penetapan;
+            $skKelulus->nomor_lampiran = $request->nomor_lampiran;
+            $skKelulus->tanggal_lampiran = $request->tanggal_lampiran;
+            $skKelulus->tentang_lampiran = $request->tentang_lampiran;
+            $skKelulus->save();
+            return response()->json($skKelulus);
         }
     }
 
     public function editKelulusan($id)
     {
-        $arsip = Arsip::where('id', $id)->first();
+        $arsip = SKLulus::where('id', $id)->first();
         return view('backend.arsip.kelulusan.edit', compact('arsip'));
     }
 
@@ -94,64 +101,47 @@ class ArsipController extends Controller
         $validated = Validator::make(
             $request->all(),
             [
-                'name' => 'required|unique:arsip,name,' . $id,
-                'tanggal_terbit' => 'required|string',
-                'file' => 'mimes:pdf,jpg,jpeg,png'
+                'name' => 'required|unique:arsip,name',
+                'tahun' => 'required|string',
+                'lokasi' => 'required|string',
+                'tanggal_penetapan' => 'required|date',
+                'nomor_lampiran' => 'required|string',
+                'tanggal_lampiran' => 'required|date',
+                'tentang_lampiran' => 'required|string',
             ],
             [
                 'name.required' => 'Silakan isi nama terlebih dahulu!',
-                'name.unique' => 'Nama Arsip sudah digunakan!',
-                'tanggal_terbit.required' => 'Silakan isi tanggal terbit terlebih dahulu!',
-                'file.mimes' => 'Jenis file yang diizinkan adalah PDF, JPG, JPEG, atau PNG.'
+                'name.unique' => 'Nama arsip sudah tersedia!',
+                'tahun.required' => 'Silakan isi tahun terlebih dahulu!',
+                'lokasi.required' => 'Silakan isi lokasi terlebih dahulu!',
+                'tanggal_penetapan.required' => 'Silakan isi tanggal penetapan terlebih dahulu!',
+                'tanggal_penetapan.date' => 'Format tanggal penetapan tidak valid.',
+                'nomor_lampiran.required' => 'Silakan isi nomor lampiran terlebih dahulu!',
+                'tanggal_lampiran.required' => 'Silakan isi tanggal lampiran terlebih dahulu!',
+                'tanggal_lampiran.date' => 'Format tanggal lampiran tidak valid.',
+                'tentang_lampiran.required' => 'Silakan isi tentang lampiran terlebih dahulu!',
             ]
         );
 
         if ($validated->fails()) {
             return response()->json(['errors' => $validated->errors()]);
         } else {
-            $arsip = Arsip::find($id);
-            if (!$arsip) {
-                return response()->json(['errors' => ['id' => 'Arsip tidak ditemukan']]);
-            }
-
-            $arsip->name = $request->name;
-            $arsip->tanggal_terbit = $request->tanggal_terbit;
-
-            if ($request->hasFile('file')) {
-                $previousFile = $arsip->file;
-                if ($previousFile) {
-                    Storage::disk('public')->delete('arsip/kelulusan/' . $previousFile);
-                }
-
-                $file = $request->file('file');
-                if ($file->isValid()) {
-                    $randomFileName = uniqid() . '.' . $file->getClientOriginalExtension();
-                    $file->storeAs('arsip/kelulusan', $randomFileName, 'public');
-                    $arsip->file = $randomFileName;
-                } else {
-                    return response()->json(['errors' => ['file' => 'File tidak valid']]);
-                }
-            }
-
-            $arsip->save();
-            return response()->json($arsip);
+            $skKelulus = SKLulus::find($id);
+            $skKelulus->name = $request->name;
+            $skKelulus->tahun = $request->tahun;
+            $skKelulus->lokasi = $request->lokasi;
+            $skKelulus->tanggal_penetapan = $request->tanggal_penetapan;
+            $skKelulus->nomor_lampiran = $request->nomor_lampiran;
+            $skKelulus->tanggal_lampiran = $request->tanggal_lampiran;
+            $skKelulus->tentang_lampiran = $request->tentang_lampiran;
+            $skKelulus->save();
+            return response()->json($skKelulus);
         }
     }
 
     public function destroyKelulusan(Request $request)
     {
-        $arsip = Arsip::find($request->id);
-
-        if (!$arsip) {
-            return response()->json(['error' => 'Arsip not found']);
-        }
-
-        if (!empty($arsip->file)) {
-            if (Storage::exists('public/arsip/kelulusan/' . $arsip->file)) {
-                Storage::delete('public/arsip/kelulusan/' . $arsip->file);
-            }
-        }
-
+        $arsip = SKLulus::find($request->id);
         $arsip->delete();
 
         return response()->json(['success' => 'Data berhasil dihapus']);

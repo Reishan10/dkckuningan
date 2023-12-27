@@ -35,13 +35,31 @@
                  </li>
              @else
                  <li class="list-inline-item mb-0">
+                     @php
+                         $unreadNotificationCount = auth()->check()
+                             ? auth()
+                                 ->user()
+                                 ->unreadNotifications->count()
+                             : 0;
+                     @endphp
+
                      <button type="button" class="login-btn-primary btn btn-icon btn-pills btn-primary"
-                         onclick="window.location.href='{{ route('notifikasi-garudaku.index') }}'"><i data-feather="bell"
-                             class="icons"></i></button>
+                         onclick="window.location.href='{{ route('notifikasi-garudaku.index') }}'">
+                         <i data-feather="bell" class="icons"></i>
+                         @if ($unreadNotificationCount > 0)
+                             <span class="badge bg-danger">{{ $unreadNotificationCount }}</span>
+                         @endif
+                     </button>
+
                      <button type="button" class="login-btn-light btn btn-icon btn-pills btn-light"
-                         onclick="window.location.href='{{ route('notifikasi-garudaku.index') }}'"><i data-feather="bell"
-                             class="icons"></i></button>
+                         onclick="window.location.href='{{ route('notifikasi-garudaku.index') }}'">
+                         <i data-feather="bell" class="icons"></i>
+                         @if ($unreadNotificationCount > 0)
+                             <span class="badge bg-danger">{{ $unreadNotificationCount }}</span>
+                         @endif
+                     </button>
                  </li>
+
                  <li class="list-inline-item ps-1 mb-0">
                      <div class="dropdown dropdown-primary">
                          <button type="button" class="login-btn-primary btn btn-icon btn-pills btn-primary dropdown-toggle"

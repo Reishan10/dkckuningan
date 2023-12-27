@@ -4,15 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 use Ramsey\Uuid\Uuid;
 
-class Notifikasi extends Model
+class SKLulus extends Model
 {
-    use HasFactory;
+    use HasFactory, Notifiable;
 
     public $incrementing = false;
     protected $keyType = 'string';
-    protected $table = 'notifikasi';
+    protected $table = 'sk_lulus';
 
     protected static function boot()
     {
@@ -33,19 +34,14 @@ class Notifikasi extends Model
         return 'string';
     }
 
-     public function receiver()
-     {
-         return $this->belongsTo(User::class, 'receiver_id', 'id');
-     }
- 
-     public function sender()
-     {
-         return $this->belongsTo(User::class, 'sender_id', 'id');
-     }
 
     protected $fillable = [
-        'receiver_id',
-        'sender_id',
-        'message',
+        'name',
+        'tahun',
+        'lokasi',
+        'tanggal_penetapan',
+        'nomor_lampiran',
+        'tanggal_lampiran',
+        'tentang_lampiran',
     ];
 }

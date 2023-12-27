@@ -8,6 +8,7 @@ use App\Http\Controllers\Backend\PendaftaranController;
 use App\Http\Controllers\Backend\PengaturanController;
 use App\Http\Controllers\Backend\PenilaianController;
 use App\Http\Controllers\Backend\RiwayatPendaftarController;
+use App\Http\Controllers\Backend\SKController;
 use App\Http\Controllers\Backend\SoalController;
 use App\Http\Controllers\Backend\TimelineController;
 use App\Http\Controllers\Backend\UserController;
@@ -33,9 +34,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/mail', [HomeController::class, 'index'])->name('beranda.index');
-
-
 Route::get('/lzw_compress', [FrontendPendaftaranController::class, 'lzw_compress'])->name('lzw_compress');
 Route::get('/lzw_decompress', [FrontendPendaftaranController::class, 'lzw_decompress'])->name('lzw_decompress');
 
@@ -44,8 +42,6 @@ Route::get('/timeline-garudaku', [FrontendTimelineController::class, 'index'])->
 Route::get('/berkas-garudaku', [BerkasController::class, 'index'])->name('berkas-garudaku.index');
 Route::get('/berita-garudaku', [BeritaController::class, 'index'])->name('berita-garudaku.index');
 Route::get('/berita-garudaku/detail/{slug}', [BeritaController::class, 'detail'])->name('berita-garudaku.detail');
-
-Route::get('/notifikasi-garudaku', [NotifikasiController::class, 'index'])->name('notifikasi-garudaku.index');
 Auth::routes();
 
 // Peserta
@@ -53,9 +49,15 @@ Route::middleware(['auth', 'user-access:Peserta'])->group(function () {
   Route::get('/pendaftaran', [FrontendPendaftaranController::class, 'index'])->name('pendaftaran.index');
   Route::post('/pendaftaran/store', [FrontendPendaftaranController::class, 'store'])->name('pendaftaran.store');
   Route::get('/pengumuman-garudaku', [PengumumanController::class, 'index'])->name('pengumuman-garudaku.index');
+  Route::get('/notifikasi-garudaku', [NotifikasiController::class, 'index'])->name('notifikasi-garudaku.index');
+  Route::get('/notifikasi-garudaku/download', [NotifikasiController::class, 'download'])->name('notifikasi-garudaku.download');
 });
 
 Route::middleware(['auth', 'user-access:Panitia,Juri,Kwarcab,Peserta'])->group(function () {
+  // SK
+  Route::get('/sk-send', [SKController::class, 'send'])->name('sk.send');
+  Route::get('/sk-download/{id}', [SKController::class, 'download'])->name('sk.download');
+
   // Pengaturan
   Route::get('/pengaturan/profile', [PengaturanController::class, 'profile'])->name('pengaturan.profile');
   Route::post('/pengaturan/profile/{id}', [PengaturanController::class, 'updateProfile'])->name('pengaturan.updateProfile');
