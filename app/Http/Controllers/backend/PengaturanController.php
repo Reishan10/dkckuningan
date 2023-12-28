@@ -14,7 +14,6 @@ class PengaturanController extends Controller
 {
     public function profile()
     {
-        $notifikasi = Notifikasi::where('receiver_id', auth()->user()->id)->orderBy('created_at', 'desc')->get();
         return view('backend.pengaturan.profile', compact('notifikasi'));
     }
 
@@ -98,7 +97,6 @@ class PengaturanController extends Controller
 
     public function gantiPassword()
     {
-        $notifikasi = Notifikasi::where('receiver_id', auth()->user()->id)->orderBy('created_at', 'desc')->get();
         return view('backend.pengaturan.ganti_password', compact('notifikasi'));
     }
 
@@ -134,7 +132,6 @@ class PengaturanController extends Controller
 
     public function nonaktif()
     {
-        $notifikasi = Notifikasi::where('receiver_id', auth()->user()->id)->orderBy('created_at', 'desc')->get();
         return view('backend.pengaturan.nonaktif', compact('notifikasi'));
     }
 
