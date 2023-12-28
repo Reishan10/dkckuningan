@@ -14,7 +14,7 @@ class PengaturanController extends Controller
 {
     public function profile()
     {
-        return view('backend.pengaturan.profile', compact('notifikasi'));
+        return view('backend.pengaturan.profile');
     }
 
     public function updateProfile(Request $request)
@@ -97,7 +97,7 @@ class PengaturanController extends Controller
 
     public function gantiPassword()
     {
-        return view('backend.pengaturan.ganti_password', compact('notifikasi'));
+        return view('backend.pengaturan.ganti_password');
     }
 
     public function updatePassword(Request $request)
@@ -132,7 +132,7 @@ class PengaturanController extends Controller
 
     public function nonaktif()
     {
-        return view('backend.pengaturan.nonaktif', compact('notifikasi'));
+        return view('backend.pengaturan.nonaktif');
     }
 
     public function updateStatus()
