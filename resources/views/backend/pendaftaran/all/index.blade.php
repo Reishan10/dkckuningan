@@ -259,6 +259,14 @@
                                 name: 'no_telepon'
                             },
                             {
+                                data: 'golongan',
+                                name: 'golongan'
+                            },
+                            {
+                                data: 'pangkalan',
+                                name: 'pangkalan'
+                            },
+                            {
                                 data: 'status',
                                 name: 'status',
                             },

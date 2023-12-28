@@ -260,12 +260,26 @@
                                 name: 'no_telepon'
                             },
                             {
+                                data: 'golongan',
+                                name: 'golongan'
+                            },
+                            {
+                                data: 'pangkalan',
+                                name: 'pangkalan'
+                            },
+                            {
                                 data: 'status',
                                 name: 'status',
                             },
                             {
                                 data: 'berkas',
                                 name: 'berkas',
+                                orderable: false,
+                                searchable: false
+                            },
+                            {
+                                data: 'persentase',
+                                name: 'persentase',
                                 orderable: false,
                                 searchable: false
                             },
